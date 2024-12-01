@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SocioSith{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base/styles.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Block for page-specific CSS -->
+    {% block styles %}
+    {% endblock %}
+
+</head>
+<body>
+    <header>
+        
+        <nav class="navbar">
+            <div class="navbar-container">
+                {% if not session.get('user_id') %}
+                <div class="logo">
+                    <a href="{{ url_for('index') }}">SocioSith</a>
+                </div>
+                {% else %}
+                <div class="logo">
+                    SocioSith
+                </div> 
+                {% endif %}
+                <ul class="nav-links">
+                    {% if session.get('user_id') %}
+                        <li><a href="{{ url_for('dashboard_boundary.dashboard') }}">Dashboard</a></li>
+                        <li><a href="{{ url_for('profile_boundary.update_account') }}">Profile</a></li>
+                        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                    {% else %}
+                        {% if show_nav %}
+                        <li><a href="{{ url_for('navbar.login') }}">Login</a></li>
+                        <li><a href="{{ url_for('navbar.register') }}">Register</a></li>
+                        <li><a href="{{ url_for('navbar.about') }}">About Us</a></li>
+                        <li><a href="{{ url_for('navbar.customer_support') }}">Customer Support</a></li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+
+    </header>
+
+    
+    <main class="main-content">
+        {% block content %}
+    
+        {% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 SocioSith. All Rights Reserved.</p>
+            <ul class="footer-links">
+                
+                <!-- <li><a href="mailto:SocioSith@sw.com">Contact Us</a></li> -->
+            </ul>
+            <div class="social-media">
+                <a href="https://twitter.com" target="_blank">Twitter</a>
+                <a href="https://facebook.com" target="_blank">Facebook</a>
+                <a href="https://instagram.com" target="_blank">Instagram</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">
+                        <span>{{ message }}</span>
+                        <button class="close-btn" onclick="this.parentElement.style.display='none';">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(() => {
+            const flashMessages = document.querySelectorAll('.flash');
+            flashMessages.forEach(flash => {
+                flash.style.display = 'none';
+            });
+        }, 5000); // Auto-dismiss after 5 seconds
+    });
+</script>
+
+</html>

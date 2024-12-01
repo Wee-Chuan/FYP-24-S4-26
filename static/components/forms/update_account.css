@@ -1,0 +1,128 @@
+/* Apply box-sizing to all elements */
+* {
+    box-sizing: border-box;
+}
+
+/* ============================= Update Account Form Section ============================= */
+.update-account-form {
+    display: flex;
+    height: 100vh; /* Full height for centering */
+}
+
+/* ============================= Info Container ============================= */
+.info-container {
+    flex: 2; /* Allow the image container to take full width of the left side */
+    background: url('../../images/main_page_wallpaper.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+
+/* Update Account Container */
+.update-account-container {
+    flex: 1;
+    background: #ffffff; /* White background for the form */
+    padding: 40px;
+    border-left: 1px solid #ccc;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center align text */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    height: 100%;
+}
+
+/* Hover Effect for Container */
+.update-account-container:hover {
+    box-shadow: 0px 6px 40px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+}
+
+/* Form Heading */
+.update-account-container h2 {
+    font-size: 2.5em;
+    color: #007c9d; 
+    margin-bottom: 20px; 
+    font-weight: bold; /* Bold heading */
+}
+
+/* Labels and Inputs */
+.update-account-container label {
+    font-size: 16px;
+    color: #333; /* Darker color for labels */
+    margin: 10px 0; /* Space around labels */
+    display: block; /* Block display for labels */
+    text-align: left; /* Left align text */
+}
+
+.update-account-container input[type="text"],
+.update-account-container input[type="password"],
+.update-account-container select {
+    width: 100%; /* Full width */
+    padding: 10px; /* Padding inside inputs */
+    margin-bottom: 20px; /* Space below inputs */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Font size for inputs */
+}
+
+/* Button Container */
+.button-container {
+    display: flex; /* Use flexbox for alignment */
+    justify-content: space-between; /* Space between buttons */
+    margin-top: 20px; /* Space above buttons */
+}
+
+.update-account-container button {
+    flex: 1; 
+    margin-right: 10px;
+}
+
+.button-container button {
+    padding: 10px 20px; /* Padding for button */
+    background-color: #000000; /* Bootstrap primary color */
+    color: white; /* White text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Font size for button */
+    cursor: pointer; /* Pointer on hover */
+    transition: background-color 0.3s ease, transform 0.3s ease; 
+}
+
+/* Hover Effect for Button */
+.button-container button:hover {
+    background-color: rgb(13, 114, 0); 
+    transform: scale(1.05);
+}
+
+/* Delete Button */
+.button-container button.delete-button {
+    padding: 10px 20px; /* Padding for button */
+    background-color: #ff4d4d; /* Red background for delete button */
+    color: white; /* White text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Font size for button */
+    cursor: pointer; /* Pointer on hover */
+    transition: background-color 0.3s ease, transform 0.3s ease; 
+}
+
+/* Hover Effect for Delete Button */
+.button-container button.delete-button:hover {
+    background-color: #cc0000; 
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .update-account-container {
+        width: 90%; /* Full width on small screens */
+        padding: 20px; /* Reduced padding on smaller screens */
+    }
+    
+    .update-account-container h2 {
+        font-size: 2em; /* Smaller heading on mobile */
+    }
+
+    .update-account-container button.delete-button {
+        width: 100%; /* Full width on small screens */
+    }
+}

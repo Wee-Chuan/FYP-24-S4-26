@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Influencer Dashboard{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='components/dashboard/influencer_dashboard.css') }}">
+{% endblock %}
+
+
+{% block content %}
+    <div class="dashboard-wrapper">
+        <!-- Sidebar Menu -->
+        <aside class="sidebar">
+            <h3>Dashboard Menu</h3>
+            <ul class="menu">
+                <li><a href="{{ url_for('dashboard_boundary.engagement') }}"><i class="fas fa-chart-line"></i> Engagement Metrics</a></li>
+                <li><a href="{{ url_for('dashboard_boundary.followers') }}"><i class="fas fa-users"></i> Followers Forecast</a></li>
+                <li><a href="{{ url_for('dashboard_boundary.network') }}"><i class="fas fa-network-wired"></i> Network Visualization</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Dashboard Content -->
+        <div class="dashboard-container">
+            <h2>Welcome, {{ user['username'] }}!</h2>
+
+            <!-- General Metrics Section -->
+            <section class="dashboard-section general-metrics">
+                <h3>General Information</h3>
+                <div class="metric-grid">
+                    <div class="metric">
+                        <h4>Top Post of the Month</h4>
+                        <div class="post-info">
+                            <img src="{{ top_post_image_url }}" alt="Top Post" />
+                            <p>{{ top_post_description }}</p>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <h4>Followers Gained This Month</h4>
+                        <ul>
+                            {% for gain in most_followers_gain %}
+                                <li>{{ gain }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="metric">
+                        <canvas id="engagementChart" width="400" height="400"></canvas>
+                        <h4>Total Engagements</h4>
+                        <div class="total-engagement-info">
+                            <div class="engagement-item">
+                                <div class="engagement-item-comments">
+                                    <i class="fas fa-comments"></i>
+                                    <div>
+                                        <p>Comments: </p>
+                                        <strong>{{ user['comments'] }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="engagement-item">
+                                <div class="engagement-item-likes">
+                                    <i class="fas fa-thumbs-up"></i>
+                                    <div>
+                                        <p>Likes: </p>
+                                        <strong>{{ user['likes'] }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="engagement-item">
+                                <div class="engagement-item-shares">
+                                    <i class="fas fa-share"></i>
+                                    <div>
+                                        <p>Shares: </p>
+                                        <strong>{{ user['shares'] }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const comments = {{ user['comments'] | default(0) | tojson }};
+            const likes = {{ user['likes'] | default(0) | tojson }};
+            const shares = {{ user['shares'] | default(0) | tojson }};
+            
+            console.log('Comments:', comments);
+            console.log('Likes:', likes);
+            console.log('Shares:', shares);
+            
+            const ctx = document.getElementById('engagementChart').getContext('2d');
+            const engagementChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Comments', 'Likes', 'Shares'],
+                    datasets: [{
+                        data: [comments, likes, shares],
+                        backgroundColor: ['#1abc9c', '#148a73ef', '#0c5a4a'],
+                        borderColor: '#fff',
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                    }
+                }
+            });
+        });
+    </script>
+    
+     
+        
+{% endblock %}

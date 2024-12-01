@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Engagement Metrics{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='components/dashboard/influencer_dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <h3>Dashboard Menu</h3>
+            <ul class="menu">
+                <li><a href="{{ url_for('dashboard_boundary.engagement') }}">Engagement Metrics</a></li>
+                <li><a href="{{ url_for('dashboard_boundary.followers') }}">Followers Forecast</a></li>
+                <li><a href="{{ url_for('dashboard_boundary.network') }}">Network Visualization</a></li>
+            </ul>
+        </aside>
+
+        <div class="dashboard-container">
+            <h2>Engagement Metrics for {{ user['username'] }}</h2>
+            <p>Track and visualize your engagement metrics here.</p>
+            <canvas id="engagementChart"></canvas>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const ctx = document.getElementById('engagementChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                            datasets: [{
+                                label: 'Engagement',
+                                data: [12, 19, 3, 5, 2, 3], // Replace with actual data
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: { beginAtZero: true }
+                            }
+                        }
+                    });
+                });
+            </script>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block title %}Welcome to SocioSith{% endblock %}
+{% set show_nav = True %}
+
+<!-- Block for page-specific CSS -->
+{% block styles %}  
+    <link rel="stylesheet" href="{{ url_for('static', filename='pages/index.css') }}">
+{% endblock %}
+
+{% block content %}
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Gain Deep Insights with <span class="highlight">SocioSith</span></h1>
+            <p>
+                Discover patterns and trends in social media that drive engagement and growth. SocioSith offers powerful tools to transform your strategy.
+            </p>
+            <div class="hero-buttons">
+                <a href="#features" class="btn btn-primary">View Features</a>
+                <a href="{{ url_for('navbar.register') }}" class="btn btn-secondary">Get Started</a>
+            </div>
+        </div>
+        <div class="info-content">
+            
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="about-container">
+            <h2>Unlock the Power of Social Insights to Drive Your Success</h2>
+            <p class="mission-statement">
+                Trying to fuel your own growth with powerful analytics and visual insights? SocioSith is the answer.
+            </p>
+            
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <h2>Platform Features</h2>
+        <p>Explore our data-driven tools for insights and growth.</p>
+
+        <!-- Buttons to switch between feature types -->
+        <div class="feature-toggle-buttons">
+            <button class="btn-toggle active" data-type="influencer" onclick="showFeatures('influencer')">Influencer Features</button>
+            <button class="btn-toggle" data-type="business" onclick="showFeatures('business')">Business Features</button>
+        </div>
+
+        <!-- Influencer Features -->
+        <div id="influencer-features" class="feature-grid">
+            <div class="feature-item">
+                <div class="feature-header" onclick="toggleFeatureDetails('feature1-details')">
+                    <!-- <img src="{{ url_for('static', filename='icons/data_insight.png') }}" alt="Data Insights"> -->
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Engagement Metrics</h3>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="feature-details" id="feature1-details">
+                    <p>Identify key influencers and trends to shape your strategy, discover social patterns, and improve your engagement strategy.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-header" onclick="toggleFeatureDetails('feature2-details')">
+                    <!-- <img src="{{ url_for('static', filename='icons/trend_forecast.png') }}" alt="Trend Forecasting"> -->
+                    <i class="fas fa-users"></i>
+                    <h3>Followers Forecast</h3>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="feature-details" id="feature2-details">
+                    <p>Analyze follower growth over time to help you make data-driven decisions for future growth.</p>
+                    <img src="{{ url_for('static', filename='images/follower_forecast.png') }}">
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-header" onclick="toggleFeatureDetails('feature3-details')">
+                    <!-- <img src="{{ url_for('static', filename='icons/interactive_visualization.png') }}" alt="Visualization"> -->
+                    <i class="fas fa-network-wired"></i>
+                    <h3>Network Visualization</h3>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="feature-details" id="feature3-details">
+                    <div class="feature-details-content">
+                        <p>Visualize your network and interactions with dynamic, intuitive graphs that make complex data easy to understand.</p>
+                        <img src="{{ url_for('static', filename='images/user1_followers_network.png') }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Business Features -->
+        <div id="business-features" class="feature-grid" style="display: none;">
+            <div class="feature-item">
+                <div class="feature-header" onclick="toggleFeatureDetails('business-feature1-details')">
+                    <i class="fas fa-network-wired"></i>
+                    <h3>Network Visualization</h3>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="feature-details" id="business-feature1-details">
+                    <p>Provide visual dashboards that map out social networks to identify highly influential individuals, user communities, and information flows to refine marketing strategies.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-header" onclick="toggleFeatureDetails('business-feature2-details')">
+                    <i class="fas fa-chart-pie"></i>
+                    <h3>Centrality and Influence Reports</h3>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="feature-details" id="business-feature2-details">
+                    <p>Generate detailed reports analyzing influencers’ network positions to understand who drives the most engagement.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-header" onclick="toggleFeatureDetails('business-feature3-details')">
+                    <i class="fas fa-star"></i>
+                    <h3>Influencer Ranking</h3>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="feature-details" id="business-feature3-details">
+                    <p>Rank influencers based on metrics such as degree, betweenness, and closeness to identify high-impact users driving engagement and conversions.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-header" onclick="toggleFeatureDetails('business-feature4-details')">
+                    <i class="fas fa-bullseye"></i>
+                    <h3>Predictive Analysis</h3>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="feature-details" id="business-feature4-details">
+                    <p>Predict social behavior trends and emerging topics in influencer networks to stay ahead of the curve.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function showFeatures(type) {
+            // Toggle visibility of influencer and business features
+            const influencerFeatures = document.getElementById('influencer-features');
+            const businessFeatures = document.getElementById('business-features');
+
+            if (type === 'influencer') {
+                influencerFeatures.style.display = 'grid';
+                businessFeatures.style.display = 'none';
+            } else {
+                influencerFeatures.style.display = 'none';
+                businessFeatures.style.display = 'grid';
+            }
+
+            document.querySelectorAll('.btn-toggle').forEach(button => {
+                button.classList.remove('active');
+            });
+            document.querySelector(`.btn-toggle[data-type="${type}"]`).classList.add('active');
+        }
+
+        function toggleFeatureDetails(featureId) {
+            const details = document.getElementById(featureId);
+            details.classList.toggle('active');
+
+            // Toggle rotation for the expand icon
+            const icon = details.previousElementSibling.querySelector('.expand-icon');
+            if (details.classList.contains('active')) {
+                icon.style.transform = "rotate(180deg)";
+            } else {
+                icon.style.transform = "rotate(0deg)";
+            }
+        }
+    </script>
+    
+    
+
+    
+
+{% endblock %}

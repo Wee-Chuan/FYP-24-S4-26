@@ -1,0 +1,122 @@
+/* Apply box-sizing to all elements */
+* {
+    box-sizing: border-box;
+}
+
+/* ============================= Auth Form Section ============================= */
+.auth-form {
+    display: flex;
+    height: 100vh; /* Full height for centering */
+}
+
+/* ============================= Info Container ============================= */
+.info-container {
+    flex: 2; /* Allow the image container to take full width of the left side */
+    background: url('../../images/main_page_wallpaper.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+/* ============================= Form Container ============================= */
+.form-container {
+    flex: 1;
+    background: #ffffff; /* White background for the form */
+    padding: 40px;
+    border-left: 1px solid #ccc;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center align text */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    height: 100%;
+}
+
+/* Form Heading */
+.form-container h2 {
+    font-size: 2.5em;
+    color: #007c9d; /* Title color */
+    margin: 0;
+}
+
+/* Form Paragraph */
+.form-container p {
+    font-size: 1.1em;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+/* ============================= Label Styling ============================= */
+label {
+    display: block; /* Stack labels */
+    margin-bottom: 5px; /* Spacing */
+    text-align: left; /* Align labels to the left */
+    font-weight: 600; /* Bold text for labels */
+}
+
+/* ============================= Input Field Styling ============================= */
+input[type="text"],
+input[type="password"] {
+    width: 100%; /* Full width */
+    padding: 10px; /* Spacing inside the input */
+    margin-bottom: 20px; /* Spacing between inputs */
+    border: 1px solid #ccc; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 1em; /* Font size */
+    transition: border-color 0.3s ease; /* Transition for focus */
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #0044cc; /* Border color on focus */
+    outline: none; /* Remove outline */
+}
+
+/* ============================= Button Styling ============================= */
+button {
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 5px; 
+    background-color: #000000; 
+    color: #fff; 
+    font-size: 1em; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease, transform 0.3s ease; 
+    width: 100%;
+}
+
+button:hover {
+    background-color: rgb(13, 114, 0); 
+    transform: scale(1.05);
+}
+
+/* ============================= login redirect Styling ============================= */
+.form-container .register-redirect{
+    margin-top: 40px;
+    font-size: 1.1em;
+    text-align: center;
+}
+
+.register-redirect a {
+    color: #3500d5; /* Or any color you prefer */
+    text-decoration: none;
+}
+
+.register-redirect a:hover {
+    text-decoration: underline;
+}
+
+/* Adding a smooth animation effect */
+.auth-form, .info-container  {
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

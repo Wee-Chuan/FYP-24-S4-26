@@ -1,0 +1,209 @@
+/* ============================= About Us Page ============================= */
+.about-us-wrapper {
+    background: url('../../images/main_page_wallpaper.jpg') no-repeat center center;
+    background-size: cover;
+    background-color: white;
+    max-width: 100%;
+}
+.about-us-container {
+    padding: 60px 40px;
+    max-width: 1000px;
+    max-height: 100%;
+    margin: 0 auto;
+    background-color: #ffffff;
+    color: #333333;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border-left: 5px solid #3d9fb5;
+    border-right: 5px solid #3d9fb5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+.about-us-container h1 {
+    font-size: 3rem;
+    margin-bottom: 30px;
+    color: #3d9fb5; 
+    text-align: center;
+    border-bottom: 2px solid #3d9fb5;
+    padding-bottom: 15px;
+}
+
+.about-us-container h2 {
+    font-size: 2rem;
+    color: #3d9fb5;
+    margin-bottom: 25px;
+    padding: 0 15px;
+    text-align: left;
+    display: inline-block;
+    position: relative;
+    width: 100%;
+}
+
+.about-us-container h2::before {
+    content: "";
+    width: 4px;
+    height: 100%;
+    background-color: #3d9fb5;
+    position: absolute;
+    left: -10px;
+    top: 0;
+}
+
+.overview {
+    margin-bottom: 40px;
+    line-height: 1.8;
+    font-size: 1.2rem;
+    width: 80%;
+    max-width: 800px;
+    color: #555555;
+}
+
+.goals {
+    text-align: center;
+    width: 800px;
+    padding: 40px;
+}
+
+.goal-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.goal-block {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 220px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.goal-block:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.goal-icon {
+    font-size: 2.5rem;
+    color: #3d9fb5;
+    margin-bottom: 15px;
+}
+
+.goal-block h3 {
+    font-size: 1.4rem;
+    color: #333333;
+    margin: 10px 0;
+}
+
+.goal-block p {
+    font-size: 1rem;
+    color: #555555;
+    line-height: 1.5;
+}
+
+
+ul {
+    padding-left: 20px;
+    list-style-type: disc;
+}
+
+.testimonials {
+    text-align: center;
+    width: 800px;
+    padding: 10px;
+}
+
+.testimonial-carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 40px 0;
+    position: relative;
+    gap: 15px;
+}
+
+.carousel-button {
+    background: none;
+    border: none;
+    font-size: 2.5rem;
+    color: #3d9fb5;
+    cursor: pointer;
+    padding: 10px;
+    transition: color 0.3s ease;
+}
+
+.carousel-button:hover {
+    color: rgba(137, 137, 137, 0.971);
+}
+
+blockquote {
+    max-height: 180px;
+    font-style: italic;
+    background-color: #3d9fb5;
+    padding: 20px;
+    border-left: 4px solid #3d9fb5;
+    border-radius: 10px;
+    margin-bottom: 0;
+    color: #ffffff;
+    max-width: 600px;
+    text-align: left;
+    font-size: 1.1rem;
+    position: relative;
+}
+
+#testimonial-author {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #ffffff;
+    text-align: right;
+    font-size: 0.9rem;
+}
+
+img.testimonial-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 0 15px;
+    object-fit: cover;
+}
+
+.carousel-item {
+    height: 200px; 
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-align: left;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    opacity: 0;
+}
+
+.carousel-item.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* Adding a smooth animation effect */
+.about-us-container, .about-us-wrapper  {
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

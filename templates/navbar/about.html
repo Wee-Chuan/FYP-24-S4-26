@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}About Us - SocioSith{% endblock %}
+{% set show_nav = True %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='components/forms/about.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="about-us-wrapper">
+
+    <div class="about-us-container">
+        <section class="overview">
+            <h1>We Are SocioSith</h1>
+            <p>With the rapid expansion of social media, the need for analyzing networks of influence, follower relationships, and trend dynamics has grown. Social Network Analysis (SNA) is essential in understanding the interactions and relationships within social networks, providing insights that go beyond just viewing engagement metrics.</p>
+            
+            <p>Our product, <strong>SocioSith</strong>, aims to bridge this gap by using data science and network analysis techniques involved in SNA to create a platform that not only covers engagement metrics but also visualizes network structures, provides centrality and influence analysis, and makes predictions based on historical data.</p>
+        </section>
+
+        <section class="goals">
+            <h2>Our Goals</h2>
+            <!-- <ul>
+                <li>Deliver a comprehensive social network analysis platform.</li>
+                <li>Provide insights into network structures and influence analysis.</li>
+                <li>Offer tools to predict trends based on historical data.</li>
+                <li>Empower businesses, researchers, and influencers with actionable insights.</li>
+            </ul> -->
+            <div class="goal-container">
+                <div class="goal-block">
+                    <i class="fas fa-project-diagram goal-icon"></i> 
+                    <h3>Comprehensive Analysis</h3>
+                    <p>Deliver a platform that provides in-depth analysis of social network structures to uncover valuable insights.</p>
+                </div>
+                
+                <div class="goal-block">
+                    <i class="fas fa-bullseye goal-icon"></i>
+                    <h3>Influence & Reach Insights</h3>
+                    <p>Provide tools that identify key influencers and visualize engagement reach to optimize strategies.</p>
+                </div>
+        
+                <div class="goal-block">
+                    <i class="fas fa-chart-line goal-icon"></i>
+                    <h3>Predictive Analytics</h3>
+                    <p>Leverage historical data to offer trend predictions, helping users stay ahead of social media trends.</p>
+                </div>
+        
+                <div class="goal-block">
+                    <i class="fas fa-users goal-icon"></i>
+                    <h3>Empowering Decisions</h3>
+                    <p>Enable businesses, and influencers to make data-driven decisions to enhance their impact.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials">
+            <h2>Customer Testimonials</h2>
+            <div class="testimonial-carousel">
+                <button class="carousel-button left" onclick="showPreviousReview()">&#9664;</button>
+                <div class="carousel-item active">
+                    <blockquote id="testimonial-text">
+                        SocioSith helped us understand our audience's interactions in ways we never thought possible.
+                        <span id="testimonial-author">- Business Analyst</span>
+                    </blockquote>
+                </div>
+                <button class="carousel-button right" onclick="showNextReview()">&#9654;</button>
+            </div>
+        </section>
+    </div>
+</div>
+<script>
+    const testimonials = [
+        { text: "SocioSith helped us understand our audience's interactions in ways we never thought possible.", author: "e.g. Business Analyst" },
+        { text: "The network visualization tools are top-notch. They give a clear view of our influence reach.", author: "e.g. Influencer" },
+        { text: "Using SocioSith, we could predict trends with surprising accuracy.", author: "e.g. Influencer" },
+        { text: "An invaluable tool for any business looking to understand its social media impact.", author: "e.g. Business Analyst" }
+    ];
+
+    let currentIndex = 0;
+
+    function updateTestimonial() {
+        const testimonialText = document.getElementById('testimonial-text');
+        testimonialText.innerHTML = `${testimonials[currentIndex].text} <span id="testimonial-author">- ${testimonials[currentIndex].author}</span>`;
+        // Fade-in effect
+        testimonialText.classList.remove('active');
+        setTimeout(() => testimonialText.classList.add('active'), 10);
+    }
+
+    function showNextReview() {
+        currentIndex = (currentIndex + 1) % testimonials.length;
+        updateTestimonial();
+    }
+
+    function showPreviousReview() {
+        currentIndex = (currentIndex - 1 + testimonials.length) % testimonials.length;
+        updateTestimonial();
+    }
+
+    document.addEventListener("DOMContentLoaded", updateTestimonial);
+</script>
+{% endblock %}
+
+
+</body>
+</html>

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='components/dashboard/admin_dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+    <!-- Sidebar Menu -->
+    <aside class="sidebar">
+        <h3>Admin Menu</h3>
+        <ul class="menu">
+            <li><a href="{{ url_for('dashboard_boundary.manage_accounts') }}"><i class="fas fa-users"></i>Manage Accounts</a></li>
+            <li><a href="{{ url_for('dashboard_boundary.approve_accounts') }}" class="{% if current_page == 'approve_accounts' %}active{% endif %}"><i class="fas fa-user-check"></i> Approve Accounts</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Dashboard Content -->
+    <div class="dashboard-container">
+
+        <!-- Management Section -->
+        <section class="dashboard-section user-management">
+            <h3>Approve Business Accounts</h3>
+
+            <!-- Search Bar for Users -->
+            <!-- <div class="user-search">
+                <input type="text" placeholder="Search for a user by username..." id="userSearchInput" oninput="debouncedSearchUser()">
+                <button onclick="searchUser()"><i class="fas fa-search"></i> Search</button>
+            </div> -->
+
+            <!-- Results Container -->
+            <div id="resultsContainer" class="user-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Business Name</th>
+                            <th>Business No.</th>
+                            <th>Email</th>
+                            <th>Account Type</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        {% for user in business_analysts %}
+                            {% if not user.is_approved %}
+                                <tr>
+                                    <td>{{ user.username }}</td>
+                                    <td>{{ user.business_name }}</td>
+                                    <td>{{ user.business_number }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>{{ user.account_type }}</td>
+                                    <td>{{ 'Pending Approval' if not user.is_approved else 'Approved' }}</td>
+                                    <td>
+                                        <form action="{{ url_for('dashboard_boundary.approve_user') }}" method="POST" style="display:inline;">
+                                            <input type="hidden" name="user_id" value="{{ user.user_id }}">
+                                            <button type="submit" class="action-button"><i class="fas fa-user-check"></i> Approve</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+{% endblock %}

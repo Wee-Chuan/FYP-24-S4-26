@@ -1,0 +1,279 @@
+/* ================ Dashboard General Styling ================ */
+.dashboard-wrapper {
+    display: flex;
+    width: 100%;
+    background-color: #f9f9f9; /* Light background for the dashboard */
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+}
+
+/* Sidebar styling */
+.sidebar {
+    width: 250px;
+    background: url('../../images/main_page_wallpaper.jpg') no-repeat center center;
+    background-size: cover;
+    color: #ecf0f1;
+    padding: 20px;
+    border-right: 2px solid #2c3e50; /* Darker border */
+}
+
+.sidebar h3 {
+    font-size: 1.5em;
+    color: #ecf0f1;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    text-align: center;
+    width: 100%;
+}
+
+.sidebar .menu {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar .menu li {
+    margin: 15px 0;
+}
+
+.sidebar .menu li a {
+    display: flex;
+    align-items: center;
+    color: #ecf0f1;
+    text-decoration: none;
+    font-size: 1.1em;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+}
+
+.sidebar .menu li a i {
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+.sidebar .menu li a:hover {
+    color: #aaaaaa;
+    transform: scale(1.05);
+}
+
+.sidebar .menu li a.active {
+    color: #00c184;
+    font-weight: bold;
+}
+
+/* dashboard container styling */
+.dashboard-container {
+    flex-grow: 1;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Increased gap for better spacing */
+    background-color: #f9f9fb;
+    width: 100%;
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.dashboard-container h2 {
+    font-size: 2em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Statistics Section Styling */
+.dashboard-section.statistics {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-section.statistics h3 {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #2d3436;
+    margin-bottom: 20px;
+}
+
+.stats-cards {
+    display: flex;
+    gap: 20px;
+}
+
+.stat-card {
+    flex: 1;
+    background-color: #020202;
+    color: #fff;
+    padding: 50px;
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card:hover {
+    background-color: rgba(36, 0, 98, 0.971);
+    transform: scale(1.05);
+}
+
+.stat-card h4 {
+    font-size: 1.2em;
+    font-weight: 500;
+    margin: 10px;
+}
+
+.stat-card p {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* User List Table Styling */
+.user-list {
+    margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden; /* Rounded corners for the table */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-list table {
+    width: 100%;
+    border-collapse: collapse; /* Better spacing */
+}
+
+.user-list th, .user-list td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd; /* Light border for rows */
+}
+
+.user-list th {
+    background-color: #000000; /* Header background */
+    color: white; /* Header text color */
+}
+
+.user-list tr:hover {
+    background-color: #f1f1f1; /* Highlight on hover */
+}
+
+/* Action Button Styles */
+.action-button {
+    padding: 15px 12px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    background-color: #000000; /* Default button color */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 80%;
+    margin: 5px 0; 
+    font-size: 14px; 
+    display: block;
+}
+
+.action-button:hover {
+    background-color: rgba(36, 0, 98, 0.971); /* Darker shade on hover */
+}
+
+.approve-button {
+    background-color: #1abc9c; /* Approve button color */
+}
+
+.approve-button:hover {
+    background-color: #16a085; /* Darker shade on hover */
+}
+
+.user-list .action-button {
+    margin-top: 8px; /* Adds some spacing between the buttons */
+}
+
+/* User Details Modal */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fff; /* Pure white for a clean look */
+    margin: 15% auto; /* Centered */
+    padding: 30px 40px;
+    border-radius: 8px; /* Rounded corners for softer look */
+    width: 25%; /* Moderate width */
+    max-width: 500px; /* Maximum width for larger screens */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+    transition: all 0.3s ease-in-out;
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #333; /* Dark text for contrast */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.modal-content p {
+    font-size: 1em;
+    color: #555; /* Subtle contrast */
+    line-height: 1.6; /* Easier to read */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Close Button Style */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Search Bar Styling */
+.user-search {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.user-search input {
+    flex: 1; /* Take up available space */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+.user-search input:focus {
+    border-color: #1abc9c; /* Highlight on focus */
+}
+
+.user-search button {
+    padding: 10px 15px;
+    margin-left: 10px;
+    border: none;
+    background-color: #000000;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.user-search button:hover {
+    background-color: rgba(36, 0, 98, 0.971); /* Darker shade on hover */
+}

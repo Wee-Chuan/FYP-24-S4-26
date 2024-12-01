@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Network Position{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='components/dashboard/influencer_dashboard.css') }}">
+    <style>
+        /* Set dimensions for the network graph */
+        #networkGraph {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ccc;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <h3>Dashboard Menu</h3>
+            <ul class="menu">
+                <li><a href="{{ url_for('dashboard_boundary.engagement') }}">Engagement Metrics</a></li>
+                <li><a href="{{ url_for('dashboard_boundary.followers') }}">Followers Forecast</a></li>
+                <li><a href="{{ url_for('dashboard_boundary.network') }}">Network Visualization</a></li>
+            </ul>
+        </aside>
+
+        <div class="dashboard-container">
+            <h2>Network Details for {{ user['username'] }}</h2>
+            <p>Analyze your rank and influence within the network.</p>
+            <h3>Network Position</h3>
+            <div class="rank-info">
+                <p>Your rank: <strong>?</strong> out of xxx influencers</p>
+                <p>Influence score: <strong>xx/100</strong></p>
+            </div>
+            
+            <!-- Display the follower network graph -->
+            <h3>Follower Network Graph</h3>
+            
+            {% if interactive_plot %}
+                <div id="networkGraph">
+                    <div id="graph">
+                        {{ interactive_plot | safe }}  <!-- Render the interactive plot here -->
+                    </div>
+                </div>
+            {% else %}
+                <p>No graph available.</p>
+            {% endif %}
+            
+        </div>
+    </div>
+{% endblock %}

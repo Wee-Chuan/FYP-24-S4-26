@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Register - SocioSith{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='components/forms/register.css') }}">
+{% endblock %}
+
+{% block content %}
+    <section class="register-form">
+        <div class="info-container">
+            <!-- <img src="{{ url_for('static', filename='images/background.jpg') }}" alt="Login Image"> -->
+        </div>
+        <div class="form-container">
+            <h2>Register</h2>
+            <form method="post" action="{{ url_for('navbar.register') }}">
+
+                <!-- Account Type  -->
+                <label for="account_type">Account Type</label>
+                <select id="account_type" name="account_type" required onchange="toggleFields()">
+                    <option value="influencer">Influencer</option>
+                    <option value="business_analyst">Business Analyst</option>
+                </select>
+
+                <!-- Username -->
+                <div id="username_field">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+
+                <!-- Business Name and Business Number (only for Business Analysts) -->
+                <div id="business_name_field" style="display: none;">
+                    <label for="business_name">Business Name</label>
+                    <input type="text" id="business_name" name="business_name">
+                </div>
+                
+                <div id="business_number_field" style="display: none;">
+                    <label for="business_number">Business Number</label>
+                    <input type="text" id="business_number" name="business_number">
+                </div>
+
+                <!-- Email -->
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email" required>
+
+                <!-- Password -->
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+
+                <!-- Confirm Password -->
+                <label for="password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+
+                <!-- <label for="account_type">Account Type</label>
+                <select id="account_type" name="account_type" required>
+                    <option value="business_analyst">Business Analyst</option>
+                    <option value="influencer">Influencer</option>
+                </select> -->
+
+                <button type="submit">Register</button>
+
+                <p class="login-redirect">
+                    Already have an account? <a href="{{ url_for('navbar.login') }}">Log in</a>
+                </p>
+
+            </form>
+        </div>
+    </section>
+
+    <script>
+        function toggleFields() {
+            const accountType = document.getElementById("account_type").value;
+            const businessNameField = document.getElementById("business_name_field");
+            const businessNumberField = document.getElementById("business_number_field");
+    
+            if (accountType === "business_analyst") {
+                businessNameField.style.display = "block";
+                businessNumberField.style.display = "block";
+            } else {
+                businessNameField.style.display = "none";
+                businessNumberField.style.display = "none";
+            }
+        }
+    
+        // Initialize the fields based on default selection
+        document.addEventListener("DOMContentLoaded", toggleFields);
+    </script>
+
+{% endblock %}

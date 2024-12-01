@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Account Details- SocioSith{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='components/forms/update_account.css') }}">
+{% endblock %}
+
+{% block content %}
+    <section class="update-account-form">
+        <div class="info-container">
+            <!-- <img src="{{ url_for('static', filename='images/background.jpg') }}" alt="Login Image"> -->
+        </div>
+        <div class="update-account-container">
+            <h2>Account Details</h2>
+            <form method="post" action="{{ url_for('profile_boundary.update_account') }}">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" value="{{ user['username'] }}"required>
+
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email" value="{{ user['email'] }}" required>
+
+                <label for="password">New Password (leave blank if not changing)</label>
+                <input type="password" id="password" name="password">
+
+                <label for="password">Confirm New Password (leave blank if not changing)</label>
+                <input type="password" id="confirm_password" name="confirm_password">
+
+                {% if user.account_type == "admin" %}
+                    <!-- Display account type as read-only for admins -->
+                    <label for="account_type">Account Type</label>
+                    <input type="text" id="account_type" name="account_type" value="{{ user['account_type'] }}" readonly>
+                {% else %}
+                    <!-- Editable account type dropdown for non-admin users -->
+                    {% if user.account_type == "business_analyst" or user.account_type == "influencer" %}
+                        <label for="account_type">Account Type</label>
+                        <select id="account_type" name="account_type" required>
+                            <option value="business_analyst" {% if user['account_type'] == 'business_analyst' %}selected{% endif %}>Business Analyst</option>
+                            <option value="influencer" {% if user['account_type'] == 'influencer' %}selected{% endif %}>Influencer</option>
+                        </select>
+                    {% endif %}
+                {% endif %}
+
+
+                <!-- Additional fields for business analysts -->
+                {% if user.account_type == "business_analyst" %}
+                    <label for="business_name">Business Name</label>
+                    <input type="text" id="business_name" name="business_name" value="{{ user.business_name }}" required>
+
+                    <label for="business_number">Business Number</label>
+                    <input type="text" id="business_number" name="business_number" value="{{ user.business_number }}" required>
+                {% endif %}
+                
+                <div class="button-container">
+                    <button type="submit">Update Account</button>
+                    <button type="button" class="delete-button" onclick="confirmDelete()">Delete Account</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        function confirmDelete() {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                document.location.href = "{{ url_for('profile_boundary.delete_account') }}"; // Navigate to delete URL
+            }
+        }
+    </script>
+{% endblock %}

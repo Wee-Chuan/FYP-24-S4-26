@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Business Analyst Dashboard{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='components/dashboard/business_dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+    <!-- Sidebar Menu -->
+    <aside class="sidebar">
+        <h3>Dashboard Menu</h3>
+        <ul class="menu">
+            <li><i class="fas fa-network-wired"></i> Network Visualization</a></li>
+            <li><i class="fas fa-chart-pie"></i> Centrality and Influence Reports</a></li>
+            <li><i class="fas fa-star"></i> Influencer Ranking</a></li>
+            <li><i class="fas fa-bullseye"></i> Predictive Analysis</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Dashboard Content -->
+    <div class="dashboard-container">
+        <h2>Welcome, {{user['username']}}!</h2>
+
+        <!-- General Metrics Section -->
+        <section class="dashboard-section general-metrics">
+            <h3>General Information</h3>
+            <div class="metric-grid">
+                <div class="metric">
+                    <h4>Influencer Rankings</h4>
+                    <p>Top influencers in the network.</p>
+                </div>
+                <div class="metric">
+                    <h4>High Impact Influencers</h4>
+                    <p>Influencers with high engagement potential.</p>
+                </div>
+                <div class="metric">
+                    <h4>Forecast of Social Trends</h4>
+                    <p>Predicted trends based on user behavior </p>
+                </div>
+            </div>
+        </section>
+   
+    </div>
+</div>
+{% endblock %}

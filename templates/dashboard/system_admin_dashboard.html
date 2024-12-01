@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='components/dashboard/admin_dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+    <!-- Sidebar Menu -->
+    <aside class="sidebar">
+        <h3>Admin Menu</h3>
+        <ul class="menu">
+            <li><a href="{{ url_for('dashboard_boundary.manage_accounts') }}"><i class="fas fa-users"></i>Manage Accounts</a></li>
+            <li><a href="{{ url_for('dashboard_boundary.approve_accounts') }}"><i class="fas fa-user-check"></i> Approve Accounts</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Dashboard Content -->
+    <div class="dashboard-container">
+        <h2>Welcome, {{ user['username'] }}!</h2>
+
+        <!-- Statistics Section -->
+        <section class="dashboard-section statistics">
+            <h3>System Overview</h3>
+            
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <h4>Total Users</h4>
+                    <p>{{ total_users }}</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Influencers</h4>
+                    <p>{{ total_influencers }}</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Business Accounts</h4>
+                    <p>{{ total_business_accounts }}</p>
+                </div>
+            </div>
+            
+        </section>
+
+    </div>
+</div>
+
+<script>
+    function approveBusinessAccount(userId) {
+        fetch(`/dashboard/admin/approve`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                }
+            });
+    }
+</script>
+{% endblock %}

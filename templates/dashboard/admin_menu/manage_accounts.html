@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='components/dashboard/admin_dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+    <!-- Sidebar Menu -->
+    <aside class="sidebar">
+        <h3>Admin Menu</h3>
+        <ul class="menu">
+            <li><a href="{{ url_for('dashboard_boundary.manage_accounts') }}" class="{% if current_page == 'manage_accounts' %}active{% endif %}"><i class="fas fa-users"></i>Manage Accounts</a></li>
+            <li><a href="{{ url_for('dashboard_boundary.approve_accounts') }}"><i class="fas fa-user-check"></i> Approve Accounts</a></li>
+        </ul>
+    </aside>
+
+    <div class="dashboard-container">
+        <!-- User Management Section -->
+        <section class="dashboard-section user-management">
+            <h3>User Management</h3>
+
+            <!-- Search Bar for Users -->
+            <div class="user-search">
+                <input type="text" placeholder="Search for a user by username..." id="userSearchInput" oninput="debouncedSearchUser()">
+                <button onclick="searchUser()"><i class="fas fa-search"></i> Search</button>
+            </div>
+
+            <!-- Results Container -->
+            <div id="resultsContainer" class="user-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Account Type</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        {% for user in all_users %}
+                        <tr>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.account_type }}</td>
+                            <td>{{ 'Suspended' if user.is_suspended else ( 'Pending Approval' if user.account_type == 'business_analyst' and not user.is_approved else 'Active' ) }}</td>
+                            <td>
+                                <button class="action-button" onclick="viewUserDetails('{{ user.user_id }}')"><i class="fas fa-eye"></i> View</button>
+                                <button class="action-button" onclick="suspendUser('{{ user.user_id }}')"><i class="fas fa-ban"></i> Suspend</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- User Details Modal -->
+        <div id="userDetailsModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h3>User Details</h3>
+                <p><strong>Username:</strong> <span id="modalUsername"></span></p>
+                <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+                <p><strong>Account Type:</strong> <span id="modalAccountType"></span></p>
+                <p><strong>Followers:</strong> <span id="modalFollowers"></span></p>
+                <p><strong>Following:</strong> <span id="modalFollowing"></span></p>
+                <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let debounceTimer
+
+    // Function to debounce user
+    function debouncedSearchUser() {
+        const query = document.getElementById('userSearchInput').value;
+        if (debounceTimer) {
+            clearTimeout(debounceTimer); // Clear the previous timer
+        }
+        debounceTimer = setTimeout(() => {
+            searchUser(query); // Call the search function after the delay
+        }, 300); // Delay of 500ms before making the request
+    }
+
+    // Functions for user actions
+    function searchUser() {
+        const query = document.getElementById('userSearchInput').value;
+        if (query) {
+            // Fetch the search results when the query is not empty
+            fetch(`/dashboard/admin/search_user?query=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    displaySearchResults(data);
+                })
+                .catch(error => console.error('Error fetching search results:', error));
+        } else {
+            // If query is empty, reset to show all users
+            fetch('/dashboard/admin/get_users') 
+                .then(response => response.json())
+                .then(data => {
+                    displaySearchResults(data); // Display all users
+                })
+                .catch(error => console.error('Error fetching all users:', error));
+        }
+    }
+
+    function displaySearchResults(data) {
+        const userTableBody = document.getElementById('userTableBody');
+        userTableBody.innerHTML = ''; // Clear previous results
+        if (data.length > 0) {
+            data.forEach(user => {
+                const userRow = document.createElement('tr');
+                userRow.innerHTML = `
+                    <td>${user.username}</td>
+                    <td>${user.email}</td>
+                    <td>${user.account_type}</td>
+                    <td>${user.account_type === 'business_analyst' && !user.is_approved ? 'Pending Approval' : 'Active'}</td>
+                    <td>
+                        <button class="action-button" onclick="viewUserDetails('${user.user_id}')"><i class="fas fa-eye"></i> View</button>
+                        ${user.account_type === 'business' && !user.is_approved ? 
+                        `<button class="action-button approve-button" onclick="approveBusinessAccount('${user.user_id}')"><i class="fas fa-user-check"></i> Approve</button>` : ''}
+                    </td>`;
+                userTableBody.appendChild(userRow);
+            });
+        } else {
+            userTableBody.innerHTML = '<tr><td colspan="5">No users found</td></tr>';
+        }
+    }
+
+    function viewUserDetails(userId) {
+        fetch(`/dashboard/admin/user/${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('modalUsername').textContent = data.username;
+                document.getElementById('modalEmail').textContent = data.email;
+                document.getElementById('modalAccountType').textContent = data.account_type;
+                document.getElementById('modalFollowers').textContent = data.follower_count || 0;
+                document.getElementById('modalFollowing').textContent = data.following_count || 0;
+                document.getElementById('modalStatus').textContent = data.account_type === 'business_analyst' && !data.is_approved ? 'Pending Approval' : 'Active';
+                document.getElementById('userDetailsModal').style.display = 'block';
+            })
+            .catch(error => console.error('Error fetching user details:', error));
+    }
+
+    function closeModal() {
+        document.getElementById('userDetailsModal').style.display = 'none';
+    }
+
+    function suspendUser(userId) {
+    if (confirm("Are you sure you want to suspend this user?")) {
+        fetch(`/dashboard/admin/suspend_user/${userId}`, {
+            method: 'POST',
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                location.reload(); // Reload the page to reflect changes
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => console.error('Error suspending user:', error));
+    }
+}
+</script>
+
+{% endblock %}
