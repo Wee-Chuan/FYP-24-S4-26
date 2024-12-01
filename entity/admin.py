@@ -1,9 +1,29 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
+from dotenv import load_dotenv
+import os
+
+# Load environment variables
+load_dotenv()
 
 # Firebase Initialization
 if not firebase_admin._apps:
-    cred = credentials.Certificate("config/credentials.json") 
+    # Prepare the credentials dictionary from environment variables
+    firebase_credentials = {
+        "type": os.getenv("GOOGLE_CLOUD_TYPE"),
+        "project_id": os.getenv("GOOGLE_CLOUD_PROJECT_ID"),
+        "private_key_id": os.getenv("GOOGLE_CLOUD_PRIVATE_KEY_ID"),
+        "private_key": os.getenv("GOOGLE_CLOUD_PRIVATE_KEY").replace('\\n', '\n'),  # Ensure newlines are correctly formatted
+        "client_email": os.getenv("GOOGLE_CLOUD_CLIENT_EMAIL"),
+        "client_id": os.getenv("GOOGLE_CLOUD_CLIENT_ID"),
+        "auth_uri": os.getenv("GOOGLE_CLOUD_AUTH_URI"),
+        "token_uri": os.getenv("GOOGLE_CLOUD_TOKEN_URI"),
+        "auth_provider_x509_cert_url": os.getenv("GOOGLE_CLOUD_AUTH_PROVIDER_X509_CERT_URL"),
+        "client_x509_cert_url": os.getenv("GOOGLE_CLOUD_CLIENT_X509_CERT_URL"),
+        "universe_domain": os.getenv("GOOGLE_CLOUD_UNIVERSE_DOMAIN")
+    }
+
+    cred = credentials.Certificate(firebase_credentials) 
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
