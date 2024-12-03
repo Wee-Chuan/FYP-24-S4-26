@@ -11,3 +11,15 @@ pip install faker
 pip install firebase-admin
 pip install bcrypt
 pip install requests
+
+BOUNDARY:
+- All the different routes of the website
+
+ENTITY:
+- The linkage to firebase and its functions to upload/get data to/from firebase
+
+STATIC:
+- All the CSS 
+
+TEMPLATES:
+- All the html design for the pages
