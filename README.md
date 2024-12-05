@@ -1,9 +1,9 @@
-# FYP-24-S4-26
+# FYP-24-S4-26 #
 Run 'python app.py' 
 
-LIBRARIES:
+# LIBRARIES #:
 
-REQUIREMENTS:
+# REQUIREMENTS #:
 pip install flask
 pip install python-dotenv
 pip install matplotlib
@@ -14,21 +14,40 @@ pip install firebase-admin
 pip install bcrypt
 pip install requests
 
-*NEW*
+*NEW* 
 pip install scikit-learn 
 
 
-BOUNDARY:
+# BOUNDARY #
 - All the different routes of the website
+    ## dashboard_boundary.py:  
+        Routes for user dashboards.
+        Functionality for different types of users (Business, Inlfuencer, Admin) to access and interact with their respective dashboards.
+    
+    ## navbar.py:
+        Routes for User registration, login, and other general pages such as About and Customer support page
 
-ENTITY:
+    ## profile_boundary.py:
+        Routes for User Profile management
+
+# ENTITY #
 - The linkage to firebase and its functions to upload/get data to/from firebase
+    ## admin.py
+        Admin user management functions to manage accounts stored in firebase
+        These functions interact with the Firestore database to retrieve and manipulate user data.
 
-STATIC:
+    ## followers_hist_entity.py
+        Retrieving follower history data and calculating follower growth
+        The data is pulled from a Firestore collection, processed, and then used for growth analysis and prediction.
+
+    ## user.py
+        Handles user-related actions within a system, particularly focused on Firebase Firestore.
+
+# STATIC #
 - All the CSS 
 
-TEMPLATES:
+# TEMPLATES #
 - All the html design for the pages
 
-GENERATE_FAKE_DATAS:
+# GENERATE_FAKE_DATAS #
 - All the files that is used to generate fake datas

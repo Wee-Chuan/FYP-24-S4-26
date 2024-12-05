@@ -3,21 +3,21 @@ from entity.user import User
 
 profile_boundary = Blueprint('profile_boundary', __name__)
 
-@profile_boundary.route("/profile")
-def profile():
-    user_id = session.get('user_id')
-    print("Session user_id:", user_id)
+# @profile_boundary.route("/profile")
+# def profile():
+#     user_id = session.get('user_id')
+#     print("Session user_id:", user_id)
 
-    if user_id:
-        user_data = User.get_profile(user_id)
-        if user_data:
-            return render_template('profile_page/profile.html', user=user_data)
-        else:
-            flash("User not found.", "danger")
-            return redirect(url_for('dashboard_boundary.dashboard'))
-    else:
-        flash("User not logged in.", "danger")
-        return redirect(url_for('auth.login'))
+#     if user_id:
+#         user_data = User.get_profile(user_id)
+#         if user_data:
+#             return render_template('profile_page/profile.html', user=user_data)
+#         else:
+#             flash("User not found.", "danger")
+#             return redirect(url_for('dashboard_boundary.dashboard'))
+#     else:
+#         flash("User not logged in.", "danger")
+#         return redirect(url_for('auth.login'))
     
 @profile_boundary.route("/update_account", methods=['GET', 'POST'])
 def update_account():
