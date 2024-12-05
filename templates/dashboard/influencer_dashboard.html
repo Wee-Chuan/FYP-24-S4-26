@@ -33,13 +33,19 @@
                             <p>{{ top_post_description }}</p>
                         </div>
                     </div>
-                    <div class="metric">
+                    <div class="metric followers-gained">
                         <h4>Followers Gained This Month</h4>
-                        <ul>
-                            {% for gain in most_followers_gain %}
-                                <li>{{ gain }}</li>
-                            {% endfor %}
-                        </ul>
+                        {% if followers_gained is not none %}
+                            <div class="followers-info">
+                                <div class="followers-count">
+                                    <i class="fas fa-user-plus"></i>
+                                    <span>{{ followers_gained }}</span>
+                                </div>
+                                <p>New followers this month</p>
+                            </div>
+                        {% else %}
+                            <p class="no-data">No data available for this month.</p>
+                        {% endif %}
                     </div>
                     <div class="metric">
                         <canvas id="engagementChart" width="400" height="400"></canvas>

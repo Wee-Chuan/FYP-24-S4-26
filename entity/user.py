@@ -112,7 +112,7 @@ class User:
         username_exists = db.collection('users').document(username).get().exists
 
         # Check if email exists
-        email_exists = db.collection('users').where('email', '==', email).limit(1).stream()
+        email_exists = db.collection('users').where(field_path='email', op_string='==', value=email).limit(1).stream()
         
         # Return True if either user_id or email already exists
         return username_exists or any(email_exists)
@@ -121,7 +121,7 @@ class User:
     def authenticate(username, password):
         """Authenticate the user by username and password."""
         # Query Firestore to find the user by username
-        users_ref = db.collection('users').where('username', '==', username).limit(1)
+        users_ref = db.collection('users').where(field_path='username', op_string='==', value=username).limit(1)
         doc = list(users_ref.stream())
         
         if doc:
@@ -140,11 +140,11 @@ class User:
         """Retrieve user profile details from Firestore."""
         try:
             doc = db.collection('users').document(user_id).get()
-            print("Attempting to retrieve document...")
+            print("Attempting to retrieve user profile...")
             print(f"Using user_id: {user_id}")
 
             if doc.exists:
-                print(f"Docs for {user_id} retrieved ")
+                print(f"User profile for {user_id} retrieved ")
                 data = doc.to_dict()
                 return data
             else:
@@ -206,7 +206,7 @@ class User:
     def visualize_followers_network(username):
         """Visualizes the followers network for the given user."""
         # Fetch user data from Firestore
-        user_ref = db.collection('users').where('username', '==', username).limit(1).get()
+        user_ref = db.collection('users').where(field_path='username', op_string='==', value=username).limit(1).get()
         
         if not user_ref:
             print(f"User {username} not found in Firestore.")
@@ -224,7 +224,7 @@ class User:
 
         # Fetch followers' following lists
         for follower in followers_list:
-            follower_ref = db.collection('users').where('username', '==', follower).limit(1).get()
+            follower_ref = db.collection('users').where(field_path='username', op_string='==', value=follower).limit(1).get()
             if follower_ref:
                 follower_data = follower_ref[0].to_dict()
                 follower_following_list = follower_data.get('following_list', [])
@@ -251,3 +251,5 @@ class User:
         plt.close(fig)  # Close the plot to avoid display issues
 
         return interactive_plot
+    
+    

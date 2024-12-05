@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, session, flash, request, jsonify
+
 from entity.user import User
 from entity.admin import Admin
+from entity.followers_hist_entity import FollowerHist
 
 dashboard_boundary = Blueprint('dashboard_boundary', __name__)
 
@@ -11,8 +13,37 @@ def dashboard():
     user = User.get_profile(user_id)
     if account_type == 'business_analyst':
         return render_template('dashboard/business_dashboard.html', user_id=user_id, user=user)
+    
     elif account_type == 'influencer':
-        return render_template('dashboard/influencer_dashboard.html', user_id=user_id, user=user)
+        # Fetch historical data for the user
+        historical_data = FollowerHist.get_followers_hist(user_id)
+        if historical_data:
+            forecast, error = FollowerHist.calculate_follower_growth(historical_data)
+
+            if not error:
+                last_month_followers = forecast['historical_data'][-2] if len(forecast['historical_data']) > 1 else 0
+                this_month_followers = forecast['historical_data'][-1]
+                followers_gained = (
+                    (this_month_followers - last_month_followers) 
+                    if last_month_followers > 0 else 0
+                )
+                followers_gained_percentage = ( 
+                    ((this_month_followers - last_month_followers) / last_month_followers) * 100 
+                )
+            else:
+                followers_gained = None
+                followers_gained_percentage = None
+        else:
+            followers_gained = None
+            followers_gained_percentage = None
+
+        return render_template(
+            'dashboard/influencer_dashboard.html', 
+            user_id=user_id, user=user, 
+            followers_gained=followers_gained, 
+            followers_gained_percentage=followers_gained_percentage
+        )
+    
     elif account_type == 'admin':
         all_users = Admin.get_all_users()
 
@@ -137,8 +168,23 @@ def engagement():
 def followers():
     user_id = session.get('user_id')
     user = User.get_profile(user_id)
-    # You can add logic to fetch followers forecast data here
-    return render_template('dashboard/influencer_menu/followers.html', user_id=user_id, user=user)
+
+    historical_data = FollowerHist.get_followers_hist(user_id)
+    if not historical_data:
+        flash('No follower data found for this user.', 'danger')
+        return render_template('dashboard/influencer_menu/followers.html', user_id=user_id, user=user)
+    
+    forecast, error = FollowerHist.calculate_follower_growth(historical_data)
+    if error:
+        flash(error, 'warning')
+        return render_template('dashboard/influencer_menu/followers.html', user_id=user_id, user=user)
+
+    return render_template(
+        'dashboard/influencer_menu/followers.html', 
+        user_id=user_id, 
+        user=user, 
+        forecast=forecast
+    )
 
 @dashboard_boundary.route('/dashboard/network')
 def network():
@@ -149,6 +195,7 @@ def network():
     # You can add logic to fetch network data here
     return render_template('dashboard/influencer_menu/network.html', user_id=user_id, user=user, interactive_plot=interactive_plot)
 # ========================================================== #
+
 
 # ================ Business dashbaord menu ================= #
 

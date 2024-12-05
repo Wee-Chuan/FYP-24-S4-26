@@ -14,7 +14,8 @@ pip install firebase-admin
 pip install bcrypt
 pip install requests
 
-pip install scikit-learn *NEW*
+*NEW*
+pip install scikit-learn 
 
 
 BOUNDARY:

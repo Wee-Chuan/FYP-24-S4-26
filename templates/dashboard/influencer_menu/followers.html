@@ -2,47 +2,156 @@
 {% block title %}Followers Forecast{% endblock %}
 
 {% block styles %}
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/css/bootstrap.min.css"> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='components/dashboard/influencer_dashboard.css') }}">
 {% endblock %}
 
 {% block content %}
-    <div class="dashboard-wrapper">
-        <aside class="sidebar">
-            <h3>Dashboard Menu</h3>
-            <ul class="menu">
-                <li><a href="{{ url_for('dashboard_boundary.engagement') }}">Engagement Metrics</a></li>
-                <li><a href="{{ url_for('dashboard_boundary.followers') }}">Followers Forecast</a></li>
-                <li><a href="{{ url_for('dashboard_boundary.network') }}">Network Visualization</a></li>
-            </ul>
-        </aside>
+<div class="dashboard-wrapper">
+    <aside class="sidebar">
+        <h3>Dashboard Menu</h3>
+        <ul class="menu">
+            <li><a href="{{ url_for('dashboard_boundary.engagement') }}"><i class="fas fa-chart-line"></i> Engagement Metrics</a></li>
+            <li><a href="{{ url_for('dashboard_boundary.followers') }}"><i class="fas fa-users"></i> Followers Forecast</a></li>
+            <li><a href="{{ url_for('dashboard_boundary.network') }}"><i class="fas fa-network-wired"></i> Network Visualization</a></li>
+        </ul>
+    </aside>
 
-        <div class="dashboard-container">
-            <h2>Followers Forecast for {{ user['username'] }}</h2>
-            <p>Predict follower growth over time.</p>
-            <canvas id="followersChart" width="600" height="400"></canvas>
+    <div class="dashboard-container">
+        <h2>Followers Forecast for {{ user['username'] }}</h2>
+
+        {% if forecast and forecast['historical_data'] and forecast['future_data'] %}
+            <!-- Key Metrics Cards -->
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <h4>Follower Growth (This Month)</h4>
+                        {% if forecast['historical_data']|length > 1 %}
+                            {% set last_month = forecast['historical_data'][-2] %}
+                            {% set current_month = forecast['historical_data'][-1] %}
+                            {% set percentage_change = ((current_month - last_month) / last_month) * 100 %}
+                            <p id="percentage">{{ percentage_change|round(2) }}%</p>
+                            <p>Change from last month</p>
+                        {% else %}
+                            <p>No previous data available for comparison.</p>
+                        {% endif %}                  
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <h4>Future Growth</h4>
+                        <p id="percentage">{{ (((forecast['future_data'][-1] - forecast['future_data'][0]) / forecast['future_data'][0]) * 100)|round(2) }}%</p>
+                        <p>Predicted growth for next 12 months</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <h4>Historical Follower Growth (Past 12 Months)</h4>
+            <div class="chart-container">
+                <canvas id="historicalFollowersChart" width="800" height="400"></canvas>
+            </div>
+
+            <h4>Predicted Follower Growth (Next 6 Months)</h4>
+            <div class="chart-container">
+                <canvas id="futureFollowersChart" width="800" height="400"></canvas>
+            </div>
+
+            <!-- Chart.js Script -->
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const ctx = document.getElementById('followersChart').getContext('2d');
-                    new Chart(ctx, {
-                        type: 'bar',
+                // Data from Flask
+                // Underlined red lines are just syntax errors (code runs fine)
+                const historicalData = {{ forecast['historical_data'] | tojson | default([]) }};
+                const futureData = {{ forecast['future_data'] | tojson | default([]) }};
+                const historicalLabels = {{ forecast['historical_labels'] | tojson | default([]) }};
+                const futureLabels = {{ forecast['future_labels'] | tojson | default([]) }};
+
+                if (historicalData.length > 0 && futureData.length > 0) {
+                    // Calculate Percentage Change for Tooltips
+                    const calculateChange = (data) => {
+                        return data.map((val, index, arr) => index === 0 ? 0 : (((val - arr[index - 1]) / arr[index - 1]) * 100).toFixed(2));
+                    };
+
+                    // Historical Followers Chart
+                    const historicalCtx = document.getElementById('historicalFollowersChart').getContext('2d');
+                    new Chart(historicalCtx, {
+                        type: 'line',
                         data: {
-                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                            labels: historicalLabels,
                             datasets: [{
-                                label: 'Followers',
-                                data: [50, 60, 70, 80, 90, 100], // Replace with actual data
-                                backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                                borderColor: 'rgba(153, 102, 255, 1)',
-                                borderWidth: 1
+                                label: 'Historical Followers Count',
+                                data: historicalData,
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderWidth: 2,
+                                tension: 0.4
                             }]
                         },
                         options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(tooltipItem) {
+                                            const index = tooltipItem.dataIndex;
+                                            const change = calculateChange(historicalData)[index];
+                                            return `Followers: ${tooltipItem.raw} (${change}%)`;
+                                        }
+                                    }
+                                }
+                            },
                             scales: {
-                                y: { beginAtZero: true }
+                                x: { title: { display: true, text: 'Date' } },
+                                y: { title: { display: true, text: 'Follower Count' }, beginAtZero: true }
                             }
                         }
                     });
-                });
+
+                    // Future Followers Chart
+                    const futureCtx = document.getElementById('futureFollowersChart').getContext('2d');
+                    new Chart(futureCtx, {
+                        type: 'line',
+                        data: {
+                            labels: futureLabels,
+                            datasets: [{
+                                label: 'Predicted Followers Growth',
+                                data: futureData,
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                borderWidth: 2,
+                                tension: 0.4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(tooltipItem) {
+                                            const index = tooltipItem.dataIndex;
+                                            const change = calculateChange(futureData)[index];
+                                            return `Predicted Followers: ${tooltipItem.raw} (${change}%)`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: { title: { display: true, text: 'Date' } },
+                                y: { title: { display: true, text: 'Follower Count' }, beginAtZero: true }
+                            }
+                        }
+                    });
+                } else {
+                    console.error('No data available for historical or future forecasts.');
+                }
             </script>
-        </div>
+        {% else %}
+            <p>No forecast data available for this user. Please check back later or contact support.</p>
+        {% endif %}
     </div>
+</div>
 {% endblock %}
