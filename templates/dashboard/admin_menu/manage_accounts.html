@@ -141,7 +141,15 @@
                 document.getElementById('modalAccountType').textContent = data.account_type;
                 document.getElementById('modalFollowers').textContent = data.follower_count || 0;
                 document.getElementById('modalFollowing').textContent = data.following_count || 0;
-                document.getElementById('modalStatus').textContent = data.account_type === 'business_analyst' && !data.is_approved ? 'Pending Approval' : 'Active';
+                // Determine and display account status
+                if (data.account_type === 'business_analyst') {
+                    document.getElementById('modalStatus').textContent = !data.is_approved ? 'Pending Approval' : 'Active';
+                } else if (data.account_type === 'influencer') {
+                    document.getElementById('modalStatus').textContent = data.is_suspended ? 'Suspended' : 'Active';
+                } else {
+                    document.getElementById('modalStatus').textContent = 'Active'; // Default for other account types
+                }
+                
                 document.getElementById('userDetailsModal').style.display = 'block';
             })
             .catch(error => console.error('Error fetching user details:', error));
