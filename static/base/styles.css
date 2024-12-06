@@ -79,6 +79,11 @@ header .navbar {
     border-bottom: 2px solid #78e6ff;
 }
 
+.nav-links .active a {
+    color: #78e6ff;
+    border-bottom: 2px solid #78e6ff;
+}
+
 .main-content {
     padding-top: 120px; 
 }
@@ -147,7 +152,7 @@ footer {
     position: fixed;
     top: 20px;
     right: 20px;
-    width: 300px;
+    width: 400px;
     z-index: 1000;
 }
 
@@ -174,6 +179,7 @@ footer {
 /* Close button styling */
 .flash .close-btn {
     font-size: 16px;
+    width: 50px;
     color: #ffffff;
     cursor: pointer;
     background: transparent;

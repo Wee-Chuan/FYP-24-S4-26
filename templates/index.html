@@ -77,10 +77,19 @@
                     <span class="expand-icon">▼</span>
                 </div>
                 <div class="feature-details" id="feature3-details">
-                    <div class="feature-details-content">
-                        <p>Visualize your network and interactions with dynamic, intuitive graphs that make complex data easy to understand.</p>
-                        <img src="{{ url_for('static', filename='images/user1_followers_network.png') }}">
-                    </div>
+                    <p>Visualize your network and interactions with dynamic, intuitive graphs that make complex data easy to understand.</p>
+                    <img src="{{ url_for('static', filename='images/user1_followers_network.png') }}">
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-header" onclick="toggleFeatureDetails('feature4-details')">
+                    <!-- <img src="{{ url_for('static', filename='icons/interactive_visualization.png') }}" alt="Visualization"> -->
+                    <i class="fas fa-trophy"></i>
+                    <h3>Network Position</h3>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="feature-details" id="feature4-details">
+                    <p>Discover how you rank and connect with others in the ecosystem to strategize your growth and influence effectively</p>
                 </div>
             </div>
         </div>

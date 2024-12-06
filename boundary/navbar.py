@@ -61,10 +61,15 @@ def login():
         password = request.form['password']
 
         # Authenticate and retrieve account_type
-        authenticated, user_id, account_type = User.authenticate(username, password)
+        authenticated, user_id, account_type, is_suspended = User.authenticate(username, password)
 
         # Authenticate using Firebase Authentication
         if authenticated:
+            # Check if user is suspended
+            if is_suspended:
+                flash("Account suspended. Please contact support for assistance.", "danger")
+                return render_template('navbar/login.html')
+            
             # Set user ID in session after successful authentication
             session['user_id'] = user_id
             session['account_type'] = account_type

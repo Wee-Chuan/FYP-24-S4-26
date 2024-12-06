@@ -126,14 +126,17 @@ class User:
         
         if doc:
             data = doc[0].to_dict()
+
+            # Check if user is suspended
+            is_suspended = data.get('is_suspended', False)
             
             stored_hashed_password = data.get('password')
             if bcrypt.checkpw(password.encode('utf-8'), stored_hashed_password.encode('utf-8')):  # Verify hashed password
                 user_id = data.get('user_id')
                 account_type = data.get('account_type')
-                return True, user_id, account_type
+                return True, user_id, account_type, is_suspended
     
-        return False, None, None # Invalid password
+        return False, None, None, False # Invalid password
     
     @staticmethod
     def get_profile(user_id):
