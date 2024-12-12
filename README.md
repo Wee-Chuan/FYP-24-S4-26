@@ -1,6 +1,15 @@
 # FYP-24-S4-26 #
 Run 'python app.py' 
 
+# CREATE VIRTUAL ENVIRONTMENT #
+python -m venv fyp_env
+
+For MacOS:
+source fyp_env/bin/activate # Activate the environment
+
+FOR Windows:
+fyp_env\Scripts\activate  # Activate the environment
+
 # LIBRARIES #:
 
 # REQUIREMENTS #:
@@ -16,6 +25,7 @@ pip install requests
 
 *NEW* 
 pip install scikit-learn 
+pip install pandas
 
 
 # BOUNDARY #
