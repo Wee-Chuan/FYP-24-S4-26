@@ -1,6 +1,11 @@
 import matplotlib
 matplotlib.use('Agg')
 
+import matplotlib.dates as mdates  # Make sure to import this for date formatting
+import logging
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+
 import networkx as nx
 import matplotlib.pyplot as plt
 import mpld3
@@ -255,4 +260,79 @@ class User:
 
         return interactive_plot
     
-    
+    @staticmethod
+    def visualize_engagement_metrics(user_id):
+        """
+        Visualizes engagement metrics (likes, comments, shares, followers) for the user over time.
+        """
+        try:
+            # Fetch engagement metrics
+            logging.info(f"Fetching engagement metrics for user_id: {user_id}")
+            metrics_ref = db.collection('engagement_metrics') \
+                .where('user_id', '==', user_id).order_by('date').stream()
+            metrics = [doc.to_dict() for doc in metrics_ref]
+
+            if not metrics:
+                logging.warning(f"No engagement metrics found for user_id: {user_id}")
+                return None
+
+            # Validate and process metrics
+            for metric in metrics:
+                if not all(key in metric for key in ['date', 'likes', 'comments', 'shares', 'followers']):
+                    logging.error(f"Invalid metric data: {metric}")
+                    return None
+
+            # Extract data for plotting
+            dates = [metric['date'].strftime('%Y-%m-%d') for metric in metrics]
+            likes = [metric['likes'] for metric in metrics]
+            comments = [metric['comments'] for metric in metrics]
+            shares = [metric['shares'] for metric in metrics]
+            followers = [metric['followers'] for metric in metrics]
+
+            # Create the chart
+            fig = User.create_chart(dates, likes, comments, shares, followers)
+
+            # Convert to interactive HTML
+            interactive_plot = mpld3.fig_to_html(fig)
+            plt.close(fig)
+
+            return interactive_plot
+
+        except Exception as e:
+            logging.error(f"Error visualizing engagement metrics for user_id {user_id}: {e}")
+            return None
+
+    @staticmethod
+    def create_chart(dates, likes, comments, shares, followers):
+        """
+        Creates a Matplotlib chart for engagement metrics.
+        """
+        try:
+            fig, ax = plt.subplots(figsize=(10, 6))
+
+            # Define colors
+            colors = ['blue', 'green', 'red', 'purple']
+
+            # Plot the data
+            ax.plot(dates, likes, label='Likes', marker='o', color=colors[0])
+            ax.plot(dates, comments, label='Comments', marker='o', color=colors[1])
+            ax.plot(dates, shares, label='Shares', marker='o', color=colors[2])
+            ax.plot(dates, followers, label='Followers', marker='o', color=colors[3])
+
+            # Formatting
+            ax.set_title('Engagement Metrics Over Time', fontsize=16)
+            ax.set_xlabel('Date', fontsize=14)
+            ax.set_ylabel('Counts', fontsize=14)
+            ax.legend()
+            ax.grid(True)
+
+            # Format the x-axis dates
+            ax.xaxis.set_major_locator(mdates.AutoDateLocator())
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %d, %Y'))
+            fig.autofmt_xdate()
+
+            return fig
+
+        except Exception as e:
+            logging.error(f"Error creating chart for engagement metrics: {e}")
+            return None

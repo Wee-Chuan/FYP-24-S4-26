@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, redirect, url_for, session, flash, request, jsonify
-
+from entity.user import db  # Assuming `db` is initialized in `user.py`
 from entity.user import User
 from entity.admin import Admin
 from entity.followers_hist_entity import FollowerHist
+
 
 dashboard_boundary = Blueprint('dashboard_boundary', __name__)
 
@@ -194,12 +195,66 @@ def network():
 
     # You can add logic to fetch network data here
     return render_template('dashboard/influencer_menu/network.html', user_id=user_id, user=user, interactive_plot=interactive_plot)
-# ========================================================== #
 
+@dashboard_boundary.route('/dashboard/engagement_metrics', methods=['GET'])
+def engagement_metrics():
+    """
+    Route to visualize the user's engagement metrics.
+    """
+    try:
+        # Get the logged-in user ID and account type
+        user_id = session.get('user_id')
+        account_type = session.get('account_type')
 
-# ================ Business dashbaord menu ================= #
+        # Check if the user exists and is an influencer
+        user = User.get_profile(user_id)
+        if not user or account_type != 'influencer':
+            flash("Unauthorized access. Only influencers can view engagement metrics.", "danger")
+            return redirect(url_for('dashboard_boundary.dashboard'))
 
+        # Fetch engagement metrics data from Firestore
+        metrics_ref = db.collection('engagement_metrics') \
+            .where('user_id', '==', user_id).order_by('date').stream()
+        metrics = [doc.to_dict() for doc in metrics_ref]
 
-# ========================================================== #
+        # Handle cases where no engagement data is available
+        if not metrics:
+            flash("No engagement metrics available.", "warning")
+            return render_template(
+                'dashboard/influencer_menu/engagement_metrics.html',
+                user_id=user_id,
+                user=user,
+                metrics=None,
+            )
 
+        # Process the data (e.g., serialize dates)
+        processed_metrics = [
+            {
+                **metric,
+                "date": metric["date"].strftime("%Y-%m-%d")  # Format the date for display
+            }
+            for metric in metrics
+        ]
+        
+        print("Metrics being passed to template:", processed_metrics)
 
+        # Pass metrics to the template
+        return render_template(
+            'dashboard/influencer_menu/engagement_metrics.html',
+            user_id=user_id,
+            user=user,
+            metrics=processed_metrics,
+            
+
+        )
+        
+    
+
+        
+   
+
+    except Exception as e:
+        # Handle unexpected errors and log them
+        print(f"Error fetching engagement metrics: {e}")
+        flash("An error occurred while fetching engagement metrics.", "danger")
+        return redirect(url_for('dashboard_boundary.dashboard'))
