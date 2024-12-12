@@ -5,7 +5,10 @@ from flask import Flask, render_template, redirect, url_for, session, flash, req
 from dotenv import load_dotenv
 from boundary.navbar import navbar
 from boundary.dashboard_boundary import dashboard_boundary
+from boundary.admin_boundary import admin_boundary
+from boundary.influencer_boundary import influencer_boundary
 from boundary.profile_boundary import profile_boundary
+
 
 load_dotenv()
 
@@ -18,8 +21,9 @@ app.permanent_session_lifetime = timedelta(minutes=30)
 # Register blueprints
 app.register_blueprint(navbar)
 app.register_blueprint(dashboard_boundary)
+app.register_blueprint(admin_boundary)
+app.register_blueprint(influencer_boundary)
 app.register_blueprint(profile_boundary)
-
 
 @app.route('/')
 def index():
