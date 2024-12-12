@@ -1,1 +1,4 @@
 .env
+
+# Ignore virtual environment
+fyp_env/
