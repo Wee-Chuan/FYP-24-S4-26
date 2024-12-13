@@ -74,7 +74,7 @@ def login():
             session['user_id'] = user_id
             session['account_type'] = account_type
             flash("Login successful", "success")
-            return redirect(url_for('dashboard_boundary.dashboard'))
+            return redirect(url_for('dashboard_boundary.dashboard')) # Access this endpoint WHEN LOGIN SUCCEEDS
         else:
             flash("Failed to log in: Invalid username or password", "danger")
 

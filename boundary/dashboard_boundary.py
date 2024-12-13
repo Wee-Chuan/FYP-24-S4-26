@@ -6,17 +6,21 @@ from entity.followers_hist_entity import FollowerHist
 
 dashboard_boundary = Blueprint('dashboard_boundary', __name__)
 
-@dashboard_boundary.route('/dashboard')
+@dashboard_boundary.route('/dashboard') # endpoint reached when successful login
 def dashboard():
     account_type = session.get('account_type')
     user_id = session.get('user_id') 
     user = User.get_profile(user_id)
+    
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ BUSINESS ANALYST DASHBOARD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     if account_type == 'business_analyst':
         return render_template('dashboard/business_dashboard.html', user_id=user_id, user=user)
     
+    
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INFLUENCER DASHBOARD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     elif account_type == 'influencer':
         # Fetch historical data for the user
-        historical_data = FollowerHist.get_followers_hist(user_id)
+        historical_data = FollowerHist.get_followers_hist(user_id) # ~~~~~~~unsure of followerHist~~~~~~~~~~~
         if historical_data:
             forecast, error = FollowerHist.calculate_follower_growth(historical_data)
 
@@ -38,12 +42,14 @@ def dashboard():
             followers_gained_percentage = None
 
         return render_template(
-            'dashboard/influencer_dashboard.html', 
+            'dashboard/influencer_dashboard.html', # html page for influencer dashboard, with needed paras
             user_id=user_id, user=user, 
             followers_gained=followers_gained, 
             followers_gained_percentage=followers_gained_percentage
         )
     
+    
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ADMIN DASHBOARD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     elif account_type == 'admin':
         all_users = Admin.get_all_users()
 
@@ -157,14 +163,14 @@ def suspend_user(user_id):
 # ======================================================= #
 
 # ================ Influencer dashbaord menu ================ #
-@dashboard_boundary.route('/dashboard/engagement')
+@dashboard_boundary.route('/engagement')
 def engagement():
     user_id = session.get('user_id')
     user = User.get_profile(user_id)
     # You can add logic to fetch engagement data here
     return render_template('dashboard/influencer_menu/engagement.html', user_id=user_id, user=user)
 
-@dashboard_boundary.route('/dashboard/followers')
+@dashboard_boundary.route('/followers')
 def followers():
     user_id = session.get('user_id')
     user = User.get_profile(user_id)
@@ -186,7 +192,7 @@ def followers():
         forecast=forecast
     )
 
-@dashboard_boundary.route('/dashboard/network')
+@dashboard_boundary.route('/network') # when 'Network Visualisation' is clicked in the sidebar from influencer's side
 def network():
     user_id = session.get('user_id')
     user = User.get_profile(user_id)
@@ -194,6 +200,7 @@ def network():
 
     # You can add logic to fetch network data here
     return render_template('dashboard/influencer_menu/network.html', user_id=user_id, user=user, interactive_plot=interactive_plot)
+    # returns network.html page here
 # ========================================================== #
 
 

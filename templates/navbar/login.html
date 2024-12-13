@@ -13,10 +13,10 @@
         <div class="info-container">
             <!-- <img src="{{ url_for('static', filename='images/background.jpg') }}" alt="Login Image"> -->
         </div>
-        <div class="form-container">
+        <div class="form-container"> <!--form to enter user details-->
             <h2>SocioSith</h2>
             <p>Welcome back!</p>
-            <form action="{{ url_for('navbar.login') }}" method="POST">
+            <form action="{{ url_for('navbar.login') }}" method="POST"> <!-- ENDPOINT IN boundary/navbar.py -->
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" required>
                 

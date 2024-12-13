@@ -35,17 +35,11 @@
             
             <!-- Display the follower network graph -->
             <h3>Follower Network Graph</h3>
-            
-            {% if interactive_plot %}
-                <div id="networkGraph">
-                    <div id="graph">
-                        {{ interactive_plot | safe }}  <!-- Render the interactive plot here -->
-                    </div>
-                </div>
-            {% else %}
-                <p>No graph available.</p>
-            {% endif %}
-            
+
+            <h4>Graph 1: Network with Communities</h2>
+            <img src="{{ url_for('static', filename='graph1.png') }}" alt="Network with Communities" width="800">
+            <h4>Graph 2: Influential Nodes Highlighted</h2>
+            <img src="{{ url_for('static', filename='graph2.png') }}" alt="Influential Nodes Highlighted" width="800">
         </div>
     </div>
 {% endblock %}

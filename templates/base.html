@@ -29,7 +29,8 @@
                 </div> 
                 {% endif %}
                 <ul class="nav-links">
-                    {% if session.get('user_id') %}
+                    <!--header for user that is logged in-->
+                    {% if session.get('user_id') %} 
                         <li class="{{ 'active' if request.path == url_for('dashboard_boundary.dashboard') else '' }}">
                             <a href="{{ url_for('dashboard_boundary.dashboard') }}">Dashboard</a>
                         </li>
@@ -38,9 +39,10 @@
                         </li>
                         <li><a href="{{ url_for('logout') }}">Logout</a></li>
                     {% else %}
+                        <!--header for user that is not logged in-->
                         {% if show_nav %}
-                        <li><a href="{{ url_for('navbar.login') }}">Login</a></li>
-                        <li><a href="{{ url_for('navbar.register') }}">Register</a></li>
+                        <li><a href="{{ url_for('navbar.login') }}">Login</a></li> <!--leads to navbar/login.html-->
+                        <li><a href="{{ url_for('navbar.register') }}">Register</a></li> <!--leads to navbar/register.html -->
                         <li class="{{ 'active' if request.path == url_for('navbar.about') else '' }}">
                             <a href="{{ url_for('navbar.about') }}">About Us</a>
                         </li>
