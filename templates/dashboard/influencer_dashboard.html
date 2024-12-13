@@ -12,16 +12,26 @@
         <aside class="sidebar"> <!--each anchor tag leads to an endpoint in boundary/dashboard_boundary.py-->
             <h3>Dashboard Menu</h3>
             <ul class="menu">
-                <li><a href="{{ url_for('dashboard_boundary.engagement') }}"><i class="fas fa-chart-line"></i> Engagement Metrics</a></li>
-                <li><a href="{{ url_for('dashboard_boundary.followers') }}"><i class="fas fa-users"></i> Followers Forecast</a></li>
-                <li><a href="{{ url_for('dashboard_boundary.network') }}"><i class="fas fa-network-wired"></i> Network Visualization</a></li>
-                
+                <li><a href="{{ url_for('influencer_boundary.engagement') }}"><i class="fas fa-chart-line"></i> Engagement Metrics</a></li>
+                <li><a href="{{ url_for('influencer_boundary.followers') }}"><i class="fas fa-users"></i> Followers Forecast</a></li>
+                <li><a href="{{ url_for('influencer_boundary.network') }}"><i class="fas fa-network-wired"></i> Network Visualization</a></li>
             </ul>
         </aside>
 
         <!-- Main Dashboard Content -->
         <div class="dashboard-container">
-            <h2>Welcome, {{ user['username'] }}!</h2>
+            <div class="header">
+                <h2>Welcome, {{ user['username'] }}!</h2>
+                {% if linked_account %}
+                    <div class="linked-info">
+                        <p><strong>Currently Linked Account:</strong> {{ linked_account | title }}</p>
+                    </div>
+                {% else %}
+                    <div class="linked-info">
+                        <p><strong>No social media account is linked yet.</strong></p>
+                    </div>
+                {% endif %}
+            </div>
 
             <!-- General Metrics Section -->
             <section class="dashboard-section general-metrics">

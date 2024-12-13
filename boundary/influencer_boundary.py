@@ -6,14 +6,14 @@ from entity.followers_hist_entity import FollowerHist
 influencer_boundary = Blueprint('influencer_boundary', __name__)
 
 # ================ Influencer dashbaord menu ================ #
-@influencer_boundary.route('/dashboard/engagement')
+@influencer_boundary.route('/engagement')
 def engagement():
     user_id = session.get('user_id')
     user = User.get_profile(user_id)
     # You can add logic to fetch engagement data here
     return render_template('dashboard/influencer_menu/engagement.html', user_id=user_id, user=user)
 
-@influencer_boundary.route('/dashboard/followers')
+@influencer_boundary.route('/followers')
 def followers():
     user_id = session.get('user_id')
     user = User.get_profile(user_id)
@@ -35,7 +35,7 @@ def followers():
         forecast=forecast
     )
 
-@influencer_boundary.route('/dashboard/network')
+@influencer_boundary.route('/network') # when 'Network Visualisation' is clicked in the sidebar from influencer's side
 def network():
     user_id = session.get('user_id')
     user = User.get_profile(user_id)
@@ -44,4 +44,5 @@ def network():
 
     # You can add logic to fetch network data here
     return render_template('dashboard/influencer_menu/network.html', user_id=user_id, user=user, interactive_plot=interactive_plot)
+    # returns network.html page here
 # ========================================================== #
