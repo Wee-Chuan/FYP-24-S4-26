@@ -12,8 +12,8 @@
     <aside class="sidebar">
         <h3>Admin Menu</h3>
         <ul class="menu">
-            <li><a href="{{ url_for('dashboard_boundary.manage_accounts') }}" class="{% if current_page == 'manage_accounts' %}active{% endif %}"><i class="fas fa-users"></i>Manage Accounts</a></li>
-            <li><a href="{{ url_for('dashboard_boundary.approve_accounts') }}"><i class="fas fa-user-check"></i> Approve Accounts</a></li>
+            <li><a href="{{ url_for('admin_boundary.manage_accounts') }}" class="{% if current_page == 'manage_accounts' %}active{% endif %}"><i class="fas fa-users"></i>Manage Accounts</a></li>
+            <li><a href="{{ url_for('admin_boundary.approve_accounts') }}"><i class="fas fa-user-check"></i> Approve Accounts</a></li>
         </ul>
     </aside>
 
@@ -63,11 +63,13 @@
             <div class="modal-content">
                 <span class="close" onclick="closeModal()">&times;</span>
                 <h3>User Details</h3>
+                <p><strong>UserID:</strong> <span id="modalUserID"></span></p>
                 <p><strong>Username:</strong> <span id="modalUsername"></span></p>
                 <p><strong>Email:</strong> <span id="modalEmail"></span></p>
                 <p><strong>Account Type:</strong> <span id="modalAccountType"></span></p>
-                <p><strong>Followers:</strong> <span id="modalFollowers"></span></p>
-                <p><strong>Following:</strong> <span id="modalFollowing"></span></p>
+                <p><strong>Linked Social Account:</strong> <span id="modalLinkedSocial"></span></p>
+                <!-- <p><strong>Followers:</strong> <span id="modalFollowers"></span></p>
+                <p><strong>Following:</strong> <span id="modalFollowing"></span></p> -->
                 <p><strong>Status:</strong> <span id="modalStatus"></span></p>
             </div>
         </div>
@@ -136,11 +138,13 @@
         fetch(`/dashboard/admin/user/${userId}`)
             .then(response => response.json())
             .then(data => {
+                document.getElementById('modalUserID').textContent = data.user_id;
                 document.getElementById('modalUsername').textContent = data.username;
                 document.getElementById('modalEmail').textContent = data.email;
                 document.getElementById('modalAccountType').textContent = data.account_type;
-                document.getElementById('modalFollowers').textContent = data.follower_count || 0;
-                document.getElementById('modalFollowing').textContent = data.following_count || 0;
+                document.getElementById('modalLinkedSocial').textContent = data.linked_social_account;
+                // document.getElementById('modalFollowers').textContent = data.follower_count || 0;
+                // document.getElementById('modalFollowing').textContent = data.following_count || 0;
                 // Determine and display account status
                 if (data.account_type === 'business_analyst') {
                     document.getElementById('modalStatus').textContent = !data.is_approved ? 'Pending Approval' : 'Active';

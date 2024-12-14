@@ -75,11 +75,34 @@
     width: 100%;
 }
 
-.dashboard-container h2 {
+.dashboard-container .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 10px;
+}
+
+.dashboard-container .header h2 {
     font-size: 2em;
     font-weight: bold;
     color: #333;
-    margin-bottom: 20px;
+    margin: 0;
+}
+
+.dashboard-container .header .linked-info {
+    font-size: 1em;
+    color: #555;
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-container .header .linked-info p {
+    margin: 0;
+    font-size: 1em;
+    font-weight: 500;
 }
 
 /* General Metrics Section */

@@ -37,6 +37,9 @@
                         <li class="{{ 'active' if request.path == url_for('profile_boundary.update_account') else '' }}">
                             <a href="{{ url_for('profile_boundary.update_account') }}">Profile</a>
                         </li>
+                        <li class="{{ 'active' if request.path == url_for('profile_boundary.link_social') else '' }}">
+                            <a href="{{ url_for('profile_boundary.link_social') }}">Link Social</a>
+                        </li>
                         <li><a href="{{ url_for('logout') }}">Logout</a></li>
                     {% else %}
                         <!--header for user that is not logged in-->
@@ -67,15 +70,6 @@
     <footer>
         <div class="footer-content">
             <p>&copy; 2024 SocioSith. All Rights Reserved.</p>
-            <ul class="footer-links">
-                
-                <!-- <li><a href="mailto:SocioSith@sw.com">Contact Us</a></li> -->
-            </ul>
-            <div class="social-media">
-                <a href="https://twitter.com" target="_blank">Twitter</a>
-                <a href="https://facebook.com" target="_blank">Facebook</a>
-                <a href="https://instagram.com" target="_blank">Instagram</a>
-            </div>
         </div>
     </footer>
 

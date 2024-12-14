@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Link Social Media{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='components/forms/link_social.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+{% endblock %}
+
+{% block content %}
+    <div class="link-social-wrapper">
+        <!-- Left Info Section (Background or Context Info) -->
+        <div class="info-container">
+            <div class="info-text">
+                <h2>Connect with Your Network</h2>
+                <p>Link your social media accounts to get the most out of our platform. Stay connected and build your online presence effortlessly.</p>
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-container">
+            <h2>Link Your Social Media Account</h2>
+            <p>Select a platform and enter your login details to securely link your account.</p>
+
+            
+
+            <form action="{{ url_for('profile_boundary.link_social') }}" method="POST">
+                <!-- Username Input -->
+                <label for="login_details">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username " required>
+                
+                <!-- Password Input -->
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                
+                <!-- Submit Button -->
+                <button type="submit">Link Account</button>
+
+                <!-- Terms and Conditions Checkbox -->
+                <div class="terms-container">
+                    <input type="checkbox" id="agree_terms" name="agree_terms" required>
+                    <label for="agree_terms">
+                        I agree to the
+                        <a href="#" id="terms-link"> Terms and Conditions</a> 
+                        and 
+                        <a href="#" id="privacy-link"> Privacy Policy</a>.
+                    </label>
+                </div>
+
+                <!-- Social Media Platform Selector -->
+                <div class="social-media-options">
+                    <input type="radio" id="twitter" name="social_media" value="twitter" required hidden>
+                    <label for="twitter" class="social-logo">
+                        <i class="bi bi-twitter"></i>
+                    </label>
+
+                    <input type="radio" id="facebook" name="social_media" value="facebook" required hidden>
+                    <label for="facebook" class="social-logo">
+                        <i class="bi bi-facebook"></i>
+                    </label>
+                </div>
+            </form>
+            <!-- Terms and Privacy Modal -->
+            <div id="termsModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Terms and Conditions</h2>
+                    <p>Welcome to <strong>SocioSith</strong>. By accessing or using our platform, you agree to comply with the following terms and conditions. Please read them carefully.</p>
+        
+                    <h3>Platform Usage</h3>
+                    <p><strong>Purpose:</strong> This platform is designed to help influencers and businesses analyze social network data and enhance their online presence.</p>
+                    <p><strong>Prohibited Actions:</strong> Users are prohibited from engaging in unauthorized activities, such as data scraping, hacking, or attempting to bypass platform security measures.</p>
+                    
+                    <h3>User Responsibilities</h3>
+                    <p><strong>Account Security:</strong> Users must keep their login credentials confidential and notify us immediately of any unauthorized use.</p>
+                    <p><strong>Accurate Information:</strong> Users must provide accurate and up-to-date information when creating an account or linking social media profiles.</p>
+                    
+                    <h3>Intellectual Property</h3>
+                    <p>All content, analytics, and tools provided by <strong>SocioSith</strong> are the property of the platform. Unauthorized use or duplication of content is strictly prohibited.</p>
+                    
+                    <h3>Limitation of Liability</h3>
+                    <p>While we strive to provide accurate data and uninterrupted service, <strong>SocioSith</strong> is not responsible for errors, delays, or disruptions caused by third-party integrations or external factors.</p>
+                    
+                    <h3>Modifications</h3>
+                    <p>We reserve the right to modify these terms at any time. Continued use of the platform constitutes acceptance of any changes.</p>
+                </div>
+            </div>
+
+            <div id="privacyModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Privacy Policy</h2>
+                    <p>At <strong>SocioSith</strong>, we value your privacy. This policy outlines how we collect, use, and protect your personal information.</p>
+        
+                    <h3>Information Collection</h3>
+                    <p><strong>Personal Data:</strong> We collect your name, email address during registration. We collect Social media accounts information when linked. </p>
+                    <p><strong>Analytics Data:</strong> Usage patterns, engagement metrics, and other data are collected to improve our services.</p>
+                    
+                    <h3>Data Usage</h3>
+                    <p><strong>Insights and Reports:</strong> Your data is used to generate customized analytics and reports for your social media strategy.</p>
+                    <p><strong>Communication:</strong> We may use your contact details to send updates, recommendations, or platform changes.</p>
+                    
+                    <h3>Data Sharing</h3>
+                    <p>We do not sell your personal information. However, we may share data with trusted third-party services for platform functionality, as permitted by you.</p>
+                    
+                    <h3>Security Measures</h3>
+                    <p>We use advanced security protocols to protect your data. Despite our efforts, no system is entirely foolproof. We encourage users to adopt strong password practices.</p>
+                    
+                    <h3>Your Rights</h3>
+                    <p>You have the right to access, modify, or delete your personal data at any time. Please contact our support team for assistance.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to handle modal functionality for both Terms and Privacy modals
+        document.getElementById("terms-link").addEventListener("click", function(event) {
+            event.preventDefault();
+            document.getElementById("termsModal").style.display = "block";
+        });
+
+        document.getElementById("privacy-link").addEventListener("click", function(event) {
+            event.preventDefault();
+            document.getElementById("privacyModal").style.display = "block";
+        });
+
+        // Add event listeners to all close buttons
+        document.querySelectorAll(".close").forEach(function(button) {
+            button.addEventListener("click", function() {
+                button.closest(".modal").style.display = "none";
+            });
+        });
+
+        // Close modals when clicking outside the modal content
+        window.addEventListener("click", function(event) {
+            if (event.target == document.getElementById("termsModal")) {
+                document.getElementById("termsModal").style.display = "none";
+            }
+            if (event.target == document.getElementById("privacyModal")) {
+                document.getElementById("privacyModal").style.display = "none";
+            }
+        });
+    </script>
+{% endblock %}
