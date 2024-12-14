@@ -1,3 +1,5 @@
+<!--Page To Link Social Media Account-->
+
 {% extends "base.html" %}
 
 {% block title %}Link Social Media{% endblock %}
@@ -23,8 +25,8 @@
             <p>Select a platform and enter your login details to securely link your account.</p>
 
             
-
-            <form action="{{ url_for('profile_boundary.link_social') }}" method="POST">
+            <!--leads to profile_boundary.link_social endpoint-->
+            <form action="{{ url_for('profile_boundary.link_social') }}" method="POST"> 
                 <!-- Username Input -->
                 <label for="login_details">Username</label>
                 <input type="text" id="username" name="username" placeholder="Enter your username " required>

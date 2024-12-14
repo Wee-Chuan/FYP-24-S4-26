@@ -36,6 +36,7 @@
                         </li>
                         <li class="{{ 'active' if request.path == url_for('profile_boundary.update_account') else '' }}">
                             <a href="{{ url_for('profile_boundary.update_account') }}">Profile</a>
+                            <!--profile_boundary.update_account endpoint-->
                         </li>
                         <li class="{{ 'active' if request.path == url_for('profile_boundary.link_social') else '' }}">
                             <a href="{{ url_for('profile_boundary.link_social') }}">Link Social</a>
@@ -44,8 +45,8 @@
                     {% else %}
                         <!--header for user that is not logged in-->
                         {% if show_nav %}
-                        <li><a href="{{ url_for('navbar.login') }}">Login</a></li> <!--leads to navbar/login.html-->
-                        <li><a href="{{ url_for('navbar.register') }}">Register</a></li> <!--leads to navbar/register.html -->
+                        <li><a href="{{ url_for('navbar.login') }}">Login</a></li> <!--leads to navbar/login endpoint-->
+                        <li><a href="{{ url_for('navbar.register') }}">Register</a></li> <!--leads to navbar/register endpoint -->
                         <li class="{{ 'active' if request.path == url_for('navbar.about') else '' }}">
                             <a href="{{ url_for('navbar.about') }}">About Us</a>
                         </li>
