@@ -414,6 +414,19 @@ class User:
         except Exception as e:
             logging.error(f"Error visualizing engagement metrics for user_id {user_id}: {e}")
             return None
+        
+    @staticmethod
+    def fetch_engagement_metrics(user_id):
+        try:
+            metrics_ref = db.collection('engagement_metrics') \
+                .where('user_id', '==', user_id) \
+                .order_by('date').stream()
+            metrics = [doc.to_dict() for doc in metrics_ref]
+            return metrics
+        except Exception as e:
+            logging.error(f"Error fetching engagement metrics for user_id {user_id}: {e}")
+            return None
+
 
     @staticmethod
     def create_chart(dates, likes, comments, shares, followers):

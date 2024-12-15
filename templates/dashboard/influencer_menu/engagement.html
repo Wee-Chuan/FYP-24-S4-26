@@ -1,48 +1,117 @@
 {% extends "base.html" %}
+
 {% block title %}Engagement Metrics{% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='components/dashboard/influencer_dashboard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='components/dashboard/influencer_dashboard.css') }}">
 {% endblock %}
 
 {% block content %}
-    <div class="dashboard-wrapper">
-        <aside class="sidebar">
-            <h3>Dashboard Menu</h3>
-            <ul class="menu">
-                <li><a href="{{ url_for('influencer_boundary.engagement') }}">Engagement Metrics</a></li>
-                <li><a href="{{ url_for('influencer_boundary.followers') }}">Followers Forecast</a></li>
-                <li><a href="{{ url_for('influencer_boundary.network') }}">Network Visualization</a></li>
-            </ul>
-        </aside>
+<div class="dashboard-wrapper">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h3>Dashboard Menu</h3>
+        <ul class="menu">
+            <li><a href="{{ url_for('influencer_boundary.engagement_metrics') }}" class="active">Engagement Metrics</a></li>
+            <li><a href="{{ url_for('influencer_boundary.followers') }}">Followers Forecast</a></li>
+            <li><a href="{{ url_for('influencer_boundary.network') }}">Network Visualization</a></li>
+        </ul>
+    </aside>
 
-        <div class="dashboard-container">
-            <h2>Engagement Metrics for {{ user['username'] }}</h2>
-            <p>Track and visualize your engagement metrics here.</p>
-            <canvas id="engagementChart"></canvas>
+    <!-- Main Content -->
+    <div class="dashboard-container">
+        <h2>Engagement Metrics for {{ user['username'] }}</h2>
+        {% if metrics %}
+            <p>Here is a detailed visualization of your engagement metrics over time.</p>
+            
+            <!-- Engagement Metrics Chart -->
+            <canvas id="engagementChart" width="400" height="200"></canvas>
+            
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     const ctx = document.getElementById('engagementChart').getContext('2d');
+
+                    // Data passed from the backend
+                    const labels = {{ metrics | map(attribute='date') | list | tojson }};
+                    const likes = {{ metrics | map(attribute='likes') | list | tojson }};
+                    const comments = {{ metrics | map(attribute='comments') | list | tojson }};
+                    const shares = {{ metrics | map(attribute='shares') | list | tojson }};
+                    const followers = {{ metrics | map(attribute='followers') | list | tojson }};
+
+                    // Initialize Chart.js
                     new Chart(ctx, {
                         type: 'line',
                         data: {
-                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                            datasets: [{
-                                label: 'Engagement',
-                                data: [12, 19, 3, 5, 2, 3], // Replace with actual data
-                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                borderColor: 'rgba(75, 192, 192, 1)',
-                                borderWidth: 1
-                            }]
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: 'Likes',
+                                    data: likes,
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderWidth: 2,
+                                    tension: 0.4
+                                },
+                                {
+                                    label: 'Comments',
+                                    data: comments,
+                                    borderColor: 'rgba(255, 99, 132, 1)',
+                                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                    borderWidth: 2,
+                                    tension: 0.4
+                                },
+                                {
+                                    label: 'Shares',
+                                    data: shares,
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                    borderWidth: 2,
+                                    tension: 0.4
+                                },
+                                {
+                                    label: 'Followers',
+                                    data: followers,
+                                    borderColor: 'rgba(153, 102, 255, 1)',
+                                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                    borderWidth: 2,
+                                    tension: 0.4
+                                }
+                            ]
                         },
                         options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top'
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false
+                                }
+                            },
                             scales: {
-                                y: { beginAtZero: true }
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Date'
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Engagement Count'
+                                    }
+                                }
                             }
                         }
                     });
                 });
             </script>
-        </div>
+        {% else %}
+            <p>No engagement data available. Start engaging with your followers to generate metrics!</p>
+        {% endif %}
     </div>
+</div>
 {% endblock %}
