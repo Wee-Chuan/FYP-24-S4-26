@@ -12,9 +12,9 @@
     <aside class="sidebar">
         <h3>Dashboard Menu</h3>
         <ul class="menu">
-            <li><a href="{{ url_for('influencer_boundary.engagement_metrics') }}" class="active">Engagement Metrics</a></li>
-            <li><a href="{{ url_for('influencer_boundary.followers') }}">Followers Forecast</a></li>
-            <li><a href="{{ url_for('influencer_boundary.network') }}">Network Visualization</a></li>
+            <li><a href="{{ url_for('influencer_boundary.engagement_metrics') }}" class="active"><i class="fas fa-chart-line"></i>Engagement Metrics</a></li>
+            <li><a href="{{ url_for('influencer_boundary.followers') }}"><i class="fas fa-users"></i>Followers Forecast</a></li>
+            <li><a href="{{ url_for('influencer_boundary.network') }}"><i class="fas fa-network-wired"></i>Network Visualization</a></li>
         </ul>
     </aside>
 
@@ -23,10 +23,10 @@
         <h2>Engagement Metrics for {{ user['username'] }}</h2>
         {% if metrics %}
             <p>Here is a detailed visualization of your engagement metrics over time.</p>
-            
+
             <!-- Engagement Metrics Chart -->
             <canvas id="engagementChart" width="400" height="200"></canvas>
-            
+
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     const ctx = document.getElementById('engagementChart').getContext('2d');
@@ -36,7 +36,15 @@
                     const likes = {{ metrics | map(attribute='likes') | list | tojson }};
                     const comments = {{ metrics | map(attribute='comments') | list | tojson }};
                     const shares = {{ metrics | map(attribute='shares') | list | tojson }};
-                    const followers = {{ metrics | map(attribute='followers') | list | tojson }};
+                    const followers = {{ metrics | map(attribute='follower_count') | list | tojson }};
+                    
+                    // // Data passed from the backend
+                    // const metrics = {{ metrics | tojson }};
+                    // const labels = metrics.map(metric => metric.date);
+                    // const likes = metrics.map(metric => metric.likes);
+                    // const comments = metrics.map(metric => metric.comments);
+                    // const shares = metrics.map(metric => metric.shares);
+                    // const followers = metrics.map(metric => metric.follower_count);
 
                     // Initialize Chart.js
                     new Chart(ctx, {

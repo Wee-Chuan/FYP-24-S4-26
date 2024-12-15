@@ -23,36 +23,30 @@ def engagement_metrics():
             flash("Unauthorized access. Only influencers can view engagement metrics.", "danger")
             return redirect(url_for('dashboard_boundary.dashboard'))
 
-        # Fetch engagement metrics data from Firestore
-        metrics_ref = db.collection('engagement_metrics') \
-            .where('user_id', '==', user_id).order_by('date').stream()
-        metrics = [doc.to_dict() for doc in metrics_ref]
+        metrics = User.visualize_engagement_metrics(user_id)
+
+        # Check if any field is None or undefined
+        for metric in metrics:
+            for key, value in metric.items():
+                if value is None:
+                    print(f"Missing value for {key} in metric: {metric}")
 
         # Handle cases where no engagement data is available
         if not metrics:
-            flash("No engagement metrics available.", "warning")
+            flash("No engagement metrics available.", "danger")
             return render_template(
-                'dashboard/influencer_menu/engagement_metrics.html',
+                'dashboard/influencer_menu/engagement.html',
                 user_id=user_id,
                 user=user,
                 metrics=None,
             )
 
-        # Process the data (e.g., serialize dates)
-        processed_metrics = [
-            {
-                **metric,
-                "date": metric["date"].strftime("%Y-%m-%d")  # Format the date for display
-            }
-            for metric in metrics
-        ]
-
         # Pass metrics to the template
         return render_template(
-            'dashboard/influencer_menu/engagement_metrics.html',
+            'dashboard/influencer_menu/engagement.html',
             user_id=user_id,
             user=user,
-            metrics=processed_metrics,
+            metrics=metrics,
         )
 
     except Exception as e:
