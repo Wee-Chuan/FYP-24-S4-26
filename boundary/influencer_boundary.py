@@ -100,25 +100,20 @@ def network():
     try:
         user_id = session.get('user_id')
         user = User.get_profile(user_id)
+        username = user['username']
+        print(username)
 
         # Ensure session is valid
         if not user_id or not user:
             flash("Session expired or user not found. Please log in again.", "danger")
             return redirect(url_for('auth_boundary.login'))  # Redirect to login if session is invalid
 
-        # Generate the interactive plot for the user's network
-        interactive_plot = User.visualize_followers_network(user['username'])
-
-        # Check if the interactive plot was created successfully
-        if not interactive_plot:
-            flash("Unable to generate network visualization.", "warning")
-
         # Render the network visualization page
+        networkVis.main(username) # generate the network first, to produce the two network pics
         return render_template(
-            'dashboard/influencer_menu/network.html',  # Ensure this template exists
+            'dashboard/influencer_menu/network.html',  
             user_id=user_id,
-            user=user,
-            interactive_plot=interactive_plot,
+            user=user
         )
     except Exception as e:
         # Handle unexpected errors
@@ -127,3 +122,5 @@ def network():
         return redirect(url_for('dashboard_boundary.dashboard'))
 
 # ========================================================== #
+
+
