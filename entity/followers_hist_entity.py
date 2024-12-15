@@ -13,6 +13,8 @@ import firebase_admin
 from firebase_admin import credentials, firestore, auth
 from datetime import datetime
 
+from entity.user import User
+
 # Load environment variables
 load_dotenv()
 
@@ -42,7 +44,17 @@ class FollowerHist:
     @staticmethod
     def get_followers_hist(user_id):
         try:
-            follower_history_ref = db.collection('follower_history').document(user_id).collection('history')\
+            # Check if the user has linked any social media accounts
+            if User.check_if_social_account_linked(user_id) == "":
+                return []  # Return an empty list if no account is linked
+            
+            if User.check_if_social_account_linked(user_id) == "twitter":
+                platform = "twitter_social_accounts"
+            else:
+                platform = "facebook_social_accounts"
+            
+            # ******************
+            follower_history_ref = db.collection(platform).document(user_id).collection('history')
             
             # Fetch all documents from the history subcollection
             docs = follower_history_ref.stream()

@@ -8,6 +8,7 @@ def register():
     if 'user_id' in session:
         return redirect(url_for('dashboard_boundary.dashboard'))
     
+    # SUBMISSION OF REGISTRATION FORM
     if request.method == 'POST':
         # user_id = request.form['user_id']
         account_type = request.form['account_type']
@@ -45,10 +46,12 @@ def register():
             User.create_user(username, email, password, account_type, business_number=business_number, business_name=business_name)
         else:
             User.create_user(username, email, password, account_type)
-            
+        #    
         flash("User registered successfully!", "success")
-        return redirect(url_for('navbar.login'))
+        return redirect(url_for('navbar.login')) # navbar/login endpoint
 
+    
+    # navigates to registration page if not logged in
     return render_template('navbar/register.html')
 
 @navbar.route('/login', methods=['GET', 'POST'])
@@ -78,6 +81,8 @@ def login():
         else:
             flash("Failed to log in: Invalid username or password", "danger")
 
+
+    # if not logging in yet, just display the login page
     return render_template('navbar/login.html')
 
 @navbar.route('/about')

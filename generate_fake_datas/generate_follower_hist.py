@@ -30,14 +30,21 @@ if not firebase_admin._apps:
 
 db = firestore.client()
 
-def update_follower_hist(user_id, new_history):
+def update_follower_hist(user_id, platform, new_history):
     """
     Deletes the current follower history for a user and uploads a new one
     in the format: follower_history (collection) > user_id (document) > history (subcollection).
     """
     try:
         # Reference to the Firestore collection
-        user_doc_ref = db.collection('follower_history').document(user_id)
+        user_doc_ref = db.collection(platform).document(user_id)
+        
+        # Check if the user document exists
+        user_doc = user_doc_ref.get()
+        if not user_doc.exists:
+            print(f"User with ID {user_id} does not exist.")
+            return False
+        
         history_collection_ref = user_doc_ref.collection('history')
 
         # Fetch all existing documents in the user's history subcollection
@@ -118,8 +125,9 @@ if __name__ == "__main__":
             {'date': '2024-12-01', 'follower_count': 500}
         ]
 
-    user_id = "2b740aad-0db4-43da-8653-9e5781aa2e89"
-    success = update_follower_hist(user_id, new_history)
+    user_id = "6512d5cb-066c-45f6-b6bc-4566698aed82"
+    platform = "twitter_social_accounts"
+    success = update_follower_hist(user_id, platform, new_history)
 
     if success:
         print("Follower history replaced successfully.")

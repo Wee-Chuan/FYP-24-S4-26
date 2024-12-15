@@ -1,0 +1,231 @@
+/* Apply box-sizing to all elements */
+* {
+    box-sizing: border-box;
+}
+
+/* ============================= Link Social Page Section ============================= */
+.link-social-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 100vh;
+}
+
+/* ============================= Info Container ============================= */
+.info-container {
+    flex: 2;
+    background: url('../../images/main_page_wallpaper.jpg') no-repeat center center;
+    background-size: cover;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+}
+
+.info-container .info-text {
+    max-width: 300px;
+}
+
+/* ============================= Form Container ============================= */
+.form-container {
+    flex: 1;
+    background: #ffffff; /* White background for the form */
+    padding: 40px;
+    border-left: 1px solid #ccc;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center align text */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    height: 100vh;
+}
+
+/* Form Heading */
+.form-container h2 {
+    font-size: 2.4em;
+    color: #007c9d; /* Title color */
+    margin: 0;
+}
+
+/* Form Paragraph */
+.form-container p {
+    font-size: 1.1em;
+    color: #333;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+/* ============================= Label Styling ============================= */
+label {
+    display: block; /* Stack labels */
+    margin-bottom: 5px; /* Spacing */
+    text-align: left; /* Align labels to the left */
+    font-weight: 600; /* Bold text for labels */
+}
+
+/* ============================= Input Field Styling ============================= */
+input[type="text"],
+input[type="password"],
+select {
+    width: 100%; /* Full width */
+    padding: 10px; /* Spacing inside the input */
+    margin-bottom: 20px; /* Spacing between inputs */
+    border: 1px solid #ccc; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 1em; /* Font size */
+    transition: border-color 0.3s ease; /* Transition for focus */
+}
+
+input[type="text"]:focus,
+select:focus {
+    border-color: #0044cc; /* Border color on focus */
+    outline: none; /* Remove outline */
+}
+
+/* ============================= Terms and Conditions ============================= */
+.terms-container {
+    margin-top: 10px;
+    font-size: 0.9em;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.terms-container label {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px; 
+    line-height: 1.5;
+}
+
+.terms-container input {
+    margin-top: 4px; 
+    flex-shrink: 0;
+}
+
+.terms-container a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.terms-container a:hover {
+    text-decoration: underline;
+}
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0, 0, 0, 0.5); 
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; 
+    padding: 30px;
+    width: 90%; 
+    max-width: 800px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-family: 'Arial', sans-serif;
+    text-align: left;
+}
+
+.modal-content .close {
+    color: #666;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-content .close:hover,
+.modal-content .close:focus {
+    color: #333;
+    text-decoration: none;
+}
+
+.modal-content h2 {
+    text-align: center;
+    margin-top: 0;
+    font-size: 28px;
+    border-bottom: 2px solid #555;
+    padding-bottom: 10px;
+    color: #333;
+}
+
+.modal-content h3 {
+    font-size: 21px;
+    margin-top: 26px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.modal-content p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #666;
+    margin-bottom: 5px;
+    text-align: left
+}
+
+.modal-content strong {
+    color: #666;
+    font-weight: bold;
+}
+
+/* ============================= Social Media Logo Selector ============================= */
+.social-media-options {
+    display: flex;
+    justify-content: center;
+    gap: 5px; /* Space between logos */
+    margin-bottom: 10px; /* Space below the logos */
+}
+
+.social-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+    font-size: 2.5em; /* Icon size */
+    color: #000000; /* Default icon color */
+}
+
+input[type="radio"]:checked + .social-logo {
+    border-color: #0044cc; /* Highlight the selected logo */
+    transform: scale(1.1); /* Slightly enlarge the selected logo */
+    color: #0044cc; /* Change icon color when selected */
+}
+
+.social-logo:hover {
+    transform: scale(1.05);
+    color: #0044cc; /* Change icon color on hover */
+}
+
+/* ============================= Button Styling ============================= */
+button {
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 5px; 
+    background-color: #000000; 
+    color: #fff; 
+    font-size: 1em; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease, transform 0.3s ease; 
+    width: 100%;
+}
+
+button:hover {
+    background-color: rgb(13, 114, 0); 
+    transform: scale(1.05);
+}

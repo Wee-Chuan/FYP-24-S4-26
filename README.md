@@ -8,6 +8,7 @@ For MacOS:
 source fyp_env/bin/activate # Activate the environment
 
 FOR Windows:
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 fyp_env\Scripts\activate  # Activate the environment
 
 # LIBRARIES #:
