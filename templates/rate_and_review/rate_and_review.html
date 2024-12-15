@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Leave a Review{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='components/forms/rate_and_review.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="rate-review-section">
+    <!-- Rate and Review Container -->
+    <div class="rate-review-container">
+        <h2>Leave a Review for SocioSith</h2>
+
+        <!-- Review Form -->
+        <form method="POST">
+            <div class="form-group">
+                <label for="rating">Rating (1-5):</label>
+                <input type="number" id="rating" name="rating" min="1" max="5" required>
+            </div>
+            <div class="form-group">
+                <label for="review">Your Review:</label>
+                <textarea id="review" name="review" rows="4" required></textarea>
+            </div>
+            <!-- Button container for submit and cancel buttons -->
+            <div class="button-container">
+                <button type="submit" class="submit-btn">Submit Review</button>
+                <button type="reset" class="cancel-button">Cancel</button>
+            </div>
+        </form>
+
+        <!-- Flash messages if any -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">
+                            <span>{{ message }}</span>
+                            <button class="close-btn" onclick="this.parentElement.style.display='none';">&times;</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+</div>
+{% endblock %}

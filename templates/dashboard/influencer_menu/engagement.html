@@ -37,14 +37,6 @@
                     const comments = {{ metrics | map(attribute='comments') | list | tojson }};
                     const shares = {{ metrics | map(attribute='shares') | list | tojson }};
                     const followers = {{ metrics | map(attribute='follower_count') | list | tojson }};
-                    
-                    // // Data passed from the backend
-                    // const metrics = {{ metrics | tojson }};
-                    // const labels = metrics.map(metric => metric.date);
-                    // const likes = metrics.map(metric => metric.likes);
-                    // const comments = metrics.map(metric => metric.comments);
-                    // const shares = metrics.map(metric => metric.shares);
-                    // const followers = metrics.map(metric => metric.follower_count);
 
                     // Initialize Chart.js
                     new Chart(ctx, {

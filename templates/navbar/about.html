@@ -19,12 +19,6 @@
 
         <section class="goals">
             <h2>Our Goals</h2>
-            <!-- <ul>
-                <li>Deliver a comprehensive social network analysis platform.</li>
-                <li>Provide insights into network structures and influence analysis.</li>
-                <li>Offer tools to predict trends based on historical data.</li>
-                <li>Empower businesses, researchers, and influencers with actionable insights.</li>
-            </ul> -->
             <div class="goal-container">
                 <div class="goal-block">
                     <i class="fas fa-project-diagram goal-icon"></i> 
@@ -55,46 +49,93 @@
         <section class="testimonials">
             <h2>Customer Testimonials</h2>
             <div class="testimonial-carousel">
+                <!-- Button to show the previous testimonial -->
                 <button class="carousel-button left" onclick="showPreviousReview()">&#9664;</button>
-                <div class="carousel-item active">
-                    <blockquote id="testimonial-text">
-                        SocioSith helped us understand our audience's interactions in ways we never thought possible.
-                        <span id="testimonial-author">- Business Analyst</span>
-                    </blockquote>
-                </div>
+                
+                <!-- Block to display the current testimonial -->
+                {% if reviews %}
+                    <div class="carousel-item active">
+                        <blockquote id="testimonial-text">
+                            <!-- First review is shown by default -->
+                            <p>
+                                <strong>{{ reviews[0].username }}</strong>
+                                <!-- Loop to generate star icons for the rating -->
+                                <span id="rating-stars">{% for i in range(reviews[0].rating|int) %}<i class="fas fa-star"></i>{% endfor %}</span>
+                            </p>
+                            <p>"{{ reviews[0].review }}"</p>
+                        </blockquote>
+                    </div>
+                {% else %}
+                    <!-- Fallback message if no reviews are available -->
+                    <div class="carousel-item active">
+                        <blockquote id="testimonial-text">
+                            No reviews available at the moment.
+                        </blockquote>
+                    </div>
+                {% endif %}
+                
+                <!-- Button to show the next testimonial -->
                 <button class="carousel-button right" onclick="showNextReview()">&#9654;</button>
             </div>
         </section>
     </div>
 </div>
 <script>
+    // Array of testimonials, dynamically populated from server-side data
     const testimonials = [
-        { text: "SocioSith helped us understand our audience's interactions in ways we never thought possible.", author: "e.g. Business Analyst" },
-        { text: "The network visualization tools are top-notch. They give a clear view of our influence reach.", author: "e.g. Influencer" },
-        { text: "Using SocioSith, we could predict trends with surprising accuracy.", author: "e.g. Influencer" },
-        { text: "An invaluable tool for any business looking to understand its social media impact.", author: "e.g. Business Analyst" }
+        {% for review in reviews %}
+            {   
+                // The review text
+                text: "{{ review.review }}",
+                // The reviewer's username
+                author: "{{ review.username }}",
+                // The rating (number of stars)
+                rating: "{{ review.rating }}"
+            }{% if not loop.last %},{% endif %}
+        {% endfor %}
     ];
 
+    // Current index of the testimonial being displayed
     let currentIndex = 0;
-
+        
+    // Function to update the testimonial content
     function updateTestimonial() {
+        // Select the blockquote element to update its content
         const testimonialText = document.getElementById('testimonial-text');
-        testimonialText.innerHTML = `${testimonials[currentIndex].text} <span id="testimonial-author">- ${testimonials[currentIndex].author}</span>`;
-        // Fade-in effect
+        // Get the current testimonial data
+        const currentTestimonial = testimonials[currentIndex];
+
+        // Generate star icons for the rating
+        let stars = '';
+        for (let i = 0; i < parseInt(currentTestimonial.rating); i++) {
+            stars += '<i class="fas fa-star"></i>';
+        }
+
+        // Update the testimonial content with the text, author, and stars
+        testimonialText.innerHTML = `<p><strong>${currentTestimonial.author}</strong> </p>
+                                     <p><span id="rating-stars">${stars}</span></p>
+                                     <p>"${currentTestimonial.text}"</p>`;
+
+        // Reset and reapply the active class for a fade-in effect
         testimonialText.classList.remove('active');
         setTimeout(() => testimonialText.classList.add('active'), 10);
     }
 
+    // Function to show the next testimonial in the carousel
     function showNextReview() {
+        // Increment the index, wrapping around if at the end
         currentIndex = (currentIndex + 1) % testimonials.length;
-        updateTestimonial();
+        updateTestimonial(); // Update the displayed testimonial
     }
 
+    // Function to show the previous testimonial in the carousel
     function showPreviousReview() {
+        // Decrement the index, wrapping around if at the beginning
         currentIndex = (currentIndex - 1 + testimonials.length) % testimonials.length;
-        updateTestimonial();
+        updateTestimonial(); // Update the displayed testimonial
     }
 
+    // Initialize the first testimonial when the page is loaded
     document.addEventListener("DOMContentLoaded", updateTestimonial);
 </script>
 {% endblock %}

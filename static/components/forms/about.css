@@ -176,7 +176,7 @@ img.testimonial-photo {
 }
 
 .carousel-item {
-    height: 200px; 
+    height: 100%; 
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -191,6 +191,12 @@ img.testimonial-photo {
     transform: translateY(0);
 }
 
+#rating-stars {
+    color: gold; 
+    font-size: 1.2em; 
+    margin: 5px 0; 
+    text-align: center; 
+}
 
 /* Adding a smooth animation effect */
 .about-us-container, .about-us-wrapper  {

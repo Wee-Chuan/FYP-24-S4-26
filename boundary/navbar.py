@@ -85,9 +85,10 @@ def login():
     # if not logging in yet, just display the login page
     return render_template('navbar/login.html')
 
-@navbar.route('/about')
+@navbar.route('/about', methods=['GET'])
 def about():
-    return render_template('navbar/about.html')
+    reviews = User.get_reviews()  # Fetch reviews from the database
+    return render_template('navbar/about.html', reviews=reviews)
 
 @navbar.route('/customer_support')
 def customer_support():

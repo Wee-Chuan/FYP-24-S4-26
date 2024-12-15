@@ -8,6 +8,7 @@ from boundary.dashboard_boundary import dashboard_boundary
 from boundary.admin_boundary import admin_boundary
 from boundary.influencer_boundary import influencer_boundary
 from boundary.profile_boundary import profile_boundary
+from boundary.rate_and_review_boundary import rate_and_review_boundary
 
 
 load_dotenv()
@@ -24,6 +25,7 @@ app.register_blueprint(dashboard_boundary)
 app.register_blueprint(admin_boundary)
 app.register_blueprint(influencer_boundary)
 app.register_blueprint(profile_boundary)
+app.register_blueprint(rate_and_review_boundary)
 
 @app.route('/')
 def index():

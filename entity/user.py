@@ -402,7 +402,7 @@ class User:
             for metric in metrics:
                 if isinstance(metric.get("date"), str):
                     metric["date"] = datetime.strptime(metric["date"], "%Y-%m-%d")
-                    
+
             # Define the date one year ago from the latest available date
             latest_date = max([metric["date"] for metric in metrics])
             one_year_ago = latest_date - timedelta(days=365)
@@ -440,4 +440,78 @@ class User:
             print(f"Error visualizing engagement metrics for user_id {user_id}: {e}")
             return None
     
+    #===================== Ratings and Reviews ==============================#
+    def save_rate_and_review(user_id, rating, review, username):
+        """
+        Add ratings and reviews into Firestore.
+        """
+        try:
+            # Get a reference to the 'ratings_and_reviews' collection
+            user_ref = db.collection('ratings_and_reviews').document(user_id)
+
+            # Set the user data (user_id, username) in the user document
+            user_ref.set({
+                'user_id': user_id,
+                'username': username
+            })
+
+            # Get a reference to the 'ratings_and_reviews' collection
+            reviews_ref = user_ref.collection('reviews')
+
+            # Add the rating and review as a new document in the 'reviews' subcollection
+            reviews_ref.add({
+                'rating': rating,
+                'review': review,
+                'date': datetime.now()
+            })
+        except Exception as e:
+            print(f"Error saving review: {e}")
+            return False
+        return True
+    
+    def get_reviews():
+        """
+        Fetch top 5 ratings and reviews from Firestore, sorted by rating.
+        """
+        try:
+            reviews_ref = db.collection('ratings_and_reviews')
+            all_reviews = []
+
+            # Loop through each user document in the 'ratings_and_reviews' collection
+            for user_doc in reviews_ref.stream():
+                user_data = user_doc.to_dict()
+                user_id = user_data.get('user_id')
+                username = user_data.get('username')
+                reviews_subcollection = user_doc.reference.collection('reviews')
+
+                # Fetch reviews for the user
+                reviews = []
+                for review in reviews_subcollection.stream():
+                    review_data = review.to_dict()
+                    # Add 'rating', 'review' and 'date' fields to the reviews list
+                    reviews.append({
+                        'rating': review_data.get('rating'),
+                        'review': review_data.get('review'),
+                        'date': review_data.get('date')
+                    })
+
+                all_reviews.extend([{
+                    'user_id': user_id,
+                    'username': username,
+                    'rating': review['rating'],
+                    'review': review['review'],
+                    'date': review['date']
+                } for review in reviews])
+
+            # Sort all reviews by rating in descending order
+            sorted_reviews = sorted(all_reviews, key=lambda x: x['rating'], reverse=True)
+
+            # Get the top 5 reviews
+            top_reviews = sorted_reviews[:5]
+
+            print("Top reviews:", top_reviews)
+            return top_reviews
+        except Exception as e:
+            print(f"Error retrieving reviews: {e}")
+            return []
     

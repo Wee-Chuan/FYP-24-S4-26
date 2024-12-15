@@ -1,0 +1,116 @@
+/* ============================= Rate and Review Section ============================= */
+.rate-review-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full height for centering */
+    background: url('../../images/main_page_wallpaper.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+/* Rate and Review Container */
+.rate-review-container {
+    flex: 1;
+    background: #ffffff; /* White background for the form */
+    padding: 40px;
+    border-left: 1px solid #ccc;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center align text */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    height: 100%;
+    max-width: 800px; 
+    margin: 0 20px;
+}
+
+/* Hover Effect for Container */
+.rate-review-container:hover {
+    box-shadow: 0px 6px 40px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+}
+
+/* Form Heading */
+.rate-review-container h2 {
+    font-size: 2.5em;
+    color: #007c9d; 
+    margin-bottom: 20px; 
+    font-weight: bold; /* Bold heading */
+}
+
+/* Labels and Inputs */
+.rate-review-container label {
+    font-size: 16px;
+    color: #333; /* Darker color for labels */
+    margin: 10px 0; /* Space around labels */
+    display: block; /* Block display for labels */
+    text-align: left; /* Left align text */
+}
+
+/* Rating Input */
+.rate-review-container input[type="number"] {
+    width: 100%; /* Full width */
+    padding: 10px; /* Padding inside inputs */
+    margin-bottom: 20px; /* Space below inputs */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Font size for inputs */
+}
+
+/* Review Textarea */
+.rate-review-container textarea {
+    width: 100%; 
+    padding: 10px; 
+    margin-bottom: 20px; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    font-size: 16px; 
+    resize: vertical; 
+}
+
+/* Button Container */
+.button-container {
+    display: flex; /* Use flexbox for alignment */
+    justify-content: space-between; /* Space between buttons */
+    margin-top: 20px; /* Space above buttons */
+}
+
+.rate-review-container button {
+    flex: 1; 
+    margin-right: 10px;
+}
+
+.button-container button {
+    padding: 10px 20px; /* Padding for button */
+    background-color: #000000; /* Primary color */
+    color: white; /* White text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Font size for button */
+    cursor: pointer; /* Pointer on hover */
+    transition: background-color 0.3s ease, transform 0.3s ease; 
+}
+
+/* Hover Effect for Submit Button */
+.button-container button:hover {
+    background-color: rgb(13, 114, 0); 
+    transform: scale(1.05);
+}
+
+/* Cancel Button */
+.button-container button.cancel-button {
+    padding: 10px 20px; /* Padding for button */
+    background-color: #f44336; /* Red background for cancel button */
+    color: white; /* White text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Font size for button */
+    cursor: pointer; /* Pointer on hover */
+    transition: background-color 0.3s ease, transform 0.3s ease; 
+}
+
+/* Hover Effect for Cancel Button */
+.button-container button.cancel-button:hover {
+    background-color: #d32f2f; 
+    transform: scale(1.05); 
+}
+
