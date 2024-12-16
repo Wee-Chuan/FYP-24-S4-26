@@ -121,18 +121,12 @@ class User:
         }
         # Handle fields based on account type
         if account_type == "business_analyst":
-            user_data['business_name'] = business_name  # Use 'username' as 'business_name'
+            user_data['business_name'] = business_name  
             user_data['business_number'] = business_number  # Store business number
             user_data['is_approved'] = False
         else:
             # Generate and store fake social accounts for the user
             User.generate_social_accounts(user_id, username)
-        #     # Generate fake followers and following lists
-        #     follower_list, following_list = User.generate_followers_following(username, 10)
-        #     user_data['follower_count'] = len(follower_list)
-        #     user_data['follower_list'] = follower_list
-        #     user_data['following_count'] = len(following_list)
-        #     user_data['following_list'] = following_list
             
         db.collection('users').document(user_id).set(user_data)
 

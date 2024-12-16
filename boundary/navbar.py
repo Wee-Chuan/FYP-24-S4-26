@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, session, flash, request
 from entity.user import User
+import re
 
 navbar = Blueprint('navbar', __name__)
 
@@ -10,18 +11,22 @@ def register():
     
     # SUBMISSION OF REGISTRATION FORM
     if request.method == 'POST':
-        # user_id = request.form['user_id']
         account_type = request.form['account_type']
-        # username = request.form['username']
         email = request.form['email']
         password = request.form['password']
         confirm_password = request.form['confirm_password']
+
+        # Check if the email format is valid
+        email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if not re.match(email_regex, email):
+            flash("Invalid email format. Please provide a valid email address.", "danger")
+            return render_template('navbar/register.html')
 
         # Handle the fields based on the account type
         if account_type == "business_analyst":
             business_name = request.form['business_name']
             business_number = request.form['business_number']
-            username = business_name  # Using business_name as username
+            username = request.form['username']
             
             # Ensure required fields for Business Analyst are filled
             if not business_name or not business_number:
