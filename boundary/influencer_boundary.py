@@ -121,6 +121,100 @@ def network():
         flash("An error occurred while generating the network visualization.", "danger")
         return redirect(url_for('dashboard_boundary.dashboard'))
 
+@influencer_boundary.route('/dashboard/ranking')
+def ranking():
+    user_id = session.get('user_id')
+    user = User.get_profile(user_id)  # Fetch user profile using your custom method
+
+    # Get ranked influencers
+    ranked_influencers = User.get_ranked_influencers()
+    
+    # Find the rank of the current user
+    user_data = next((u for u in ranked_influencers if u['uid'] == user_id), None)
+    if not user_data:
+        flash('Unable to determine your rank.', 'danger')
+        return render_template('dashboard/influencer_menu/ranking.html', user_id=user_id, user=user)
+
+    user_rank = ranked_influencers.index(user_data) + 1  # Rankings are 1-indexed
+    user_score = user_data['centrality_score']
+
+    # Determine nearby users
+    total_users = len(ranked_influencers)
+
+    # Adjust start and end indices for users near the top or bottom
+    start_index = max(0, user_rank - 6)  # Default: 5 users before + 1 current user
+    end_index = min(total_users, user_rank + 5)  # Default: 5 users after
+    
+    if user_rank <= 5:  # Top 5 users
+        start_index = 0  # Include all users from the beginning
+        end_index = min(total_users, 11)  # Ensure up to 10 users if possible
+    elif user_rank > total_users - 5:  # Bottom 5 users
+        start_index = max(0, total_users - 11)  # Ensure up to the last 10 users
+        end_index = total_users  # Include all users till the end
+
+    nearby_users = ranked_influencers[start_index:end_index]
+    nearby_users_labels = [u['username'] for u in nearby_users]
+    nearby_users_followers = [u['follower_count'] for u in nearby_users]
+    nearby_users_following = [u['following_count'] for u in nearby_users]
+    nearby_users_scores = [u['centrality_score'] for u in nearby_users]
+
+    # Top user comparison
+    top_user = ranked_influencers[0] if user_rank != 1 else ranked_influencers[1]
+    top_user_labels = [user_data['username'], top_user['username']]
+    top_user_followers = [user_data['follower_count'], top_user['follower_count']]
+    top_user_following = [user_data['following_count'], top_user['following_count']]
+    top_user_scores = [user_data['centrality_score'], top_user['centrality_score']]
+    score_diff = top_user['centrality_score'] - user_score
+
+
+    #Bar chart
+    chart_data = {
+    "labels_nearby": nearby_users_labels,  # Usernames of nearby users
+    "followers_nearby": nearby_users_followers,  # Follower counts of nearby users
+    "following_nearby": nearby_users_following,  # Following counts of nearby users
+    "labels_top": top_user_labels,  # Usernames for top influencer comparison
+    "followers_top": top_user_followers,  # Follower counts for top influencer comparison
+    "following_top": top_user_following,  # Following counts for top influencer comparison
+}
+
+    # Table data
+    ranking_table = []
+    for i, influencer in enumerate(ranked_influencers):
+        rank = i + 1
+        if rank <= 3 or (start_index <= i < end_index):  # Top 3 or nearby
+            ranking_table.append({
+                'rank': rank,
+                'username': influencer['username'],
+                'score': influencer['centrality_score'],
+                'is_user': influencer['uid'] == user_id,
+                'use_ellipsis': False
+            })
+        elif rank == 4 or rank == end_index + 1:  # Ellipses between skipped ranges
+            ranking_table.append({'rank': None, 'username': '...', 'score': None, 'is_user': False, 'use_ellipsis': True})
+
+
+
+    return render_template(
+        'dashboard/influencer_menu/ranking.html',
+        user_id=user_id,
+        user=user,
+        user_rank=user_rank,
+        user_score=user_score,
+        nearby_users_labels=nearby_users_labels,
+        nearby_users_followers=nearby_users_followers,
+        nearby_users_following=nearby_users_following,
+        nearby_users_scores=nearby_users_scores,
+        top_user_labels=top_user_labels,
+        top_user_followers=top_user_followers,
+        top_user_following=top_user_following,
+        top_user_scores=top_user_scores,
+        score_diff=score_diff,
+        is_top_user=(user_rank == 1),
+        ranking_table=ranking_table,
+        chart_data=chart_data,
+    )
+
+    
 # ========================================================== #
 
 
