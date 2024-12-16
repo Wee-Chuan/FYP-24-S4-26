@@ -40,20 +40,20 @@
                 </div>
                 <div class="col">
                     <div class="card">
-                        <h4>Future Growth</h4>
+                        <h4>Future Forecast</h4>
                         <p id="percentage">{{ (((forecast['future_data'][-1] - forecast['future_data'][0]) / forecast['future_data'][0]) * 100)|round(2) }}%</p>
-                        <p>Predicted growth for next 12 months</p>
+                        <p>Predicted Forecast for next 12 months</p>
                     </div>
                 </div>
             </div>
 
             <!-- Charts Section -->
-            <h4>Historical Follower Growth (Past 12 Months)</h4>
+            <h4>Past Follower Data (Past 12 Months)</h4>
             <div class="chart-container">
                 <canvas id="historicalFollowersChart" width="800" height="400"></canvas>
             </div>
 
-            <h4>Predicted Follower Growth (Next 6 Months)</h4>
+            <h4>Predicted Follower Forecast (Next 6 Months)</h4>
             <div class="chart-container">
                 <canvas id="futureFollowersChart" width="800" height="400"></canvas>
             </div>
