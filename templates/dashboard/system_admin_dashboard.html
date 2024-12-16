@@ -23,36 +23,50 @@
         <!-- Statistics Section -->
         <section class="dashboard-section statistics">
             <h3>System Overview</h3>
-            
-            <div class="stats-cards">
-                <div class="stat-card">
-                    <h4>Total Users</h4>
-                    <p>{{ total_users }}</p>
+            <div class="stats-grid">
+                <!-- Total Users -->
+                <div class="stat-card highlight">
+                    <div class="card-content">
+                        <div class="icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="details">
+                            <h4>Total Users</h4>
+                            <p>{{ total_users }}</p>
+                        </div>
+                    </div>
                 </div>
+        
+                <!-- Influencers -->
                 <div class="stat-card">
-                    <h4>Influencers</h4>
-                    <p>{{ total_influencers }}</p>
+                    <div class="card-content">
+                        <div class="icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="details">
+                            <h4>Influencer Accounts</h4>
+                            <p>{{ total_influencers }}</p>
+                        </div>
+                    </div>
                 </div>
+        
+                <!-- Business Accounts -->
                 <div class="stat-card">
-                    <h4>Business Accounts</h4>
-                    <p>{{ total_business_accounts }}</p>
+                    <div class="card-content">
+                        <div class="icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div class="details">
+                            <h4>Business Accounts</h4>
+                            <p>{{ total_business_accounts }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             
+                    
         </section>
 
     </div>
 </div>
-
-<script>
-    function approveBusinessAccount(userId) {
-        fetch(`/dashboard/admin/approve`, { method: 'POST' })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                }
-            });
-    }
-</script>
 {% endblock %}
