@@ -72,24 +72,17 @@ def create_json_collection(input_file, output_file):
                 user_dict[username]["following_list"].append(main_username)
                 user_dict[main_username]["followers_list"].append(username)
 
-    # Add random interactions and ensure follows are created
+    # Add random interactions for users that follow each other
     for user in user_dict.values():
-        for other_user in unique_usernames:
-            if other_user != user["username"]:
-                # Randomly decide if an interaction occurs
-                if random.random() < 0.3:  # 30% chance of interaction
-                    if other_user not in user["interactions"]:
-                        user["interactions"][other_user] = {"likes": 0, "comments": 0, "reposts": 0}
+        for other_user in user["following_list"]:
+            # Generate interactions even if not mutual
+            if other_user not in user["interactions"]:
+                user["interactions"][other_user] = {"likes": 0, "comments": 0, "reposts": 0}
 
-                    # Randomly generate interaction counts
-                    user["interactions"][other_user]["likes"] += random.randint(0, 1000)
-                    user["interactions"][other_user]["comments"] += random.randint(0, 1000)
-                    user["interactions"][other_user]["reposts"] += random.randint(0, 1000)
-
-                    # Add follow if not already following
-                    if other_user not in user["following_list"]:
-                        user["following_list"].append(other_user)
-                        user_dict[other_user]["followers_list"].append(user["username"])
+            # Randomly generate interaction counts
+            user["interactions"][other_user]["likes"] += random.randint(0, 1000)
+            user["interactions"][other_user]["comments"] += random.randint(0, 1000)
+            user["interactions"][other_user]["reposts"] += random.randint(0, 1000)
 
     # Randomly assign top 5 hashtags for each user
     hashtags_pool = ['#fun', '#tech', '#music', '#art', '#travel', '#sports', '#food', '#fashion', '#gaming', '#fitness']

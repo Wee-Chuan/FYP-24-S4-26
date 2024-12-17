@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, session, flash, request, jsonify
-import networkVis
 from entity.user import User
 from entity.followers_hist_entity import FollowerHist
+import networkVisFinal
 
 influencer_boundary = Blueprint('influencer_boundary', __name__)
 
@@ -108,12 +108,24 @@ def network():
             flash("Session expired or user not found. Please log in again.", "danger")
             return redirect(url_for('auth_boundary.login'))  # Redirect to login if session is invalid
 
+        # render the graph html files!
+        nodes = networkVisFinal.plot_user_network_with_3d(username, save_as_html=True)
+        
+        if nodes == None:
+            return render_template(
+            'dashboard/influencer_menu/network.html',  
+            user_id=user_id,
+            user=user,
+            graph = False
+        )
+        
         # Render the network visualization page
-        networkVis.main(username) # generate the network first, to produce the two network pics
         return render_template(
             'dashboard/influencer_menu/network.html',  
             user_id=user_id,
-            user=user
+            user=user,
+            graph = True,
+            central_nodes = nodes
         )
     except Exception as e:
         # Handle unexpected errors

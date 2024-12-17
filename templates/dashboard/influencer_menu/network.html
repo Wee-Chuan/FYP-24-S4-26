@@ -27,20 +27,34 @@
 
         <div class="dashboard-container">
             <h2>Network Details for {{ user['username'] }}</h2>
-            <p>Analyze your rank and influence within the network.</p>
-            <h3>Network Position</h3>
-            <div class="rank-info">
-                <p>Your rank: <strong>?</strong> out of xxx influencers</p>
-                <p>Influence score: <strong>xx/100</strong></p>
-            </div>
+            <p>Analyze your influence within the network.</p>
+            
             
             <!-- Display the follower network graph -->
             <h3>Follower Network Graph</h3>
 
-            <h4>Graph 1: Network with Communities</h2>
-            <img src="{{ url_for('static', filename='graph1.png') }}" alt="Network with Communities" width="800">
-            <h4>Graph 2: Influential Nodes Highlighted</h2>
-            <img src="{{ url_for('static', filename='graph2.png') }}" alt="Influential Nodes Highlighted" width="800">
+            {% if graph %}
+                <h4>Graph 1: Network with Communities</h4>
+                <iframe src="{{ url_for('serve_graphs', filename='3d_network.html') }}" width="100%" height="600px"></iframe>
+
+                <h4>Graph 2: Influential Nodes Highlighted</h4>
+                <iframe src="{{ url_for('serve_graphs', filename='3d_network_centrality.html') }}" width="100%" height="600px"></iframe>
+
+                    <h4>Top Central Nodes:</h4>
+                <ul>
+                    {% for node, score in central_nodes.items() %}
+                        <li>{{ node }}: {{ score }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No data found.</p>
+            {% endif %}
+
+            
+
+
+
+        
         </div>
     </div>
 {% endblock %}

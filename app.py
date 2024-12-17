@@ -1,7 +1,7 @@
 import os
 from datetime import timedelta
 
-from flask import Flask, render_template, redirect, url_for, session, flash, request
+from flask import Flask, render_template, redirect, url_for, session, flash, request, send_from_directory
 from dotenv import load_dotenv
 from boundary.navbar import navbar
 from boundary.dashboard_boundary import dashboard_boundary
@@ -41,6 +41,15 @@ def logout():
     flash("You have been logged out", "info")
 
     return redirect(url_for('index'))
+
+# Custom route to serve files from 'templates/dashboard/influencer_menu'
+@app.route('/dashboard/influencer_menu/<filename>')
+def serve_graphs(filename):
+    # Serve the file from the 'templates/dashboard/influencer_menu' folder
+    return send_from_directory(
+        os.path.join(app.root_path, 'templates', 'dashboard', 'influencer_menu'), 
+        filename
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
