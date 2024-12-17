@@ -112,6 +112,7 @@ def network():
         nodes = networkVisFinal.plot_user_network_with_3d(username, save_as_html=True)
         
         if nodes == None:
+            flash("An error occurred while generating the network visualization.", "danger")
             return render_template(
             'dashboard/influencer_menu/network.html',  
             user_id=user_id,
