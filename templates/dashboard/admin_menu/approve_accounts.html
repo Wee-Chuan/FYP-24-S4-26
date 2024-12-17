@@ -54,9 +54,9 @@
                                     <td>{{ user.account_type }}</td>
                                     <td>{{ 'Pending Approval' if not user.is_approved else 'Approved' }}</td>
                                     <td>
-                                        <form action="{{ url_for('dashboard_boundary.approve_user') }}" method="POST" style="display:inline;">
+                                        <form action="{{ url_for('admin_boundary.approve_user') }}" method="POST" style="display:inline;">
                                             <input type="hidden" name="user_id" value="{{ user.user_id }}">
-                                            <button type="submit" class="action-button"><i class="fas fa-user-check"></i> Approve</button>
+                                            <button type="submit" class="action-button" id="approve"><i class="fas fa-user-check"></i> Approve</button>
                                         </form>
                                     </td>
                                 </tr>

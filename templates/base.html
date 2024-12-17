@@ -31,20 +31,33 @@
                 <ul class="nav-links">
                     <!--header for user that is logged in-->
                     {% if session.get('user_id') %} 
-                        <li class="{{ 'active' if request.path == url_for('dashboard_boundary.dashboard') else '' }}">
-                            <a href="{{ url_for('dashboard_boundary.dashboard') }}">Dashboard</a>
-                        </li>
-                        <li class="{{ 'active' if request.path == url_for('profile_boundary.update_account') else '' }}">
-                            <a href="{{ url_for('profile_boundary.update_account') }}">Profile</a>
-                            <!--profile_boundary.update_account endpoint-->
-                        </li>
-                        <li class="{{ 'active' if request.path == url_for('profile_boundary.link_social') else '' }}">
-                            <a href="{{ url_for('profile_boundary.link_social') }}">Link Social</a>
-                        </li>
-                        <li class="{{ 'active' if request.path == url_for('rate_and_review_boundary.rate_and_review') else '' }}">
-                            <a href="{{ url_for('rate_and_review_boundary.rate_and_review') }}">Leave a Review</a>
-                        </li>
-                        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                        <!-- Check if the user is an admin -->
+                        {% if session.get('account_type') == 'admin' %}
+                            <li class="{{ 'active' if request.path == url_for('dashboard_boundary.dashboard') else '' }}">
+                                <a href="{{ url_for('dashboard_boundary.dashboard') }}">Dashboard</a>
+                            </li>
+                            <li class="{{ 'active' if request.path == url_for('profile_boundary.update_account') else '' }}">
+                                <a href="{{ url_for('profile_boundary.update_account') }}">Profile</a>
+                                <!--profile_boundary.update_account endpoint-->
+                            </li>
+                            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                        {% else %}
+                            <!-- Non-admin user links -->
+                            <li class="{{ 'active' if request.path == url_for('dashboard_boundary.dashboard') else '' }}">
+                                <a href="{{ url_for('dashboard_boundary.dashboard') }}">Dashboard</a>
+                            </li>
+                            <li class="{{ 'active' if request.path == url_for('profile_boundary.update_account') else '' }}">
+                                <a href="{{ url_for('profile_boundary.update_account') }}">Profile</a>
+                                <!--profile_boundary.update_account endpoint-->
+                            </li>
+                            <li class="{{ 'active' if request.path == url_for('profile_boundary.link_social') else '' }}">
+                                <a href="{{ url_for('profile_boundary.link_social') }}">Link Social</a>
+                            </li>
+                            <li class="{{ 'active' if request.path == url_for('rate_and_review_boundary.rate_and_review') else '' }}">
+                                <a href="{{ url_for('rate_and_review_boundary.rate_and_review') }}">Leave a Review</a>
+                            </li>
+                            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                        {% endif %}
                     {% else %}
                         <!--header for user that is not logged in-->
                         {% if show_nav %}

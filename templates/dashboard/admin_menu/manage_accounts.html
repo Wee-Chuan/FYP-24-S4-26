@@ -3,6 +3,7 @@
 
 
 {% block styles %}
+    <link rel="preload" href="{{ url_for('static', filename='images/main_page_wallpaper.jpg') }}" as="image">
     <link rel="stylesheet" href="{{ url_for('static', filename='components/dashboard/admin_dashboard.css') }}">
 {% endblock %}
 
@@ -25,7 +26,15 @@
             <!-- Search Bar for Users -->
             <div class="user-search">
                 <input type="text" placeholder="Search for a user by username..." id="userSearchInput" oninput="debouncedSearchUser()">
-                <button onclick="searchUser()"><i class="fas fa-search"></i> Search</button>
+                <!-- <button onclick="searchUser()"><i class="fas fa-search"></i> Search</button> -->
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="filter-buttons">
+                <button onclick="filterUsers('all')" data-filter="all" class="{% if currentFilter == 'all' %}active{% endif %}">All Users</button>
+                <button onclick="filterUsers('influencer')" data-filter="influencer" class="{% if currentFilter == 'influencer' %}active{% endif %}">Influencers</button>
+                <button onclick="filterUsers('business_analyst')" data-filter="business_analyst" class="{% if currentFilter == 'business_analyst' %}active{% endif %}">Business Users</button>
+                <button onclick="filterUsers('admin')" data-filter="admin" class="{% if currentFilter == 'admin' %}active{% endif %}">Admins</button>
             </div>
 
             <!-- Results Container -->
@@ -34,7 +43,7 @@
                     <thead>
                         <tr>
                             <th>Username</th>
-                            <th>Email</th>
+                            <!-- <th>Email</th> -->
                             <th>Account Type</th>
                             <th>Status</th>
                             <th>Actions</th>
@@ -44,12 +53,12 @@
                         {% for user in all_users %}
                         <tr>
                             <td>{{ user.username }}</td>
-                            <td>{{ user.email }}</td>
+                            <!-- <td>{{ user.email }}</td> -->
                             <td>{{ user.account_type }}</td>
                             <td>{{ 'Suspended' if user.is_suspended else ( 'Pending Approval' if user.account_type == 'business_analyst' and not user.is_approved else 'Active' ) }}</td>
                             <td>
-                                <button class="action-button" onclick="viewUserDetails('{{ user.user_id }}')"><i class="fas fa-eye"></i> View</button>
-                                <button class="action-button" onclick="suspendUser('{{ user.user_id }}')"><i class="fas fa-ban"></i> Suspend</button>
+                                <button class="action-button" id="view" onclick="viewUserDetails('{{ user.user_id }}')"><i class="fas fa-eye"></i> View</button>
+                                <button class="action-button" id="suspend" onclick="suspendUser('{{ user.user_id }}')"><i class="fas fa-ban"></i> Suspend</button>
                             </td>
                         </tr>
                         {% endfor %}
@@ -65,6 +74,13 @@
                 <h3>User Details</h3>
                 <p><strong>UserID:</strong> <span id="modalUserID"></span></p>
                 <p><strong>Username:</strong> <span id="modalUsername"></span></p>
+
+                <!-- Business Analyst Specific Information -->
+                <div id="businessDetails" style="display:none;">
+                    <p><strong>Business Name:</strong> <span id="modalBusinessName"></span></p>
+                    <p><strong>Business Number:</strong> <span id="modalBusinessNumber"></span></p>
+                </div>
+
                 <p><strong>Email:</strong> <span id="modalEmail"></span></p>
                 <p><strong>Account Type:</strong> <span id="modalAccountType"></span></p>
                 <p><strong>Linked Social Account:</strong> <span id="modalLinkedSocial"></span></p>
@@ -77,38 +93,72 @@
 </div>
 <script>
     let debounceTimer
+    let currentFilter = 'all'; // Default filter is 'all'
 
     // Function to debounce user
     function debouncedSearchUser() {
         const query = document.getElementById('userSearchInput').value;
-        if (debounceTimer) {
-            clearTimeout(debounceTimer); // Clear the previous timer
-        }
-        debounceTimer = setTimeout(() => {
-            searchUser(query); // Call the search function after the delay
-        }, 300); // Delay of 500ms before making the request
-    }
-
-    // Functions for user actions
-    function searchUser() {
-        const query = document.getElementById('userSearchInput').value;
-        if (query) {
-            // Fetch the search results when the query is not empty
-            fetch(`/dashboard/admin/search_user?query=${encodeURIComponent(query)}`)
-                .then(response => response.json())
-                .then(data => {
-                    displaySearchResults(data);
-                })
-                .catch(error => console.error('Error fetching search results:', error));
-        } else {
-            // If query is empty, reset to show all users
-            fetch('/dashboard/admin/get_users') 
+        //Send the search query along with the selected filter
+        if (query === '') {
+            fetch(`/dashboard/admin/get_filtered_users?query=&filter=${encodeURIComponent(currentFilter)}`)
                 .then(response => response.json())
                 .then(data => {
                     displaySearchResults(data); // Display all users
                 })
                 .catch(error => console.error('Error fetching all users:', error));
+        } else {
+            // Debounced search
+            if (debounceTimer) {
+                clearTimeout(debounceTimer); // Clear the previous timer
+            }
+            debounceTimer = setTimeout(() => {
+                searchUser(query); // Call the search function after the delay
+            }, 300); // Delay of 300ms before making the request
         }
+    }
+    
+    function searchUser() {
+        const query = document.getElementById('userSearchInput').value;
+        if (query) {
+            console.log(`Searching for users with query: "${query}" and filter: "${currentFilter}"`); // Log the current filter
+            // Fetch search results when query is not empty
+            fetch(`/dashboard/admin/search_user?query=${encodeURIComponent(query)}&filter=${encodeURIComponent(currentFilter)}`)
+                .then(response => response.json())
+                .then(data => {
+                    displaySearchResults(data); // Display search results
+                })
+                .catch(error => console.error('Error fetching search results:', error));
+        }
+    }
+
+    // Function to handle filtering by user type
+    function filterUsers(filter) {
+        currentFilter = filter; // Set the current filter to the selected value
+
+        // Log the filter change
+        console.log(`Filter changed to: ${currentFilter}`); // Log the new filter value
+        
+        // Update the active class on the filter buttons
+        const filterButtons = document.querySelectorAll('.filter-buttons button');
+        
+        // Remove 'active' class from all filter buttons
+        filterButtons.forEach(button => {
+            button.classList.remove('active');
+        });
+
+        // Add 'active' class to the clicked button
+        const activeButton = document.querySelector(`.filter-buttons button[data-filter="${filter}"]`);
+        if (activeButton) {
+            activeButton.classList.add('active');
+        }
+        
+        const query = document.getElementById('userSearchInput').value; // Get current search input
+        fetch(`/dashboard/admin/get_filtered_users?query=${encodeURIComponent(query)}&filter=${encodeURIComponent(currentFilter)}`)
+            .then(response => response.json())
+            .then(data => {
+                displaySearchResults(data); // Update the user list based on filter
+            })
+            .catch(error => console.error('Error fetching filtered users:', error));
     }
 
     function displaySearchResults(data) {
@@ -119,13 +169,12 @@
                 const userRow = document.createElement('tr');
                 userRow.innerHTML = `
                     <td>${user.username}</td>
-                    <td>${user.email}</td>
+                    
                     <td>${user.account_type}</td>
                     <td>${user.account_type === 'business_analyst' && !user.is_approved ? 'Pending Approval' : 'Active'}</td>
                     <td>
-                        <button class="action-button" onclick="viewUserDetails('${user.user_id}')"><i class="fas fa-eye"></i> View</button>
-                        ${user.account_type === 'business' && !user.is_approved ? 
-                        `<button class="action-button approve-button" onclick="approveBusinessAccount('${user.user_id}')"><i class="fas fa-user-check"></i> Approve</button>` : ''}
+                        <button class="action-button" id="view" onclick="viewUserDetails('${user.user_id}')"><i class="fas fa-eye"></i> View</button>
+                        <button class="action-button" id="suspend" onclick="suspendUser('${user.user_id}')"><i class="fas fa-ban"></i> Suspend</button>
                     </td>`;
                 userTableBody.appendChild(userRow);
             });
@@ -135,7 +184,7 @@
     }
 
     function viewUserDetails(userId) {
-        fetch(`/dashboard/admin/user/${userId}`)
+        fetch(`/dashboard/admin/get_user_details/${userId}`)
             .then(response => response.json())
             .then(data => {
                 document.getElementById('modalUserID').textContent = data.user_id;
@@ -143,8 +192,17 @@
                 document.getElementById('modalEmail').textContent = data.email;
                 document.getElementById('modalAccountType').textContent = data.account_type;
                 document.getElementById('modalLinkedSocial').textContent = data.linked_social_account;
-                // document.getElementById('modalFollowers').textContent = data.follower_count || 0;
-                // document.getElementById('modalFollowing').textContent = data.following_count || 0;
+
+                // Business analyst specific information
+                const businessDetailsSection = document.getElementById('businessDetails')
+                if (data.account_type === 'business_analyst') {
+                    businessDetailsSection.style.display = 'block';
+                    document.getElementById('modalBusinessName').textContent = data.business_name;
+                    document.getElementById('modalBusinessNumber').textContent = data.business_number;
+                } else {
+                    businessDetailsSection.style.display = 'none';
+                }
+
                 // Determine and display account status
                 if (data.account_type === 'business_analyst') {
                     document.getElementById('modalStatus').textContent = !data.is_approved ? 'Pending Approval' : 'Active';

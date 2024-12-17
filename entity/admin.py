@@ -38,9 +38,7 @@ class Admin:
 
             for user in users:
                 user_data = user.to_dict()
-
-                if user_data.get('account_type') != 'admin':
-                    user_list.append(user_data)
+                user_list.append(user_data)
 
             return user_list
         except Exception as e:
@@ -92,34 +90,47 @@ class Admin:
             return None
     
     @staticmethod
-    def search_users_by_query(query):
+    def search_users_by_query(query, account_type='all'):
         """Search for users by query string."""
         try:
             # Query for matching usernames
-            user_ref_username = db.collection('users').where('username', '>=', query).where('username', '<=', query + '\uf8ff')
-            # Query for matching account types
-            user_ref_account_type = db.collection('users').where('account_type', '>=', query).where('account_type', '<=', query + '\uf8ff')
+            user_ref = db.collection('users').where('username', '>=', query).where('username', '<=', query + '\uf8ff')
 
-            # Execute both queries
-            users_by_username = user_ref_username.stream()
-            users_by_account_type = user_ref_account_type.stream()
+            # Execute the query
+            users_by_username = user_ref.stream()
 
-            # Combine results
+            # Prepare the list of user data
             user_list = []
             for user in users_by_username:
                 user_data = user.to_dict()
-                if user_data.get('account_type') != 'admin':  # Exclude admin accounts
+                # If account_type is not 'all', filter in memory
+                if account_type != 'all' and user_data['account_type'] == account_type:
+                    user_list.append(user_data)
+                elif account_type == 'all':
                     user_list.append(user_data)
 
-            for user in users_by_account_type:
+            return user_list
+        except Exception as e:
+            print(f"Error searching users: {e}")
+            return []
+    
+    @staticmethod
+    def filter_users(query):
+        """Filter users by query."""
+        try:
+            # Query for matching usernames
+            user_ref = db.collection('users').where('username', '>=', query).where('username', '<=', query + '\uf8ff')
+
+            # Execute the query
+            users_by_username = user_ref.stream()
+
+            # Prepare the list of user data
+            user_list = []
+            for user in users_by_username:
                 user_data = user.to_dict()
-                if user_data.get('account_type') != 'admin':  # Exclude admin accounts
-                    # Add to list only if not already present (optional)
-                    if user_data not in user_list:
-                        user_list.append(user_data)
+                user_list.append(user_data)
 
             return user_list
-
         except Exception as e:
             print(f"Error searching users: {e}")
             return []

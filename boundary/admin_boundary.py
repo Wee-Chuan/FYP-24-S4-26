@@ -28,16 +28,44 @@ def get_users():
 @admin_boundary.route('/dashboard/admin/search_user', methods=['GET'])
 def search_user():
     query = request.args.get('query', '').strip()  # Get the search query from URL parameters
+    filter_type = request.args.get('filter', 'all')
 
     if not query:
         return jsonify({"error": "No search query provided"}), 400  # Return an error if query is empty
     
-    
-    results = Admin.search_users_by_query(query)
+    try:
+        # Search users by username using the method from the Admin class
+        results = Admin.search_users_by_query(query, account_type=filter_type)
+        
+        # Check if results are valid
+        if results is None:
+            print(f"No results found for query: '{query}' with filter: '{filter_type}'")
+            return jsonify({"error": "No users found"}), 404  # Return error if no users found
+        elif not results:
+            print(f"Empty result set for query: '{query}' with filter: '{filter_type}'")
+            return jsonify({"error": "No users match the query and filter"}), 404  # Return error if empty results
 
-    return jsonify(results)  # Return the search results as JSON
+        # Return the search results as JSON
+        print(f"Found {len(results)} user(s) matching query: '{query}' with filter: '{filter_type}'")
+        return jsonify(results)
 
+    except Exception as e:
+        print((f"Error occurred while searching users: {str(e)}"))
+        return jsonify({"error": "An error occurred while processing your request"}), 500  # Return error if exception occurs
 
+@admin_boundary.route('/dashboard/admin/get_filtered_users')
+def get_filtered_users():
+    query = request.args.get('query', '')
+    filter_type = request.args.get('filter', 'all')
+
+    # Get filtered users based on query and account type filter
+    user_list = Admin.filter_users(query)
+    if filter_type != 'all':
+        user_list = [user for user in user_list if user['account_type'] == filter_type]
+
+    return jsonify(user_list)
+
+# Function to approve the business user account
 @admin_boundary.route('/dashboard/admin/approve_user', methods=['POST', 'GET'])
 def approve_user():
     # Check if the request is from an admin
@@ -53,8 +81,9 @@ def approve_user():
         flash(message, "success" if success else "danger")
 
         # Redirect back to the 'approve_accounts' page
-        return redirect(url_for('dashboard_boundary.approve_accounts'))
+        return redirect(url_for('admin_boundary.approve_accounts'))
 
+# Function to display business accounts who needs approval page
 @admin_boundary.route('/dashboard/admin/approve_accounts')
 def approve_accounts():
     if session.get('account_type') != 'admin':
@@ -67,13 +96,12 @@ def approve_accounts():
     return render_template('dashboard/admin_menu/approve_accounts.html', business_analysts=business_analysts, current_page='approve_accounts')
 
 
-@admin_boundary.route('/dashboard/admin/user/<string:user_id>', methods=['GET'])
+@admin_boundary.route('/dashboard/admin/get_user_details/<string:user_id>', methods=['GET'])
 def get_user_details(user_id):
     if session.get('account_type') != 'admin':
         return jsonify({"error": "Unauthorized access"}), 403
 
     user_data = Admin.get_user_details(user_id)
-    print(user_data)
     if user_data:
         return jsonify(user_data)  # Return user data as JSON
     else:
@@ -91,6 +119,6 @@ def suspend_user(user_id):
     # flash(message, "success" if success else "danger")
     return jsonify(result)
     # # Redirect back to the 'approve_accounts' page
-    # return redirect(url_for('dashboard_boundary.manage_accounts'))
+    # return redirect(url_for('admin_boundary.manage_accounts'))
     
 # ======================================================= #

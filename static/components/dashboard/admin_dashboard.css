@@ -2,6 +2,7 @@
 .dashboard-wrapper {
     display: flex;
     width: 100%;
+    height: 100%;
     background-color: #f9f9f9; /* Light background for the dashboard */
     font-family: Arial, sans-serif;
     min-height: 100vh;
@@ -12,9 +13,8 @@
     width: 250px;
     background: url('../../images/main_page_wallpaper.jpg') no-repeat center center;
     background-size: cover;
-    color: #ecf0f1;
     padding: 20px;
-    border-right: 2px solid #2c3e50; /* Darker border */
+    border-right: 2px solid #2c3e50;
 }
 
 .sidebar h3 {
@@ -97,35 +97,69 @@
     margin-bottom: 20px;
 }
 
-.stats-cards {
-    display: flex;
-    gap: 20px;
+/* Grid Layout for Stats */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 20px; 
+    margin-top: 20px;
 }
 
+/* General Stat Card Styling */
 .stat-card {
-    flex: 1;
-    background-color: #020202;
-    color: #fff;
-    padding: 50px;
+    background-color: #f4f4f9; 
+    color: #333;
+    padding: 20px;
     border-radius: 8px;
-    text-align: center;
-    transition: transform 0.2s ease, background-color 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 .stat-card:hover {
-    background-color: rgba(36, 0, 98, 0.971);
-    transform: scale(1.05);
+    transform: scale(1.05); 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
 }
 
-.stat-card h4 {
+/* Highlighted Card (for Total Users) */
+.stat-card.highlight {
+    background-color: #64c2d7; 
+    color: white;
+}
+
+/* Card Content Layout */
+.card-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Icon Styling */
+.card-content .icon {
+    font-size: 2.5em; 
+    color: #64c2d7;
+    background-color: #ffffff;
+    border-radius: 50%;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+}
+
+.stat-card.highlight .icon {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.2); 
+}
+
+/* Text Details in Cards */
+.card-content .details h4 {
     font-size: 1.2em;
-    font-weight: 500;
-    margin: 10px;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 
-.stat-card p {
-    font-size: 1.8em;
+.card-content .details p {
+    font-size: 2em;
     font-weight: bold;
     margin: 0;
 }
@@ -161,28 +195,37 @@
 /* Action Button Styles */
 .action-button {
     padding: 15px 12px;
-    border: none;
+    border: 1px solid #ddd;
     border-radius: 4px;
-    color: white;
-    background-color: #000000; /* Default button color */
+    color: black;
+    background-color: #d0d0d0;
     cursor: pointer;
     transition: background-color 0.3s ease;
     width: 80%;
     margin: 5px 0; 
     font-size: 14px; 
+    border-radius: 4px;
     display: block;
 }
 
-.action-button:hover {
-    background-color: rgba(36, 0, 98, 0.971); /* Darker shade on hover */
+#view:hover {
+    background-color: #64c2d7; 
+}
+
+#approve:hover {
+    background-color: #64c2d7; 
+}
+
+#suspend:hover {
+    background-color: #bc0101; 
 }
 
 .approve-button {
-    background-color: #1abc9c; /* Approve button color */
+    background-color: #1abc9c; 
 }
 
 .approve-button:hover {
-    background-color: #16a085; /* Darker shade on hover */
+    background-color: #16a085; 
 }
 
 .user-list .action-button {
@@ -263,17 +306,43 @@
     border-color: #1abc9c; /* Highlight on focus */
 }
 
-.user-search button {
-    padding: 10px 15px;
-    margin-left: 10px;
-    border: none;
-    background-color: #000000;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+/* Style for the filter buttons container */
+.filter-buttons {
+    display: flex;
+    justify-content: left;
+    gap: 20px;
+    margin-bottom: 20px;
 }
 
-.user-search button:hover {
-    background-color: rgba(36, 0, 98, 0.971); /* Darker shade on hover */
+/* Style for each filter button */
+.filter-buttons button {
+    background-color: #d0d0d0;
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+/* Active state for the filter button */
+.filter-buttons button.active {
+    background-color: #64c2d7;
+    color: #fff;
+    border-color: #ddd;
+}
+
+/* Hover effect for filter buttons */
+.filter-buttons button:hover {
+    background-color: #64c2d7;
+}
+
+/* Active button hover state */
+.filter-buttons button.active:hover {
+    background-color: #64c2d7;
+    border-color: #ddd;
+}
+
+
+
