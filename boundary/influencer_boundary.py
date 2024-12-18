@@ -1,11 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, session, flash, request, jsonify
 from entity.user import User
 from entity.followers_hist_entity import FollowerHist
-import networkVisFinal, globals
-import seaborn as sns
-import matplotlib.pyplot as plt
+import networkVisFinal, globals, influencer_centrality_ranking
 import numpy as np
-
 
 
 influencer_boundary = Blueprint('influencer_boundary', __name__)
@@ -26,6 +23,12 @@ def engagement_metrics():
         user = User.get_profile(user_id)
         if not user or account_type != 'influencer':
             flash("Unauthorized access. Only influencers can view engagement metrics.", "danger")
+            return redirect(url_for('dashboard_boundary.dashboard'))
+        
+        
+        # CHECKING IF ACCOUNT IS LINKEDDDDDDDDDDDDDDDDDDDDDDDDDDD 
+        if user['linked_social_account'] == "":
+            flash("Please link to your social media acccount first", "danger")
             return redirect(url_for('dashboard_boundary.dashboard'))
 
         metrics = User.visualize_engagement_metrics(user_id)
@@ -74,6 +77,11 @@ def followers():
             flash("Session expired or user not found. Please log in again.", "danger")
             return redirect(url_for('auth_boundary.login'))  # Redirect to login if session is invalid
 
+        # CHECKING IF ACCOUNT IS LINKEDDDDDDDDDDDDDDDDDDDDDDDDDDD 
+        if user['linked_social_account'] == "":
+            flash("Please link to your social media acccount first", "danger")
+            return redirect(url_for('dashboard_boundary.dashboard'))
+
         # Fetch historical data and calculate forecast
         historical_data = FollowerHist.get_followers_hist(user_id)
         if not historical_data:
@@ -113,6 +121,11 @@ def network():
             flash("Session expired or user not found. Please log in again.", "danger")
             return redirect(url_for('auth_boundary.login'))  # Redirect to login if session is invalid
 
+        # CHECKING IF ACCOUNT IS LINKEDDDDDDDDDDDDDDDDDDDDDDDDDDD 
+        if user['linked_social_account'] == "":
+            flash("Please link to your social media acccount first", "danger")
+            return redirect(url_for('dashboard_boundary.dashboard'))
+
         # render the graph html files!
         nodes = networkVisFinal.plot_user_network_with_3d(username, save_as_html=True)
         
@@ -143,102 +156,47 @@ def network():
 def ranking():
     user_id = session.get('user_id')
     user = User.get_profile(user_id)  # Fetch user profile using your custom method
+    username = user['username']
 
-    # Get ranked influencers
-    ranked_influencers = User.get_ranked_influencers()
-    
-    # Find the rank of the current user
-    user_data = next((u for u in ranked_influencers if u['uid'] == user_id), None)
-    if not user_data:
-        flash('Unable to determine your rank.', 'danger')
-        return render_template('dashboard/influencer_menu/ranking.html', user_id=user_id, user=user)
-    
-    user_followers = user_data['follower_count']
-    user_following = user_data['following_count']
+    # CHECKING IF ACCOUNT IS LINKEDDDDDDDDDDDDDDDDDDDDDDDDDDD 
+    if user['linked_social_account'] == "":
+        flash("Please link to your social media acccount first", "danger")
+        return redirect(url_for('dashboard_boundary.dashboard'))
 
-    user_rank = ranked_influencers.index(user_data) + 1  # Rankings are 1-indexed
-    user_score = user_data['centrality_score']
+    # Get ranked influencers (assuming it returns a dictionary {username: centrality_score})
+    ranked_influencers = influencer_centrality_ranking.build_graph_and_calculate_centrality()
 
-    # Determine nearby users
-    total_users = len(ranked_influencers)
+    # Sort influencers by centrality score in descending order
+    sorted_influencers = sorted(ranked_influencers.items(), key=lambda x: x[1], reverse=True)
 
-    # Adjust start and end indices for users near the top or bottom
-    start_index = max(0, user_rank - 6)  # Default: 5 users before + 1 current user
-    end_index = min(total_users, user_rank + 5)  # Default: 5 users after
-    
-    if user_rank <= 5:  # Top 5 users
-        start_index = 0  # Include all users from the beginning
-        end_index = min(total_users, 11)  # Ensure up to 10 users if possible
-    elif user_rank > total_users - 5:  # Bottom 5 users
-        start_index = max(0, total_users - 11)  # Ensure up to the last 10 users
-        end_index = total_users  # Include all users till the end
+    # Prepare top 3 influencers
+    top_3_users = [
+        {"rank": i + 1, "username": user, "score": score}
+        for i, (user, score) in enumerate(sorted_influencers[:3])
+    ]
 
-    nearby_users = ranked_influencers[start_index:end_index]
-    nearby_users_labels = [u['username'] for u in nearby_users]
-    nearby_users_followers = [u['follower_count'] for u in nearby_users]
-    nearby_users_following = [u['following_count'] for u in nearby_users]
-    nearby_users_scores = [u['centrality_score'] for u in nearby_users]
+    # Find the current user's rank and score
+    user_rank = next((i + 1 for i, (user, _) in enumerate(sorted_influencers) if user == username), None)
+    user_score = ranked_influencers.get(username, 0)
+    score_diff = ranked_influencers.get(sorted_influencers[0][0], 0) - user_score if user_rank != 1 else None
 
-    # Top user comparison
-    top_user = ranked_influencers[0] if user_rank != 1 else ranked_influencers[1]
-    top_user_labels = [user_data['username'], top_user['username']]
-    top_user_followers = [user_data['follower_count'], top_user['follower_count']]
-    top_user_following = [user_data['following_count'], top_user['following_count']]
-    top_user_scores = [user_data['centrality_score'], top_user['centrality_score']]
-    score_diff = top_user['centrality_score'] - user_score
-
-    # Bar chart data
-    chart_data = {
-        "labels_nearby": nearby_users_labels,  # Usernames of nearby users
-        "followers_nearby": nearby_users_followers,  # Follower counts of nearby users
-        "following_nearby": nearby_users_following,  # Following counts of nearby users
-        "labels_top": top_user_labels,  # Usernames for top influencer comparison
-        "followers_top": top_user_followers,  # Follower counts for top influencer comparison
-        "following_top": top_user_following,  # Following counts for top influencer comparison
-    }
-
-    # Declare the user index
-    user_index = nearby_users_labels.index(user_data['username']) if user_data['username'] in nearby_users_labels else None
-
-    # Table data
-    ranking_table = []
-    for i, influencer in enumerate(ranked_influencers):
-        rank = i + 1
-        if rank <= 3 or (start_index <= i < end_index):  # Top 3 or nearby
-            ranking_table.append({
-                'rank': rank,
-                'username': influencer['username'],
-                'score': influencer['centrality_score'],
-                'is_user': influencer['uid'] == user_id,
-                'use_ellipsis': False
-            })
-        elif rank == 4 or rank == end_index + 1:  # Ellipses between skipped ranges
-            ranking_table.append({'rank': None, 'username': '...', 'score': None, 'is_user': False, 'use_ellipsis': True})
+    # Get 3 users above and below the current user (if available)
+    if user_rank:
+        surrounding_indices = range(max(0, user_rank - 4), min(len(sorted_influencers), user_rank + 3))
+        surrounding_users = [
+            {"rank": i + 1, "username": user, "score": score}
+            for i, (user, score) in enumerate(sorted_influencers) if i in surrounding_indices
+        ]
+    else:
+        surrounding_users = []
 
     return render_template(
         'dashboard/influencer_menu/ranking.html',
-        user_id=user_id,
-        user=user,
+        username=username,
+        top_3_users=top_3_users,
+        surrounding_users=surrounding_users,
+        current_user=username,
         user_rank=user_rank,
         user_score=user_score,
-        user_followers=user_followers,  
-        user_following=user_following, 
-        nearby_users_labels=nearby_users_labels,
-        nearby_users_followers=nearby_users_followers,
-        nearby_users_following=nearby_users_following,
-        nearby_users_scores=nearby_users_scores,
-        top_user_labels=top_user_labels,
-        top_user_followers=top_user_followers,
-        top_user_following=top_user_following,
-        top_user_scores=top_user_scores,
         score_diff=score_diff,
-        is_top_user=(user_rank == 1),
-        ranking_table=ranking_table,
-        chart_data=chart_data,
-        user_index=user_index,  # Pass the user_index to the template
     )
-
-    
-# ========================================================== #
-
-
