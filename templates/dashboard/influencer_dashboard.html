@@ -43,7 +43,11 @@
                     <div class="metric">
                         <h4>Current Ranking</h4>
                         <div class="post-info">
-                            <p>{{ Ranking }}</p>
+                            {% if ranking %}
+                                <p>Rank: {{ ranking }}</p>
+                            {% else %}
+                                <p>Unable to retrieve ranking.</p>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="metric followers-gained">
@@ -69,7 +73,7 @@
                                     <i class="fas fa-comments"></i>
                                     <div>
                                         <p>Comments: </p>
-                                        <strong>{{ user['comments'] }}</strong>
+                                        <strong>{{ total_comments  }}</strong>
                                     </div>
                                 </div>
                             </div>
@@ -78,7 +82,7 @@
                                     <i class="fas fa-thumbs-up"></i>
                                     <div>
                                         <p>Likes: </p>
-                                        <strong>{{ user['likes'] }}</strong>
+                                        <strong>{{ total_likes }}</strong>
                                     </div>
                                 </div>
                             </div>
@@ -87,7 +91,7 @@
                                     <i class="fas fa-share"></i>
                                     <div>
                                         <p>Shares: </p>
-                                        <strong>{{ user['shares'] }}</strong>
+                                        <strong>{{ total_shares }}</strong>
                                     </div>
                                 </div>
                             </div>
@@ -100,9 +104,9 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const comments = {{ user['comments'] | default(0) | tojson }};
-            const likes = {{ user['likes'] | default(0) | tojson }};
-            const shares = {{ user['shares'] | default(0) | tojson }};
+            const comments = {{ total_comments | tojson }};
+            const likes = {{ total_likes | tojson }};
+            const shares = {{ total_shares | tojson }};
             
             console.log('Comments:', comments);
             console.log('Likes:', likes);

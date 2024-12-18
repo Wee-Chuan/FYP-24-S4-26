@@ -22,6 +22,16 @@ def dashboard():
         # Check if the linked social media account
         linked_account = User.check_if_social_account_linked(user_id)
 
+        # Fetch total engagement metrics for the user
+        metrics = User.visualize_engagement_metrics(user_id)
+    
+        if metrics:
+            total_likes = sum([metric['likes'] for metric in metrics])
+            total_comments = sum([metric['comments'] for metric in metrics])
+            total_shares = sum([metric['shares'] for metric in metrics])
+        else:
+            total_likes = total_comments = total_shares = 0
+
         # Fetch historical data for the user
         historical_data = FollowerHist.get_followers_hist(user_id) # ~~~~~~~unsure of followerHist~~~~~~~~~~~
         if historical_data:
@@ -34,22 +44,19 @@ def dashboard():
                     (this_month_followers - last_month_followers) 
                     if last_month_followers > 0 else 0
                 )
-                followers_gained_percentage = ( 
-                    ((this_month_followers - last_month_followers) / last_month_followers) * 100 
-                )
             else:
                 followers_gained = None
-                followers_gained_percentage = None
         else:
             followers_gained = None
-            followers_gained_percentage = None
 
         return render_template(
             'dashboard/influencer_dashboard.html', # html page for influencer dashboard, with needed paras
             user_id=user_id, user=user, 
             followers_gained=followers_gained, 
-            followers_gained_percentage=followers_gained_percentage,
-            linked_account=linked_account
+            linked_account=linked_account,
+            total_likes=total_likes, 
+            total_comments=total_comments, 
+            total_shares=total_shares,
         )
     
     
