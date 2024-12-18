@@ -30,6 +30,7 @@ pip install scikit-learn
 pip install pandas
 pip install plotly
 pip install python-louvain
+pip install seaborn
 
 
 # BOUNDARY #

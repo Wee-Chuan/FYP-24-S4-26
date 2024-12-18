@@ -48,31 +48,31 @@ if not firebase_admin._apps:
 db = firestore.client()
 
 class User:
-    @staticmethod
-    def generate_followers_following(username, num_users, follower_limit=20):
-        """Generate fake followers and following lists for a new user."""
-        # Create a set to ensure unique usernames
-        fake_usernames = set()
+    # @staticmethod
+    # def generate_followers_following(username, num_users, follower_limit=20):
+    #     """Generate fake followers and following lists for a new user."""
+    #     # Create a set to ensure unique usernames
+    #     fake_usernames = set()
         
-        # Generate fake usernames until we have enough, ensuring the new user's username is included
-        while len(fake_usernames) < num_users:
-            fake_usernames.add(fake.user_name())
+    #     # Generate fake usernames until we have enough, ensuring the new user's username is included
+    #     while len(fake_usernames) < num_users:
+    #         fake_usernames.add(fake.user_name())
         
-        # Add the new user's username to the list
-        fake_usernames.add(username)
+    #     # Add the new user's username to the list
+    #     fake_usernames.add(username)
 
-        # Convert the set back to a list
-        fake_usernames = list(fake_usernames)
+    #     # Convert the set back to a list
+    #     fake_usernames = list(fake_usernames)
         
-        # Generate followers
-        follower_count = random.randint(1, min(follower_limit, len(fake_usernames) - 1))  # Exclude the new user
-        follower_list = random.sample([user for user in fake_usernames if user != username], follower_count)
+    #     # Generate followers
+    #     follower_count = random.randint(1, min(follower_limit, len(fake_usernames) - 1))  # Exclude the new user
+    #     follower_list = random.sample([user for user in fake_usernames if user != username], follower_count)
 
-        # Generate following (you could use a similar strategy or different logic)
-        following_count = random.randint(1, min(follower_limit, len(fake_usernames) - 1))  # Exclude the new user
-        following_list = random.sample([user for user in fake_usernames if user != username], following_count)
+    #     # Generate following (you could use a similar strategy or different logic)
+    #     following_count = random.randint(1, min(follower_limit, len(fake_usernames) - 1))  # Exclude the new user
+    #     following_list = random.sample([user for user in fake_usernames if user != username], following_count)
 
-        return follower_list, following_list
+    #     return follower_list, following_list
     
     @staticmethod
     def generate_social_accounts(user_id, username):
@@ -87,15 +87,11 @@ class User:
             # Hash the password for storage
             hashed_password = bcrypt.hashpw(account_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
-            # Generate fake social media data
-            follower_list, following_list = User.generate_followers_following(username, 15)
+            ## Generate fake social media data
+            # follower_list, following_list = User.generate_followers_following(username, 15)
             social_data = {
                 'username': account_username,
                 'password': hashed_password,
-                'followers': follower_list,
-                'following': following_list,
-                'follower_count': len(follower_list),
-                'following_count': len(following_list),
                 'profile_created': firestore.SERVER_TIMESTAMP  # Timestamp for when the account was created
             }
 
@@ -148,7 +144,7 @@ class User:
     def authenticate(username, password):
         """Authenticate the user by username and password."""
         # Query Firestore to find the user by username
-        users_ref = db.collection('degree_of_centrailty').where(field_path='username', op_string='==', value=username).limit(1)
+        users_ref = db.collection('users').where(field_path='username', op_string='==', value=username).limit(1)
         doc = list(users_ref.stream())
         
         if doc:
@@ -169,7 +165,7 @@ class User:
     def get_profile(user_id):
         """Retrieve user profile details from Firestore."""
         try:
-            doc = db.collection('degree_of_centrailty').document(user_id).get()
+            doc = db.collection('users').document(user_id).get()
             print("Attempting to retrieve user profile...")
             print(f"Using user_id: {user_id}")
 
@@ -316,55 +312,55 @@ class User:
     
     # ========================================================== #
 
-    @staticmethod
-    def visualize_followers_network(username):
-        """Visualizes the followers network for the given user."""
-        # Fetch user data from Firestore
-        user_ref = db.collection('degree_of_centrailty').where(field_path='username', op_string='==', value=username).limit(1).get()
+    # @staticmethod
+    # def visualize_followers_network(username):
+    #     """Visualizes the followers network for the given user."""
+    #     # Fetch user data from Firestore
+    #     user_ref = db.collection('users').where(field_path='username', op_string='==', value=username).limit(1).get()
         
-        if not user_ref:
-            print(f"User {username} not found in Firestore.")
-            return None
+    #     if not user_ref:
+    #         print(f"User {username} not found in Firestore.")
+    #         return None
 
-        user_data = user_ref[0].to_dict()
-        followers_list = user_data.get('follower_list', [])
+    #     user_data = user_ref[0].to_dict()
+    #     followers_list = user_data.get('follower_list', [])
         
-        user_subgraph = nx.DiGraph()
-        user_subgraph.add_node(username)
+    #     user_subgraph = nx.DiGraph()
+    #     user_subgraph.add_node(username)
         
-        # Add edges from followers to the user
-        for follower in followers_list:
-            user_subgraph.add_edge(follower, username)
+    #     # Add edges from followers to the user
+    #     for follower in followers_list:
+    #         user_subgraph.add_edge(follower, username)
 
-        # Fetch followers' following lists
-        for follower in followers_list:
-            follower_ref = db.collection('users').where(field_path='username', op_string='==', value=follower).limit(1).get()
-            if follower_ref:
-                follower_data = follower_ref[0].to_dict()
-                follower_following_list = follower_data.get('following_list', [])
-                for other_follower in followers_list:
-                    if other_follower in follower_following_list:
-                        user_subgraph.add_edge(follower, other_follower)
+    #     # Fetch followers' following lists
+    #     for follower in followers_list:
+    #         follower_ref = db.collection('users').where(field_path='username', op_string='==', value=follower).limit(1).get()
+    #         if follower_ref:
+    #             follower_data = follower_ref[0].to_dict()
+    #             follower_following_list = follower_data.get('following_list', [])
+    #             for other_follower in followers_list:
+    #                 if other_follower in follower_following_list:
+    #                     user_subgraph.add_edge(follower, other_follower)
 
-        # Set up the Matplotlib figure
-        fig, ax = plt.subplots(figsize=(8.4, 6))
-        pos = nx.spring_layout(user_subgraph, k=1.0)  # Adjust 'k' to change spacing
+    #     # Set up the Matplotlib figure
+    #     fig, ax = plt.subplots(figsize=(8.4, 6))
+    #     pos = nx.spring_layout(user_subgraph, k=1.0)  # Adjust 'k' to change spacing
 
-        # Draw nodes and edges
-        nx.draw_networkx_edges(user_subgraph, pos, arrowstyle='-|>', arrowsize=15, width=0.5, edge_color='black')
-        node_colors = ['red' if node == username else 'blue' for node in user_subgraph.nodes()]
-        nx.draw_networkx_nodes(user_subgraph, pos, node_color=node_colors, node_size=500)
-        nx.draw_networkx_labels(user_subgraph, pos, font_size=12, font_family='sans-serif')
+    #     # Draw nodes and edges
+    #     nx.draw_networkx_edges(user_subgraph, pos, arrowstyle='-|>', arrowsize=15, width=0.5, edge_color='black')
+    #     node_colors = ['red' if node == username else 'blue' for node in user_subgraph.nodes()]
+    #     nx.draw_networkx_nodes(user_subgraph, pos, node_color=node_colors, node_size=500)
+    #     nx.draw_networkx_labels(user_subgraph, pos, font_size=12, font_family='sans-serif')
 
-        ax.axis('off')  # Turn off the axis
-        ax.grid(False)
-        plt.tight_layout()  # Adjust layout
+    #     ax.axis('off')  # Turn off the axis
+    #     ax.grid(False)
+    #     plt.tight_layout()  # Adjust layout
 
-        # Use mpld3 to create an interactive plot
-        interactive_plot = mpld3.fig_to_html(fig)
-        plt.close(fig)  # Close the plot to avoid display issues
+    #     # Use mpld3 to create an interactive plot
+    #     interactive_plot = mpld3.fig_to_html(fig)
+    #     plt.close(fig)  # Close the plot to avoid display issues
 
-        return interactive_plot
+    #     return interactive_plot
     
     
     #=======================KEVIN======================================================================#
