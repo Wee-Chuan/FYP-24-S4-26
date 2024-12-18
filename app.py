@@ -10,7 +10,6 @@ from boundary.influencer_boundary import influencer_boundary
 from boundary.profile_boundary import profile_boundary
 from boundary.rate_and_review_boundary import rate_and_review_boundary
 
-
 load_dotenv()
 
 app = Flask(__name__)

@@ -6,9 +6,76 @@ from collections import Counter
 from networkx.drawing.layout import spring_layout
 import plotly.io as pio
 import os
+from dotenv import load_dotenv
+import firebase_admin
+from firebase_admin import credentials, firestore
+
+import globals
+
+# Load environment variables
+load_dotenv()
+
+# Firebase Initialization
+if not firebase_admin._apps:
+    firebase_credentials = {
+        "type": os.getenv("GOOGLE_CLOUD_TYPE"),
+        "project_id": os.getenv("GOOGLE_CLOUD_PROJECT_ID"),
+        "private_key_id": os.getenv("GOOGLE_CLOUD_PRIVATE_KEY_ID"),
+        "private_key": os.getenv("GOOGLE_CLOUD_PRIVATE_KEY").replace('\\n', '\n'),
+        "client_email": os.getenv("GOOGLE_CLOUD_CLIENT_EMAIL"),
+        "client_id": os.getenv("GOOGLE_CLOUD_CLIENT_ID"),
+        "auth_uri": os.getenv("GOOGLE_CLOUD_AUTH_URI"),
+        "token_uri": os.getenv("GOOGLE_CLOUD_TOKEN_URI"),
+        "auth_provider_x509_cert_url": os.getenv("GOOGLE_CLOUD_AUTH_PROVIDER_X509_CERT_URL"),
+        "client_x509_cert_url": os.getenv("GOOGLE_CLOUD_CLIENT_X509_CERT_URL"),
+        "universe_domain": os.getenv("GOOGLE_CLOUD_UNIVERSE_DOMAIN")
+    }
+
+    cred = credentials.Certificate(firebase_credentials)
+    firebase_admin.initialize_app(cred)
+
+# Get Firestore client
+db = firestore.client()
+
+# Fetch all documents from the 'user_interactions' collection and save to a JSON file
+def save_user_interactions_to_file_as_list():
+    try:
+        # Reference to the 'user_interactions' collection
+        user_interactions_ref = db.collection('user_interactions')
+        
+        # Get all documents in the collection
+        docs = user_interactions_ref.stream()
+        
+        # Prepare the data as a list
+        interactions = []
+        for doc in docs:
+            document_data = doc.to_dict()
+            document_data['id'] = doc.id  # Optionally include the document ID in the data
+            interactions.append(document_data)
+
+        # Define the file path
+        output_file = 'Data-Processing-Scripts/0network.json'
+
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
+        # Save the data to the JSON file
+        with open(output_file, 'w', encoding='utf-8') as f:
+            json.dump(interactions, f, indent=4, ensure_ascii=False)
+        
+        print(f"Data saved successfully to {output_file}")
+    
+    except Exception as e:
+        print(f"Error fetching and saving documents: {e}")
 
 # Load the data from 0network.json
 def load_data():
+    if globals.data_loaded == False:
+        save_user_interactions_to_file_as_list()
+        globals.data_loaded = True
+        print("DATA READ")
+    else:
+        print("DATA NOT READ")
     with open('Data-Processing-Scripts/0network.json') as f:
         return json.load(f)
 

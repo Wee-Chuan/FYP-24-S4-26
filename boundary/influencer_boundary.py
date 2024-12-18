@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, session, flash, request, jsonify
 from entity.user import User
 from entity.followers_hist_entity import FollowerHist
-import networkVisFinal
+import networkVisFinal, globals
 
 influencer_boundary = Blueprint('influencer_boundary', __name__)
 
