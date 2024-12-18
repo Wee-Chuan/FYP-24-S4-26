@@ -57,8 +57,11 @@ def dashboard():
     elif account_type == 'admin':
         all_users = Admin.get_all_users()
 
+        # Filter out admins
+        non_admin_users = [user for user in all_users if user['account_type'] != 'admin']
+
         # Calculate the counts
-        total_users = len(all_users)
+        total_users = len(non_admin_users)
         total_influencers = sum(1 for user in all_users if user['account_type'] == 'influencer')
         total_business_accounts = sum(1 for user in all_users if user['account_type'] == 'business_analyst')
 

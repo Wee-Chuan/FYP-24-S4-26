@@ -38,8 +38,10 @@ class Admin:
 
             for user in users:
                 user_data = user.to_dict()
-                user_list.append(user_data)
-
+                # Exclude admins
+                if user_data.get('account_type') != 'admin':
+                    user_list.append(user_data)
+        
             return user_list
         except Exception as e:
             print(f"Error retrieving users: {e}")
@@ -103,6 +105,10 @@ class Admin:
             user_list = []
             for user in users_by_username:
                 user_data = user.to_dict()
+                # Exclude admins
+                if user_data['account_type'] == 'admin':
+                    continue
+
                 # If account_type is not 'all', filter in memory
                 if account_type != 'all' and user_data['account_type'] == account_type:
                     user_list.append(user_data)
