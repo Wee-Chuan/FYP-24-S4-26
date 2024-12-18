@@ -14,7 +14,7 @@ def clear_existing_data(user_id):
 
     try:
         # Delete user document
-        user_ref = db.collection('users').document(user_id)
+        user_ref = db.collection('degree_of_centrailty').document(user_id)
         if user_ref.get().exists:
             user_ref.delete()
             logging.info(f"Deleted user document for user_id: {user_id}")

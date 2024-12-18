@@ -2,6 +2,11 @@ from flask import Blueprint, render_template, redirect, url_for, session, flash,
 from entity.user import User
 from entity.followers_hist_entity import FollowerHist
 import networkVisFinal, globals
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+
+
 
 influencer_boundary = Blueprint('influencer_boundary', __name__)
 
@@ -147,6 +152,9 @@ def ranking():
     if not user_data:
         flash('Unable to determine your rank.', 'danger')
         return render_template('dashboard/influencer_menu/ranking.html', user_id=user_id, user=user)
+    
+    user_followers = user_data['follower_count']
+    user_following = user_data['following_count']
 
     user_rank = ranked_influencers.index(user_data) + 1  # Rankings are 1-indexed
     user_score = user_data['centrality_score']
@@ -179,16 +187,18 @@ def ranking():
     top_user_scores = [user_data['centrality_score'], top_user['centrality_score']]
     score_diff = top_user['centrality_score'] - user_score
 
-
-    #Bar chart
+    # Bar chart data
     chart_data = {
-    "labels_nearby": nearby_users_labels,  # Usernames of nearby users
-    "followers_nearby": nearby_users_followers,  # Follower counts of nearby users
-    "following_nearby": nearby_users_following,  # Following counts of nearby users
-    "labels_top": top_user_labels,  # Usernames for top influencer comparison
-    "followers_top": top_user_followers,  # Follower counts for top influencer comparison
-    "following_top": top_user_following,  # Following counts for top influencer comparison
-}
+        "labels_nearby": nearby_users_labels,  # Usernames of nearby users
+        "followers_nearby": nearby_users_followers,  # Follower counts of nearby users
+        "following_nearby": nearby_users_following,  # Following counts of nearby users
+        "labels_top": top_user_labels,  # Usernames for top influencer comparison
+        "followers_top": top_user_followers,  # Follower counts for top influencer comparison
+        "following_top": top_user_following,  # Following counts for top influencer comparison
+    }
+
+    # Declare the user index
+    user_index = nearby_users_labels.index(user_data['username']) if user_data['username'] in nearby_users_labels else None
 
     # Table data
     ranking_table = []
@@ -205,14 +215,14 @@ def ranking():
         elif rank == 4 or rank == end_index + 1:  # Ellipses between skipped ranges
             ranking_table.append({'rank': None, 'username': '...', 'score': None, 'is_user': False, 'use_ellipsis': True})
 
-
-
     return render_template(
         'dashboard/influencer_menu/ranking.html',
         user_id=user_id,
         user=user,
         user_rank=user_rank,
         user_score=user_score,
+        user_followers=user_followers,  
+        user_following=user_following, 
         nearby_users_labels=nearby_users_labels,
         nearby_users_followers=nearby_users_followers,
         nearby_users_following=nearby_users_following,
@@ -225,6 +235,7 @@ def ranking():
         is_top_user=(user_rank == 1),
         ranking_table=ranking_table,
         chart_data=chart_data,
+        user_index=user_index,  # Pass the user_index to the template
     )
 
     

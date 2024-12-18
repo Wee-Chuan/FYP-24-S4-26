@@ -148,7 +148,7 @@ class User:
     def authenticate(username, password):
         """Authenticate the user by username and password."""
         # Query Firestore to find the user by username
-        users_ref = db.collection('users').where(field_path='username', op_string='==', value=username).limit(1)
+        users_ref = db.collection('degree_of_centrailty').where(field_path='username', op_string='==', value=username).limit(1)
         doc = list(users_ref.stream())
         
         if doc:
@@ -169,7 +169,7 @@ class User:
     def get_profile(user_id):
         """Retrieve user profile details from Firestore."""
         try:
-            doc = db.collection('users').document(user_id).get()
+            doc = db.collection('degree_of_centrailty').document(user_id).get()
             print("Attempting to retrieve user profile...")
             print(f"Using user_id: {user_id}")
 
@@ -320,7 +320,7 @@ class User:
     def visualize_followers_network(username):
         """Visualizes the followers network for the given user."""
         # Fetch user data from Firestore
-        user_ref = db.collection('users').where(field_path='username', op_string='==', value=username).limit(1).get()
+        user_ref = db.collection('degree_of_centrailty').where(field_path='username', op_string='==', value=username).limit(1).get()
         
         if not user_ref:
             print(f"User {username} not found in Firestore.")

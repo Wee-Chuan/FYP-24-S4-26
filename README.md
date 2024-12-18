@@ -23,8 +23,9 @@ pip install faker
 pip install firebase-admin
 pip install bcrypt
 pip install requests
+pip install python-louvain
 
-*NEW* 
+
 pip install scikit-learn 
 pip install pandas
 pip install plotly
