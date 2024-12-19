@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for, session, flash,
 from entity.user import User
 from entity.admin import Admin
 from entity.followers_hist_entity import FollowerHist
+import influencer_centrality_ranking
 
 dashboard_boundary = Blueprint('dashboard_boundary', __name__)
 
@@ -19,6 +20,14 @@ def dashboard():
     
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INFLUENCER DASHBOARD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     elif account_type == 'influencer':
+        
+        # get the ranking
+        ranking_dict = influencer_centrality_ranking.build_graph_and_calculate_centrality()
+        rank_score = ranking_dict[user['username']]
+        rank = next((i for i, key in enumerate(ranking_dict.keys()) if key == user['username']), None) + 1
+        print(rank_score)
+        print(rank)
+        
         # Check if the linked social media account
         linked_account = User.check_if_social_account_linked(user_id)
 
@@ -57,6 +66,7 @@ def dashboard():
             total_likes=total_likes, 
             total_comments=total_comments, 
             total_shares=total_shares,
+            rank = rank
         )
     
     

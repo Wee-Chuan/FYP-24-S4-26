@@ -262,16 +262,16 @@ def plot_user_network_with_3d(username, save_as_html=False, output_dir="template
     # Perform centrality analysis, excluding the username node
     centrality_scores = nx.degree_centrality(G)
     sorted_centrality = sorted(centrality_scores.items(), key=lambda x: x[1], reverse=True)
-    top_3_central_nodes = [node for node, _ in sorted_centrality[:3]]
-    top_3_dict = {node: centrality_scores[node] for node in top_3_central_nodes}  # Return as dictionary
+    top_4_central_nodes = [node for node, _ in sorted_centrality[:4]]
+    top_4_dict = {node: centrality_scores[node] for node in top_4_central_nodes}  # Return as dictionary
     
     # Generate original 2D and 3D network figures (no centrality highlighting)
     fig_2d = create_network_figure(G, pos_2d, partition, is_3d=False)
     fig_3d = create_network_figure(G, pos_3d, partition, is_3d=True)
     
     # Generate centrality-based 2D and 3D network figures
-    fig_2d_centrality = create_network_figure(G, pos_2d, partition, is_3d=False, centrality_nodes=top_3_central_nodes, centrality_scores=centrality_scores)
-    fig_3d_centrality = create_network_figure(G, pos_3d, partition, is_3d=True, centrality_nodes=top_3_central_nodes, centrality_scores=centrality_scores)
+    fig_2d_centrality = create_network_figure(G, pos_2d, partition, is_3d=False, centrality_nodes=top_4_central_nodes, centrality_scores=centrality_scores)
+    fig_3d_centrality = create_network_figure(G, pos_3d, partition, is_3d=True, centrality_nodes=top_4_central_nodes, centrality_scores=centrality_scores)
     
     if save_as_html:
         os.makedirs(output_dir, exist_ok=True)
@@ -280,5 +280,5 @@ def plot_user_network_with_3d(username, save_as_html=False, output_dir="template
         fig_2d_centrality.write_html(os.path.join(output_dir, f"2d_network_centrality.html"))
         fig_3d_centrality.write_html(os.path.join(output_dir, f"3d_network_centrality.html"))
     
-    print("Top 3 Nodes with Centrality Scores:", top_3_dict)
-    return top_3_dict
+    print("Top 3 Nodes with Centrality Scores:", top_4_dict)
+    return top_4_dict

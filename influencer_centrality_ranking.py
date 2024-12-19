@@ -75,10 +75,11 @@ def build_graph_and_calculate_centrality():
 
     return sorted_centrality
 
-# Get the sorted centrality scores
-centrality_scores = build_graph_and_calculate_centrality()
+# # Get the sorted centrality scores
+# centrality_scores = build_graph_and_calculate_centrality()
 
-# Print the top 5 nodes with their centrality scores
-print("Top 5 users based on centrality:")
-for username, score in list(centrality_scores.items())[:5]:
-    print(f"{username}: {score}")
+# # Print the top 5 nodes with their centrality scores
+# print("Top 5 users based on centrality:")
+# for username, score in list(centrality_scores.items())[:5]:
+#     print(f"{username}: {score}")
+
