@@ -172,11 +172,13 @@ def generate_plot_data(G, pos, partition, is_3d=False, centrality_nodes=None, ce
             else:
                 node_color.append('gray')
         
-        # Prepare hover text with centrality score
+        # Prepare hover text with centrality score and community
         if centrality_scores:
-            node_text.append(f"Node: {node}<br>Centrality: {centrality_scores[node]:.4f}")
+            community = partition.get(node, "Unknown")
+            node_text.append(f"Node: {node}<br>Centrality: {centrality_scores[node]:.4f}<br>Community: {community}")
         else:
-            node_text.append(f"Node: {node}")
+            community = partition.get(node, "Unknown")
+            node_text.append(f"Node: {node}<br>Community: {community}")
     
     return edge_x, edge_y, edge_z, node_x, node_y, node_z, node_size, node_color, node_text
 
