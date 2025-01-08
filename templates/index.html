@@ -10,9 +10,9 @@
 {% block content %}
     <section class="hero">
         <div class="hero-content">
-            <h1>Gain Deep Insights with <span class="highlight">SocioSith</span></h1>
+            <h1>{{ hero_content["title"] }}</h1>
             <p>
-                Discover patterns and trends in social media that drive engagement and growth. SocioSith offers powerful tools to transform your strategy.
+                {{ hero_content["paragraph"] }}
             </p>
             <div class="hero-buttons">
                 <a href="#features" class="btn btn-primary">View Features</a>
@@ -26,17 +26,17 @@
 
     <section id="about" class="about">
         <div class="about-container">
-            <h2>Unlock the Power of Social Insights to Drive Your Success</h2>
+            <h2>{{about_content["title"]}}</h2>
             <p class="mission-statement">
-                Trying to fuel your own growth with powerful analytics and visual insights? SocioSith is the answer.
+                {{about_content["paragraph"]}}
             </p>
             
         </div>
     </section>
 
     <section id="features" class="features">
-        <h2>Platform Features</h2>
-        <p>Explore our data-driven tools for insights and growth.</p>
+        <h2>{{feature_content["title"]}}</h2>
+        <p>{{feature_content["paragraph"]}}</p>
 
         <!-- Buttons to switch between feature types -->
         <div class="feature-toggle-buttons">
@@ -46,52 +46,19 @@
 
         <!-- Influencer Features -->
         <div id="influencer-features" class="feature-grid">
-            <div class="feature-item">
-                <div class="feature-header" onclick="toggleFeatureDetails('feature1-details')">
-                    <!-- <img src="{{ url_for('static', filename='icons/data_insight.png') }}" alt="Data Insights"> -->
-                    <i class="fas fa-chart-line"></i>
-                    <h3>Engagement Metrics</h3>
-                    <span class="expand-icon">▼</span>
+            {% for feature in influencer_features%}
+                <div class="feature-item">
+                    <div class="feature-header" onclick="toggleFeatureDetails('feature{{ loop.index }}-details')">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>{{ feature["title"] }}</h3>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="feature-details" id="feature{{ loop.index }}-details">
+                        <p>{{ feature["paragraph"] }}</p>
+                    </div>
                 </div>
-                <div class="feature-details" id="feature1-details">
-                    <p>Identify key influencers and trends to shape your strategy, discover social patterns, and improve your engagement strategy.</p>
-                </div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-header" onclick="toggleFeatureDetails('feature2-details')">
-                    <!-- <img src="{{ url_for('static', filename='icons/trend_forecast.png') }}" alt="Trend Forecasting"> -->
-                    <i class="fas fa-users"></i>
-                    <h3>Followers Forecast</h3>
-                    <span class="expand-icon">▼</span>
-                </div>
-                <div class="feature-details" id="feature2-details">
-                    <p>Analyze follower growth over time to help you make data-driven decisions for future growth.</p>
-                    <img src="{{ url_for('static', filename='images/follower_forecast.png') }}">
-                </div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-header" onclick="toggleFeatureDetails('feature3-details')">
-                    <!-- <img src="{{ url_for('static', filename='icons/interactive_visualization.png') }}" alt="Visualization"> -->
-                    <i class="fas fa-network-wired"></i>
-                    <h3>Network Visualization</h3>
-                    <span class="expand-icon">▼</span>
-                </div>
-                <div class="feature-details" id="feature3-details">
-                    <p>Visualize your network and interactions with dynamic, intuitive graphs that make complex data easy to understand.</p>
-                    <img src="{{ url_for('static', filename='images/user1_followers_network.png') }}">
-                </div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-header" onclick="toggleFeatureDetails('feature4-details')">
-                    <!-- <img src="{{ url_for('static', filename='icons/interactive_visualization.png') }}" alt="Visualization"> -->
-                    <i class="fas fa-trophy"></i>
-                    <h3>Network Position</h3>
-                    <span class="expand-icon">▼</span>
-                </div>
-                <div class="feature-details" id="feature4-details">
-                    <p>Discover how you rank and connect with others in the ecosystem to strategize your growth and influence effectively</p>
-                </div>
-            </div>
+            {% endfor %}
+            
         </div>
         
         <!-- Business Features -->

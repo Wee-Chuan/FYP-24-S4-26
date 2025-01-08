@@ -120,5 +120,82 @@ def suspend_user(user_id):
     return jsonify(result)
     # # Redirect back to the 'approve_accounts' page
     # return redirect(url_for('admin_boundary.manage_accounts'))
-    
+
+@admin_boundary.route('/admin/manage-landing-page', methods=['GET', 'POST', 'PUT'])
+def manage_landing_page():
+    # Fetch all content for the page
+    hero_content = Admin.get_hero_content()
+    about_content = Admin.get_about_content()
+    features_content = Admin.get_features_content()
+
+    # Fetch influencer features for the 'features' section
+    influencer_features = Admin.get_influencer_features() if features_content else []
+
+    # Determine the current section
+    current_section = request.args.get('section', 'hero')
+
+    # Select the content for the current section
+    if current_section == 'hero':
+        current_content = hero_content
+    elif current_section == 'about':
+        current_content = about_content
+    elif current_section == 'features':
+        current_content = features_content
+    else:
+        return jsonify({"error": "Invalid section"}), 400
+
+    if request.method == 'GET':
+        # Render the template with all content
+        return render_template(
+            'dashboard/admin_menu/manage_landing_page.html',
+            influencer_features=influencer_features,
+            current_section=current_section,
+            current_content=current_content
+        )
+
+    elif request.method == 'POST':
+        # Determine which section is being updated
+        section = request.form.get("section") 
+
+        # Update the corresponding section
+        if section == "hero":
+            data = {
+                "title": request.form.get("title"),
+                "paragraph": request.form.get("paragraph"),
+            }
+            success = Admin.update_hero_content(data)
+
+        elif section == "about":
+            data = {
+                "title": request.form.get("title"),
+                "paragraph": request.form.get("paragraph"),
+            }
+            success = Admin.update_about_content(data)
+
+        elif section == "features":
+            data = {
+                "title": request.form.get("title"),
+                "paragraph": request.form.get("paragraph"),
+            }
+            success = Admin.update_features_content(data)
+
+            # Update influencer features
+            influencer_features = request.form.to_dict(flat=False)
+            for key, value in influencer_features.items():
+                if key.startswith('influencer_title_'):
+                    feature_id = key.split('_')[-1]
+                    title = request.form.get(f'influencer_title_{feature_id}')
+                    paragraph = request.form.get(f'influencer_paragraph_{feature_id}')
+                    # Update each influencer feature based on its ID
+                    Admin.update_influencer_feature(feature_id, title, paragraph)
+
+        else:
+            return jsonify({"error": "Invalid section"}), 400
+
+        # Handle success or failure
+        if success:
+            return redirect(url_for('admin_boundary.manage_landing_page', section=section))
+        else:
+            return jsonify({"error": f"Failed to update {section} content"}), 500
+
 # ======================================================= #

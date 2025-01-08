@@ -211,3 +211,159 @@ class Admin:
             # return False, message
         
             return {'success': False, 'message': f'Error suspending user: {e}'}
+        
+    @staticmethod
+    def get_hero_content():
+        """Fetch hero content from Firestore."""
+        try:
+            hero_ref = db.collection('landing_page').document('default')
+            
+            hero_doc = hero_ref.get()
+            
+            # Check if the document exists
+            if hero_doc.exists:
+                return hero_doc.to_dict()
+            else:
+                print("Hero content not found.")
+        except Exception as e:
+            print(f"Error fetching hero content: {e}")
+            return None
+
+    @staticmethod
+    def update_hero_content(data):
+        """Update hero content in Firestore."""
+        try:
+            hero_ref = db.collection('landing_page').document('default')
+
+            # Set the new data (overwrites if the document exists)
+            hero_ref.set({
+                'title': data.get('title'),
+                'paragraph': data.get('paragraph')
+            }, merge=True)
+
+            print("Hero content updated successfully.")
+            return True
+        except Exception as e:
+            print(f"Error updating hero content: {e}")
+            return False
+        
+    @staticmethod
+    def get_about_content():
+        """Fetch about content from Firestore."""
+        try:
+            about_ref = db.collection('landing_page').document('about')
+            
+            about_doc = about_ref.get()
+            
+            # Check if the document exists
+            if about_doc.exists:
+                return about_doc.to_dict()
+            else:
+                print("About content not found.")
+        except Exception as e:
+            print(f"Error fetching About content: {e}")
+            return None
+        
+    @staticmethod
+    def update_about_content(data):
+        """Update hero content in Firestore."""
+        try:
+            about_ref = db.collection('landing_page').document('about')
+
+            # Set the new data (overwrites if the document exists)
+            about_ref.set({
+                'title': data.get('title'),
+                'paragraph': data.get('paragraph')
+            }, merge=True)
+
+            print("About content updated successfully.")
+            return True
+        except Exception as e:
+            print(f"Error updating About content: {e}")
+            return False
+    
+    @staticmethod
+    def get_features_content():
+        """Fetch content based on type from Firestore."""
+        try:
+            content_ref = db.collection('landing_page').document('features')
+            content_doc = content_ref.get()
+
+            if content_doc.exists:
+                return content_doc.to_dict()
+            else:
+                print(f"Feature content not found.")
+                return None
+        except Exception as e:
+            print(f"Error fetching Feature content: {e}")
+            return None
+    
+    @staticmethod
+    def update_features_content(data):
+        """Update content in Firestore based on type."""
+        try:
+            content_ref = db.collection('landing_page').document('features')
+            # Set the new data (overwrites if the document exists)
+            content_ref.set({
+                'title': data.get('title'),
+                'paragraph': data.get('paragraph')
+            }, merge=True)
+
+            print(f"Feature content updated successfully.")
+            return True
+        except Exception as e:
+            print(f"Error updating Feature content: {e}")
+            return False
+        
+    @staticmethod
+    def get_influencer_features():
+        # Reference to the 'features' document inside 'landing_page' collection
+        features_ref = db.collection('landing_page').document('features')
+        
+        # Fetch the 'features' document
+        features_doc = features_ref.get()
+
+        if not features_doc.exists:
+            return {"error": "Features document not found"}
+        
+        # Reference to the influencer_features subcollection
+        influencer_features_ref = features_ref.collection('influencer_features')
+        
+        # Fetch all documents in influencer_features subcollection
+        influencer_features_docs = influencer_features_ref.stream()
+        
+        influencer_features = []
+        for feature in influencer_features_docs:
+            feature_data = feature.to_dict()
+            influencer_features.append({
+                "id": feature.id,
+                "title": feature_data.get("title"),
+                "paragraph": feature_data.get("paragraph")
+            })
+        
+        return influencer_features
+
+    @staticmethod
+    def update_influencer_feature(feature_id, title, paragraph):
+        # Reference to the 'features' document inside 'landing_page' collection
+        features_ref = db.collection('landing_page').document('features')
+
+        # Reference to the influencer_features subcollection
+        influencer_features_ref = features_ref.collection('influencer_features')
+
+        # Fetch the influencer feature document by ID
+        influencer_feature_ref = influencer_features_ref.document(feature_id)
+
+        # Prepare the updated data
+        updated_data = {
+            "title": title,
+            "paragraph": paragraph
+        }
+
+        try:
+            # Update the influencer feature document
+            influencer_feature_ref.update(updated_data)
+            return True  # Indicate success
+        except Exception as e:
+            print(f"Error updating influencer feature: {e}")
+            return False  # Indicate failure

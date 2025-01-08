@@ -12,7 +12,8 @@
         <h3>Admin Menu</h3>
         <ul class="menu">
             <li><a href="{{ url_for('admin_boundary.manage_accounts') }}"><i class="fas fa-users"></i>View All Users</a></li>
-            <li><a href="{{ url_for('admin_boundary.approve_accounts') }}" class="{% if current_page == 'approve_accounts' %}active{% endif %}"><i class="fas fa-user-check"></i> Approve Accounts</a></li>
+            <li><a href="{{ url_for('admin_boundary.approve_accounts') }}" class="active"><i class="fas fa-user-check"></i> Approve Accounts</a></li>
+            <li><a href="{{ url_for('admin_boundary.manage_landing_page') }}"><i class="fas fa-pencil-alt"></i>Manage Landing Page</a></li>
         </ul>
     </aside>
 
@@ -22,12 +23,6 @@
         <!-- Management Section -->
         <section class="dashboard-section user-management">
             <h3>Approve Business Accounts</h3>
-
-            <!-- Search Bar for Users -->
-            <!-- <div class="user-search">
-                <input type="text" placeholder="Search for a user by username..." id="userSearchInput" oninput="debouncedSearchUser()">
-                <button onclick="searchUser()"><i class="fas fa-search"></i> Search</button>
-            </div> -->
 
             <!-- Results Container -->
             <div id="resultsContainer" class="user-list">

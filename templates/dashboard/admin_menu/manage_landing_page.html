@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Manage Landing Page{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='components/dashboard/admin_dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+    <!-- Sidebar Menu -->
+    <aside class="sidebar">
+        <h3>Admin Menu</h3>
+        <ul class="menu">
+            <li><a href="{{ url_for('admin_boundary.manage_accounts') }}"><i class="fas fa-users"></i>View All Users</a></li>
+            <li><a href="{{ url_for('admin_boundary.approve_accounts') }}"><i class="fas fa-user-check"></i> Approve Accounts</a></li>
+            <li><a href="{{ url_for('admin_boundary.manage_landing_page') }}" class="active"><i class="fas fa-pencil-alt"></i>Manage Landing Page</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="dashboard-container">
+        <!-- Navigation Buttons -->
+        <section class="navigation-buttons">
+            <a class="btn btn-secondary {% if current_section == 'hero' %}active{% endif %}" href="{{ url_for('admin_boundary.manage_landing_page', section='hero') }}">Hero Section</a>
+            <a class="btn btn-secondary {% if current_section == 'about' %}active{% endif %}" href="{{ url_for('admin_boundary.manage_landing_page', section='about') }}">About Section</a>
+            <a class="btn btn-secondary {% if current_section == 'features' %}active{% endif %}" href="{{ url_for('admin_boundary.manage_landing_page', section='features') }}">Feature Section</a>
+        </section>
+
+        <h2 id="content-title">Manage {{ current_section|capitalize }} Content</h2>
+
+        <!-- Form to Update Content -->
+        <section class="update-content" id="update-content">
+            <form action="{{ url_for('admin_boundary.manage_landing_page', section=current_section) }}" method="POST">
+                <input type="hidden" name="section" value="{{ current_section }}"> <!-- Section Identifier -->
+
+                <!-- Title -->
+                <div class="form-group">
+                    <label for="title">{{ current_section|capitalize }} Title</label>
+                    <input type="text" id="title" name="title" value="{{ current_content['title'] }}" required>
+                </div>
+
+                <!-- Paragraph -->
+                <div class="form-group">
+                    <label for="paragraph">{{ current_section|capitalize }} Paragraph</label>
+                    <textarea id="paragraph" name="paragraph" required>{{ current_content['paragraph'] }}</textarea>
+                </div>
+                
+                <!-- Influencer Features Section -->
+                {% if current_section == 'features' %}
+                <div class="form-group">
+                    <h3>Manage Influencer Features</h3>
+                    {% for feature in influencer_features %}
+                        <div class="feature-item">
+                            <div class="form-group">
+                                <label for="influencer-title-{{ feature.id }}">Title for Feature {{ loop.index }}</label>
+                                <input type="text" id="influencer-title-{{ feature.id }}" name="influencer_title_{{ feature.id }}" value="{{ feature.title }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="influencer-paragraph-{{ feature.id }}">Feature Paragraph</label>
+                                <textarea id="influencer-paragraph-{{ feature.id }}" name="influencer_paragraph_{{ feature.id }}" required>{{ feature.paragraph }}</textarea>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </section>
+    </div>
+</div>
+{% endblock %}

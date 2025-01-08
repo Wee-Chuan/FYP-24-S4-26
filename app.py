@@ -1,7 +1,7 @@
 import os
 from datetime import timedelta
 
-from flask import Flask, render_template, redirect, url_for, session, flash, request, send_from_directory
+from flask import Flask, render_template, redirect, url_for, session, flash, jsonify, send_from_directory
 from dotenv import load_dotenv
 from boundary.navbar import navbar
 from boundary.dashboard_boundary import dashboard_boundary
@@ -9,6 +9,7 @@ from boundary.admin_boundary import admin_boundary
 from boundary.influencer_boundary import influencer_boundary
 from boundary.profile_boundary import profile_boundary
 from boundary.rate_and_review_boundary import rate_and_review_boundary
+from entity.admin import Admin
 
 load_dotenv()
 
@@ -28,9 +29,17 @@ app.register_blueprint(rate_and_review_boundary)
 
 @app.route('/')
 def index():
+    hero_content = Admin.get_hero_content()
+    about_content = Admin.get_about_content()
+    feature_content = Admin.get_features_content()
+    influencer_features = Admin.get_influencer_features()
     if 'user_id' in session:
         return redirect(url_for('dashboard_boundary.dashboard'))
-    return render_template('index.html')
+    return render_template('index.html', 
+                           hero_content=hero_content, 
+                           about_content=about_content, 
+                           feature_content=feature_content,
+                           influencer_features=influencer_features)
   
 @app.route('/logout', methods=['POST', 'GET'])
 def logout():
