@@ -379,35 +379,36 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.update-content .form-group {
+.form-group {
     margin-bottom: 20px;
 }
 
-.update-content .form-group label {
+.form-group label {
     font-size: 1.1em;
     color: #34495e;
     margin-bottom: 5px;
     display: block;
 }
 
-.update-content .form-group input,
-.update-content .form-group textarea {
-    width: 100%;
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 98%;
     padding: 12px;
-    font-size: 1em;
+    font-size: 1.1em;
     border: 1px solid #ddd;
     border-radius: 4px;
     margin-top: 5px;
     transition: border-color 0.3s ease;
 }
 
-.update-content .form-group input:focus,
-.update-content .form-group textarea:focus {
+.form-group input:focus,
+.form-group textarea:focus {
     border-color: #3498db;
     outline: none;
 }
 
-.update-content button {
+button {
     background-color: #1abc9c;
     color: white;
     font-size: 1.2em;
@@ -420,6 +421,107 @@
     margin: 0 auto;
 }
 
-.update-content button:hover {
+button:hover {
     background-color: #16a085;
+}
+
+/* ================================ Manage about us page Styles ================================ */
+.overview {
+    background-color: #fdfdfd;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.goals {
+    background-color: #fdfdfd;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.goals .goal-block {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.goals small{
+    margin-left: 5px;
+}
+
+.testimonials {
+    background-color: #fdfdfd;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.testimonials .testimonial-block {
+    background: #ecf0f1;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    font-size: 1em;
+    margin-top: 5px;
+    transition: border-color 0.3s ease;
+}
+
+.dropdown button {
+    width: 10%;
+    padding: 12px; 
+    text-align: center;
+    background-color: #fff;
+    color: rgb(0, 0, 0);
+    border: 1px solid #ccc;
+    cursor: pointer;
+    margin: 0;
+}
+
+.dropdown-button i {
+    margin-right: 10px;
+}
+
+.dropdown-menu {
+    width: 10%;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: none;
+    z-index: 1000;
+    align-items: center;
+}
+
+.dropdown-item {
+    padding: 12px 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.dropdown-item i {
+    margin-right: 10px;
+}
+
+.dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown.open .dropdown-menu {
+    display: block;
 }

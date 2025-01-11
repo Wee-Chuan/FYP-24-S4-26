@@ -198,4 +198,54 @@ def manage_landing_page():
         else:
             return jsonify({"error": f"Failed to update {section} content"}), 500
 
+@admin_boundary.route('/admin/manage-about-us-page', methods=['GET', 'POST', 'PUT'])
+def manage_about_us_page():
+    overview_content = Admin.get_overview_content()
+    goals_heading = Admin.get_goals_heading()  
+    our_goals = Admin.get_our_goals()
+
+    if request.method == 'GET':
+        # Render the template with all content
+        return render_template(
+            'dashboard/admin_menu/manage_about_us_page.html',
+            overview_content=overview_content,
+            goals_heading=goals_heading,
+            our_goals=our_goals
+        )
+    
+    # Handle POST requests for form submissions
+    if request.method == 'POST':
+        section = request.args.get('section', '')
+        
+        if section == 'overview':
+            # Update overview content
+            overview_title = request.form['overview_title']
+            overview_paragraph = request.form['overview_paragraph']
+            Admin.update_overview_content(overview_title, overview_paragraph) 
+            
+        elif section == 'goals_heading':
+            # Update main goals title
+            goals_heading = request.form['goals_heading']
+            Admin.update_goals_heading(goals_heading)  
+            
+        elif section == "goals":
+            # Extract data from the form for goals
+            goals_data = request.form.to_dict(flat=False)
+            for key, value in goals_data.items():
+                if key.startswith('goal_title_'):  # Identify the goal ID
+                    goal_id = key.split('_')[-1]
+                    title = request.form.get(f'goal_title_{goal_id}')
+                    description = request.form.get(f'goal_description_{goal_id}')
+                    icon = request.form.get(f'goal_icon_{goal_id}')
+                    # Update each goal based on its ID
+                    Admin.update_our_goals(goal_id, title, description, icon)
+
+        elif section == 'testimonials':
+            # Update testimonials 
+            pass
+        
+        # After processing, reload the page with updated data
+        return redirect(url_for('admin_boundary.manage_about_us_page'))
+
+
 # ======================================================= #

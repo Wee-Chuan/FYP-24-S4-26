@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}Manage About Us - SocioSith{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='components/dashboard/admin_dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+    <!-- Sidebar Menu -->
+    <aside class="sidebar">
+        <h3>Admin Menu</h3>
+        <ul class="menu">
+            <li><a href="{{ url_for('admin_boundary.manage_accounts') }}"><i class="fas fa-users"></i>View All Users</a></li>
+            <li><a href="{{ url_for('admin_boundary.approve_accounts') }}"><i class="fas fa-user-check"></i> Approve Accounts</a></li>
+            <li><a href="{{ url_for('admin_boundary.manage_landing_page') }}"><i class="fas fa-pencil-alt"></i>Manage Landing Page</a></li>
+            <li><a href="{{ url_for('admin_boundary.manage_about_us_page') }}" class="active"><i class="fas fa-info-circle"></i>Manage About Us Page</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="dashboard-container">
+        <h1>Manage About Us Page</h1>
+
+        <!-- Overview Section -->
+        <section class="overview">
+            <h2>Overview</h2>
+            <form action="{{ url_for('admin_boundary.manage_about_us_page', section='overview') }}" method="POST">
+                <div class="form-group">
+                    <label for="overview_title">Title</label>
+                    <input type="text" id="overview_title" name="overview_title" value="{{ overview_content['title'] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="overview_paragraph">Paragraph 1</label>
+                    <textarea id="overview_paragraph" name="overview_paragraph" required>{{ overview_content['paragraph'] }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="overview_paragraph">Paragraph 2</label>
+                    <textarea id="overview_paragraph" name="overview_paragraph" required>{{ overview_content['paragraph2'] }}</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </section>
+
+        <!-- Goals Section -->
+        <section class="goals">
+            <h2>Goals</h2>
+            <form action="{{ url_for('admin_boundary.manage_about_us_page', section='goals_heading') }}" method="POST">
+                <div class="form-group">
+                    <label for="goals_title">Goals Heading</label>
+                    <input type="text" id="goals_heading" name="goals_heading" value="{{ goals_heading['heading'] }}" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Title</button>
+            </form>
+
+            <form action="{{ url_for('admin_boundary.manage_about_us_page', section='goals') }}" method="POST">
+                {% for goal in our_goals %}
+                <div class="goal-block">
+                    <h3>Goal {{ loop.index }}</h3>
+                    <input type="hidden" name="goal_id_{{ goal.id }}" value="{{ goal.id }}">
+                    <div class="form-group">
+                        <label for="goal_title_{{ loop.index }}">Title</label>
+                        <input type="text" id="goal_title_{{ loop.index }}" name="goal_title_{{ goal.id }}" value="{{ goal.title }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="goal_description_{{ loop.index }}">Description</label>
+                        <textarea id="goal_description_{{ loop.index }}" name="goal_description_{{ goal.id }}" required>{{ goal.description }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="goal_icon_{{ loop.index }}">Icon</label>
+
+                        <div class="dropdown">
+                            <button class="dropdown-button" id="dropdownButton_{{ loop.index }}">
+                                <i class="{{ goal.icon }}"></i> <!-- Display the current selected icon -->
+                            </button>
+                            <div class="dropdown-menu" id="dropdownMenu_{{ loop.index }}">
+                                {% set icons = ['fas fa-project-diagram', 'fas fa-users', 'fas fa-rocket', 'fas fa-chart-line'] %} <!-- Add more icons if needed -->
+                                {% for icon in icons %}
+                                    <a href="#" class="dropdown-item" data-icon="{{ icon }}">
+                                        <i class="{{ icon }}"></i> 
+                                    </a>
+                                {% endfor %}
+                            </div>
+                            <input type="hidden" name="goal_icon_{{ goal.id }}" id="goal_icon_input_{{ loop.index }}" value="{{ goal.icon }}">
+                        </div>
+                        <small>Select a Font Awesome icon from the list.</small>
+                    </div>
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary">Save Goals</button>
+            </form>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials">
+            <h2>Testimonials</h2>
+            <form action="{{ url_for('admin_boundary.manage_about_us_page', section='testimonials') }}" method="POST">
+                
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </section>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const dropdownButtons = document.querySelectorAll('.dropdown-button');
+    dropdownButtons.forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent form submission
+            const dropdown = button.closest('.dropdown');
+            dropdown.classList.toggle('open');
+        });
+    });
+
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', function (event) {
+            const icon = item.getAttribute('data-icon');
+            const button = item.closest('.dropdown').querySelector('.dropdown-button');
+            const input = item.closest('.dropdown').querySelector('input');
+            button.innerHTML = `<i class="${icon}"></i> ${item.innerText}`;
+            input.value = icon; // Update hidden input with the selected icon
+            item.closest('.dropdown').classList.remove('open');
+        });
+    });
+});
+
+</script>
+{% endblock %}

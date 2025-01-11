@@ -10,42 +10,42 @@
 <div class="about-us-wrapper">
 
     <div class="about-us-container">
+        <!-- Section for Overview -->
         <section class="overview">
-            <h1>We Are SocioSith</h1>
-            <p>With the rapid expansion of social media, the need for analyzing networks of influence, follower relationships, and trend dynamics has grown. Social Network Analysis (SNA) is essential in understanding the interactions and relationships within social networks, providing insights that go beyond just viewing engagement metrics.</p>
+            <!-- Title of the About Us section, from the 'overview_content_about_us' object -->
+            <h1>{{overview_content_about_us['title']}}</h1>
+
+            <!-- First paragraph of the About Us section -->
+            <p>{{overview_content_about_us['paragraph']}}</p>
             
-            <p>Our product, <strong>SocioSith</strong>, aims to bridge this gap by using data science and network analysis techniques involved in SNA to create a platform that not only covers engagement metrics but also visualizes network structures, provides centrality and influence analysis, and makes predictions based on historical data.</p>
+            <!-- Second paragraph of the About Us section -->
+            <p>{{overview_content_about_us['paragraph2']}}</p>
         </section>
 
+         <!-- Section for Goals -->
         <section class="goals">
-            <h2>Our Goals</h2>
+            <!-- Heading for the Goals section, from the 'goals_heading' object -->
+            <h2>{{goals_heading['heading']}}</h2>
+
+            <!-- Container for displaying multiple goals -->
             <div class="goal-container">
+                <!-- Loop through all goals in the 'our_goals' collection -->
+                {% for goal in our_goals %}
                 <div class="goal-block">
-                    <i class="fas fa-project-diagram goal-icon"></i> 
-                    <h3>Comprehensive Analysis</h3>
-                    <p>Deliver a platform that provides in-depth analysis of social network structures to uncover valuable insights.</p>
+                    <!-- Display the icon associated with each goal using 'goal.icon' -->
+                    <i class="{{ goal['icon'] }} goal-icon"></i> 
+
+                    <!-- Title of the goal -->
+                    <h3>{{ goal['title'] }}</h3>
+
+                    <!-- Description of the goal -->
+                    <p>{{ goal['description'] }}</p>
                 </div>
-                
-                <div class="goal-block">
-                    <i class="fas fa-bullseye goal-icon"></i>
-                    <h3>Influence & Reach Insights</h3>
-                    <p>Provide tools that identify key influencers and visualize engagement reach to optimize strategies.</p>
-                </div>
-        
-                <div class="goal-block">
-                    <i class="fas fa-chart-line goal-icon"></i>
-                    <h3>Predictive Analytics</h3>
-                    <p>Leverage historical data to offer trend predictions, helping users stay ahead of social media trends.</p>
-                </div>
-        
-                <div class="goal-block">
-                    <i class="fas fa-users goal-icon"></i>
-                    <h3>Empowering Decisions</h3>
-                    <p>Enable businesses, and influencers to make data-driven decisions to enhance their impact.</p>
-                </div>
+                {% endfor %}
             </div>
         </section>
 
+        <!-- Section for Testimonials -->
         <section class="testimonials">
             <h2>Customer Testimonials</h2>
             <div class="testimonial-carousel">

@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, session, flash, request
 from entity.user import User
+from entity.admin import Admin
 import re
 
 navbar = Blueprint('navbar', __name__)
@@ -93,7 +94,14 @@ def login():
 @navbar.route('/about', methods=['GET'])
 def about():
     reviews = User.get_reviews()  # Fetch reviews from the database
-    return render_template('navbar/about.html', reviews=reviews)
+    overview_content_about_us = Admin.get_overview_content()
+    goals_heading = Admin.get_goals_heading()
+    our_goals = Admin.get_our_goals()
+    return render_template('navbar/about.html', 
+                           reviews=reviews, 
+                           overview_content_about_us=overview_content_about_us,
+                           goals_heading=goals_heading,
+                           our_goals=our_goals)
 
 @navbar.route('/customer_support')
 def customer_support():

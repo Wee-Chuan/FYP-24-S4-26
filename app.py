@@ -16,9 +16,6 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY')
 
-# Set session expiry to 30 minutes
-app.permanent_session_lifetime = timedelta(minutes=30)
-
 # Register blueprints
 app.register_blueprint(navbar)
 app.register_blueprint(dashboard_boundary)
@@ -39,7 +36,7 @@ def index():
                            hero_content=hero_content, 
                            about_content=about_content, 
                            feature_content=feature_content,
-                           influencer_features=influencer_features)
+                           influencer_features=influencer_features,)
   
 @app.route('/logout', methods=['POST', 'GET'])
 def logout():

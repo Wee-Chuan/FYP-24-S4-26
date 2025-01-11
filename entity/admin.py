@@ -211,7 +211,8 @@ class Admin:
             # return False, message
         
             return {'success': False, 'message': f'Error suspending user: {e}'}
-        
+    
+    # ============================== Manage landing page ==================================#
     @staticmethod
     def get_hero_content():
         """Fetch hero content from Firestore."""
@@ -266,7 +267,7 @@ class Admin:
         
     @staticmethod
     def update_about_content(data):
-        """Update hero content in Firestore."""
+        """Update about content in Firestore."""
         try:
             about_ref = db.collection('landing_page').document('about')
 
@@ -366,4 +367,127 @@ class Admin:
             return True  # Indicate success
         except Exception as e:
             print(f"Error updating influencer feature: {e}")
+            return False  # Indicate failure
+
+    # ============================== Manage landing page ==================================#
+    @staticmethod
+    def get_overview_content():
+        """Fetch overview content from Firestore."""
+        try:
+            overview_ref = db.collection('about_us_page').document('overview')
+            
+            overview_doc = overview_ref.get()
+            
+            # Check if the document exists
+            if overview_doc.exists:
+                return overview_doc.to_dict()
+            else:
+                print("Overview content not found.")
+        except Exception as e:
+            print(f"Error fetching Overview content: {e}")
+            return None
+        
+    @staticmethod
+    def update_overview_content(overview_title, overview_paragraph):
+        """Update overview content in Firestore."""
+        try:
+            overview_ref = db.collection('about_us_page').document('overview')
+            # Set the new data (overwrites if the document exists)
+            overview_ref.set({
+                'title': overview_title,
+                'paragraph': overview_paragraph
+            }, merge=True)
+
+            print(f"Overview content updated successfully.")
+            return True
+        except Exception as e:
+            print(f"Error updating Overview content: {e}")
+            return False
+        
+    @staticmethod
+    def get_goals_heading():
+        try:
+            goals_ref = db.collection('about_us_page').document('goals')
+
+            goals_doc = goals_ref.get()
+
+            # Check if the document exists
+            if goals_doc.exists:
+                return goals_doc.to_dict()
+            else:
+                print("Goals content not found.")
+        except Exception as e:
+            print(f"Error fetching Overview content: {e}")
+            return None
+        
+    @staticmethod
+    def update_goals_heading(goals_title):
+        """Update goals title in Firestore."""
+        try:
+            goals_ref = db.collection('about_us_page').document('goals')
+            # Set the new data (overwrites if the document exists)
+            goals_ref.set({
+                'heading': goals_title
+            }, merge=True)
+
+            print(f"Goals title updated successfully.")
+            return True
+        except Exception as e:
+            print(f"Error updating Goals title: {e}")
+            return False
+         
+        
+    @staticmethod
+    def get_our_goals():
+        # Reference to the 'goals' document inside 'about_us_page' collection
+        goals_ref = db.collection('about_us_page').document('goals')
+        
+        # Fetch the 'goals' document
+        goals_doc = goals_ref.get()
+
+        if not goals_doc.exists:
+            return {"error": "Goals document not found"}
+        
+        # Reference to the our_goals subcollection
+        our_goals_ref = goals_ref.collection('our_goals')
+        
+        # Fetch all documents in our_goals subcollection
+        our_goals_docs = our_goals_ref.stream()
+        
+        our_goals = []
+        for goals in our_goals_docs:
+            goals_data = goals.to_dict()
+            our_goals.append({
+                "id": goals.id,
+                "icon": goals_data.get("icon", "fas fa-project-diagram"),
+                "title": goals_data.get("title"),
+                "description": goals_data.get("description")
+            })
+        
+        return our_goals
+
+    @staticmethod
+    def update_our_goals(goal_id, title, description, icon):
+        # Reference to the 'goals' document inside 'about_us_page' collection
+        goals_ref = db.collection('about_us_page').document('goals')
+
+        # Reference to the our_goals subcollection
+        our_goals_ref = goals_ref.collection('our_goals')
+
+        # Fetch our_goals documents by ID
+        our_goals_ref = our_goals_ref.document(goal_id)
+
+        # Prepare the updated data
+        updated_data = {
+            "title": title,
+            "description": description,
+            "icon": icon
+        }
+
+        try:
+            # Update the influencer feature document
+            our_goals_ref.update(updated_data)
+            return True  # Indicate success
+        except Exception as e:
+            print(f"Error updating our goals: {e}")
             return False  # Indicate failure
