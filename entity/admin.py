@@ -353,7 +353,7 @@ class Admin:
         influencer_features_ref = features_ref.collection('influencer_features')
 
         # Fetch the influencer feature document by ID
-        influencer_feature_ref = influencer_features_ref.document(feature_id)
+        influencer_feature_doc = influencer_features_ref.document(feature_id)
 
         # Prepare the updated data
         updated_data = {
@@ -363,7 +363,7 @@ class Admin:
 
         try:
             # Update the influencer feature document
-            influencer_feature_ref.update(updated_data)
+            influencer_feature_doc.update(updated_data)
             return True  # Indicate success
         except Exception as e:
             print(f"Error updating influencer feature: {e}")
@@ -449,6 +449,7 @@ class Admin:
         
     @staticmethod
     def get_goals_heading():
+        """Get goals heading in Firestore."""
         try:
             goals_ref = db.collection('about_us_page').document('goals')
 
@@ -460,12 +461,12 @@ class Admin:
             else:
                 print("Goals content not found.")
         except Exception as e:
-            print(f"Error fetching Overview content: {e}")
+            print(f"Error fetching Goals content: {e}")
             return None
         
     @staticmethod
     def update_goals_heading(goals_title):
-        """Update goals title in Firestore."""
+        """Update goals heading in Firestore."""
         try:
             goals_ref = db.collection('about_us_page').document('goals')
             # Set the new data (overwrites if the document exists)
@@ -482,32 +483,36 @@ class Admin:
         
     @staticmethod
     def get_our_goals():
-        # Reference to the 'goals' document inside 'about_us_page' collection
-        goals_ref = db.collection('about_us_page').document('goals')
-        
-        # Fetch the 'goals' document
-        goals_doc = goals_ref.get()
+        try:
+            # Reference to the 'goals' document inside 'about_us_page' collection
+            goals_ref = db.collection('about_us_page').document('goals')
+            
+            # Fetch the 'goals' document
+            goals_doc = goals_ref.get()
 
-        if not goals_doc.exists:
-            return {"error": "Goals document not found"}
-        
-        # Reference to the our_goals subcollection
-        our_goals_ref = goals_ref.collection('our_goals')
-        
-        # Fetch all documents in our_goals subcollection
-        our_goals_docs = our_goals_ref.stream()
-        
-        our_goals = []
-        for goals in our_goals_docs:
-            goals_data = goals.to_dict()
-            our_goals.append({
-                "id": goals.id,
-                "icon": goals_data.get("icon", "fas fa-project-diagram"),
-                "title": goals_data.get("title"),
-                "description": goals_data.get("description")
-            })
-        
-        return our_goals
+            if not goals_doc.exists:
+                return {"error": "Goals document not found"}
+            
+            # Reference to the our_goals subcollection
+            our_goals_ref = goals_ref.collection('our_goals')
+            
+            # Fetch all documents in our_goals subcollection
+            our_goals_docs = our_goals_ref.stream()
+            
+            our_goals = []
+            for goals in our_goals_docs:
+                goals_data = goals.to_dict()
+                our_goals.append({
+                    "id": goals.id,
+                    "icon": goals_data.get("icon", "fas fa-project-diagram"),
+                    "title": goals_data.get("title"),
+                    "description": goals_data.get("description")
+                })
+            
+            return our_goals
+        except Exception as e:
+            print(f"Error fetching our goals: {e}")
+            return {"error": "An error occurred while fetching the goals"}
 
     @staticmethod
     def update_our_goals(goal_id, title, description, icon):
@@ -565,7 +570,6 @@ class Admin:
                         'is_selected': review_data.get('is_selected')
                     })
 
-            print("All reviews:", all_reviews)
             return all_reviews
         except Exception as e:
             print(f"Error retrieving reviews: {e}")
@@ -595,5 +599,151 @@ class Admin:
         except Exception as e:
             print(f"Error updating review ID {review_id}: {e}")
             return False
+    
+    # ============================== Manage customer support page ==================================#
+    @staticmethod
+    def get_faq_content():
+        try:
+            faq_section_ref = db.collection('customer_support_page').document('faq_section')
+
+            faq_section_doc = faq_section_ref.get()
+
+            # Check if the document exists
+            if faq_section_doc.exists:
+                return faq_section_doc.to_dict()
+            else:
+                print("FAQ content not found.")
+        except Exception as e:
+            print(f"Error fetching FAQ content: {e}")
+            return None
+    
+    @staticmethod
+    def update_faq_content(faq_heading=None, faq_paragraph=None, contact_heading=None, contact_paragraph=None, main_heading=None, main_paragraph=None):
+        try:
+            faq_section_ref = db.collection('customer_support_page').document('faq_section')
+
+            # Prepare the updated data dictionary
+            updated_data = {}
+
+            if main_heading is not None:
+                updated_data['heading'] = main_heading
+            if main_paragraph is not None:
+                updated_data['heading_paragraph'] = main_paragraph
+            if faq_heading is not None:
+                updated_data['title1'] = faq_heading
+            if faq_paragraph is not None:
+                updated_data['paragraph1'] = faq_paragraph
+            if contact_heading is not None:
+                updated_data['title2'] = contact_heading
+            if contact_paragraph is not None:
+                updated_data['paragraph2'] = contact_paragraph
+
+            if not updated_data:
+                print("No fields to update.")
+                return False
+            
+            # Perform the update
+            faq_section_ref.update(updated_data)
+            print("FAQ content updated successfully.")
+            return True
+        
+        except Exception as e:
+            print(f"Error fetching FAQ content: {e}")
+            return None
+
+    @staticmethod
+    def get_faqs():
+        try:
+            # Reference to the 'faq_section' document inside 'customer_support_page' collection
+            faq_section_ref = db.collection('customer_support_page').document('faq_section')
+            
+            # Reference to the faqs subcollection
+            faqs_ref = faq_section_ref.collection('faqs')
+            
+            # Fetch all documents in our_goals subcollection
+            faqs_docs = faqs_ref.stream()
+            
+            faqs = []
+            for faq in faqs_docs:
+                faqs_data = faq.to_dict()
+                faqs.append({
+                    "id": faq.id,
+                    "question": faqs_data.get("question"),
+                    "answer": faqs_data.get("answer")
+                })
+
+            return faqs
+        except Exception as e:
+            print(f"Error fetching FAQs: {e}")
+            return {"error": "An error occurred while fetching the faqs"}
+    
+    @staticmethod
+    def update_faq(faq_id, question, answer):
+        # Reference to the 'faq_section' document inside 'customer_support_page' collection
+        faq_section_ref = db.collection('customer_support_page').document('faq_section')
+
+        # Reference to the faqs subcollection
+        faqs_ref = faq_section_ref.collection('faqs')
+
+        # Fetch the faqs document by ID
+        faqs_doc = faqs_ref.document(faq_id)
+
+        # Prepare the updated data
+        updated_data = {
+            "question": question,
+            "answer": answer
+        }
+
+        try:
+            # Update the FAQ document
+            faqs_doc.update(updated_data)
+            return True  # Indicate success
+        except Exception as e:
+            print(f"Error updating faqs feature: {e}")
+            return False  # Indicate failure
+    
+    @staticmethod
+    def delete_faq(faq_id):
+        # Reference to the 'faq_section' document inside 'customer_support_page' collection
+        faq_section_ref = db.collection('customer_support_page').document('faq_section')
+
+        # Reference to the faqs subcollection
+        faqs_ref = faq_section_ref.collection('faqs')
+
+        # Fetch the faqs document by ID
+        faqs_doc = faqs_ref.document(faq_id)
+
+        try:
+            # Delete the FAQ document
+            faqs_doc.delete()
+            print(f"FAQ with ID {faq_id} successfully deleted.")
+            return True  # Indicate success
+        except Exception as e:
+            print(f"Error deleting FAQ with ID {faq_id}: {e}")
+            return False  # Indicate failure
+    
+    @staticmethod
+    def add_faq(question, answer):
+        # Reference to the 'faq_section' document inside 'customer_support_page' collection
+        faq_section_ref = db.collection('customer_support_page').document('faq_section')
+
+        # Reference to the influencer_features subcollection
+        faqs_ref = faq_section_ref.collection('faqs')
+
+        try:
+            # Add a new document to the influencer_features subcollection
+            new_faq_ref = faqs_ref.add({
+                "question": question,
+                "answer": answer
+            })
+
+            print(f"FAQ successfully created with ID {new_faq_ref[1].id}.")
+            return True  # Indicate success
+        except Exception as e:
+            print(f"Error FAQ feature: {e}")
+            return False  # Indicate failure
+
+
+
 
 

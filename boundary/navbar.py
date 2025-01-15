@@ -105,4 +105,8 @@ def about():
 
 @navbar.route('/customer_support')
 def customer_support():
-    return render_template('navbar/customer_support.html')
+    faq_content = Admin.get_faq_content()
+    faqs = Admin.get_faqs()
+    return render_template('navbar/customer_support.html',
+                           faq_content=faq_content,
+                           faqs=faqs)

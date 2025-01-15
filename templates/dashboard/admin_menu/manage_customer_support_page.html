@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% block title %}Manage Customer Support - SocioSith{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='components/dashboard/admin_dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+    <!-- Sidebar Menu -->
+    <aside class="sidebar">
+        <h3>Admin Menu</h3>
+        <ul class="menu">
+            <li><a href="{{ url_for('admin_boundary.manage_accounts') }}"><i class="fas fa-users"></i>View All Users</a></li>
+            <li><a href="{{ url_for('admin_boundary.approve_accounts') }}"><i class="fas fa-user-check"></i> Approve Accounts</a></li>
+            <li><a href="{{ url_for('admin_boundary.manage_landing_page') }}"><i class="fas fa-pencil-alt"></i>Manage Landing Page</a></li>
+            <li><a href="{{ url_for('admin_boundary.manage_about_us_page') }}"><i class="fas fa-info-circle"></i>Manage About Us Page</a></li>
+            <li><a href="{{ url_for('admin_boundary.manage_customer_support_page') }}" class="active"><i class="fas fa-headset"></i>Manage Customer Support</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="dashboard-container">
+        <!-- Navigation Buttons -->
+        <!-- <section class="navigation-buttons">
+            <a class="btn btn-secondary {% if current_section == 'faqs' %}active{% endif %}" href="{{ url_for('admin_boundary.manage_customer_support_page', section='faqs') }}">FAQs</a>
+            <a class="btn btn-secondary {% if current_section == 'contact_form' %}active{% endif %}" href="{{ url_for('admin_boundary.manage_customer_support_page', section='contact_form') }}">Contact Form</a>
+        </section> -->
+
+        <h2 id="content-title">Manage {{ current_section|capitalize }} Content</h2>
+
+        <!-- FAQs Section -->
+        {% if current_section == 'faqs' %}
+        <section class="faqs">
+            <form action="{{ url_for('admin_boundary.manage_customer_support_page', section=current_section) }}" method="POST">
+                <!-- Edit Main Heading -->
+                <section>
+                    <div class="form-group">
+                        <label for="main_heading">Main Heading</label>
+                        <input type="text" id="main_heading" name="main_heading" value="{{ faq_content.heading }}" required>
+                    </div>
+                </section>
+
+                <!-- Edit Main Paragraph -->
+                <section>
+                    <div class="form-group">
+                        <label for="main_paragraph">Main Paragraph</label>
+                        <textarea id="main_paragraph" name="main_paragraph" rows="3" required>{{ faq_content.heading_paragraph }}</textarea>
+                    </div>
+                </section>
+
+                <!-- Edit Heading -->
+                <section>
+                    <div class="form-group">
+                        <label for="faq_heading">FAQs Heading</label>
+                        <input type="text" id="faq_heading" name="faq_heading" value="{{ faq_content.title1 }}" required>
+                    </div>
+                </section>
+
+                <!-- Edit Paragraph -->
+                <section>
+                    <div class="form-group">
+                        <label for="faq_paragraph">FAQs Intro Paragraph</label>
+                        <textarea id="faq_paragraph" name="faq_paragraph" rows="3" required>{{ faq_content.paragraph1 }}</textarea>
+                    </div>
+                </section>
+                
+                <!-- Edit FAQs -->
+                <h3>Edit FAQs</h3>
+                <table class="table" id="faq-table">
+                    <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>Answer</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for faq in faqs %}
+                            <tr class="faq-item" id="{{ faq.id }}">
+                                <td><input type="text" name="faq_question_{{ faq.id }}" value="{{ faq.question }}" required></td>
+                                <td><textarea name="faq_answer_{{ faq.id }}" rows="2" required>{{ faq.answer }}</textarea></td>
+                                <td>
+                                    <button type="button" class="btn btn-delete delete-faq" data-feature-id="{{ faq.id }}">Delete</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <!-- Button to Add New FAQ -->
+                <button type="button" class="btn btn-add" id="add-faq">Add FAQ</button>
+
+                <!-- Hidden inputs to track added and deleted FAQs -->
+                <input type="hidden" id="added-faqs" name="added_faqs" value="">
+                <input type="hidden" id="deleted-faqs" name="deleted_faqs" value="">
+
+                <!-- Edit Contact Options -->
+                <section>
+                    <div class="form-group">
+                        <label for="contact_heading">Contact Options Heading</label>
+                        <input type="text" id="contact_heading" name="contact_heading" value="{{ faq_content.title2 }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact_paragraph">Contact Options Intro Paragraph</label>
+                        <textarea id="contact_paragraph" name="contact_paragraph" rows="3" required>{{ faq_content.paragraph2 }}</textarea>
+                    </div>
+                </section>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </section>
+        {% endif %}
+
+        <!-- Contact Form Settings Section -->
+        {% if current_section == 'contact_form' %}
+        
+        {% endif %}
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const faqTable = document.getElementById('faq-table').getElementsByTagName('tbody')[0];
+        const deletedFaqsInput = document.getElementById('deleted-faqs');
+        const addedFaqsInput = document.getElementById('added-faqs');
+        const addFaqButton = document.getElementById('add-faq');
+
+        // Track unique IDs for newly added FAQs
+        let newFaqIndex = 1;
+
+        // Add New FAQ
+        addFaqButton.addEventListener('click', () => {
+            const faqId = `new_${newFaqIndex++}`;
+
+            const faqRow = faqTable.insertRow();
+            faqRow.classList.add('faq-item');
+            faqRow.setAttribute('id', faqId);
+
+            const questionCell = faqRow.insertCell(0);
+            const answerCell = faqRow.insertCell(1);
+            const actionsCell = faqRow.insertCell(2);
+
+            questionCell.innerHTML = `
+                <input type="text" name="faq_question_${faqId}" required>
+            `;
+            answerCell.innerHTML = `
+                <textarea name="faq_answer_${faqId}" rows="2" required></textarea>
+            `;
+            actionsCell.innerHTML = `
+                <button type="button" class="btn btn-delete delete-faq" data-faq-id="${faqId}">Delete</button>
+            `;
+
+            // Track the new FAQ
+            let addedFaqs = addedFaqsInput.value ? addedFaqsInput.value.split(',') : [];
+            addedFaqs.push(faqId);
+            addedFaqsInput.value = addedFaqs.join(',');
+        });
+
+        // Delete FAQ
+        faqTable.addEventListener('click', (event) => {
+            if (event.target.classList.contains('delete-faq')) {
+                const faqId = event.target.getAttribute('data-faq-id');
+
+                // Remove the FAQ item from the table
+                const faqRow = document.querySelector(`.faq-item[id="${faqId}"]`);
+                if (faqRow) {
+                    faqRow.remove();
+                }
+
+                // Add the deleted FAQ ID to the hidden input
+                let deletedFaqs = deletedFaqsInput.value ? deletedFaqsInput.value.split(',') : [];
+                if (!deletedFaqs.includes(faqId)) {
+                    deletedFaqs.push(faqId);
+                    deletedFaqsInput.value = deletedFaqs.join(',');
+                }
+
+                // Remove the FAQ from added_faqs if it's a new FAQ
+                let addedFaqs = addedFaqsInput.value ? addedFaqsInput.value.split(',') : [];
+                addedFaqs = addedFaqs.filter(id => id !== faqId);
+                addedFaqsInput.value = addedFaqs.join(',');
+            }
+        });
+    });
+</script>
+
+{% endblock %}

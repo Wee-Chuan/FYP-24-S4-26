@@ -433,7 +433,7 @@ button.btn.btn-primary:hover {
     background-color: #16a085;
 }
 
-button.btn.btn-delete.delete-feature {
+button.btn.btn-delete {
     background-color: #e10000;
     color: white;
     font-size: 1.1em;
@@ -446,7 +446,7 @@ button.btn.btn-delete.delete-feature {
     margin-bottom: 20px;
 }
 
-button.btn.btn-delete.delete-feature:hover {
+button.btn.btn-delete:hover {
     background-color: #bc0101;
 }
 
@@ -461,6 +461,7 @@ button.btn.btn-add {
     transition: background-color 0.3s ease;
     display: block;
     margin-left: 10px;
+    margin-bottom: 10px;
 }
 
 button.btn.btn-add:hover {
@@ -662,4 +663,34 @@ input[type="checkbox"] {
     transform: scale(1.2); 
     margin: 0; 
     cursor: pointer; 
+}
+
+/* ================================ Manage customer support page Styles ================================ */
+.faqs{
+    background-color: #fdfdfd;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#faq-table input[type="text"],
+#faq-table textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1.1em;
+    color: #333;
+    box-sizing: border-box;
+}
+
+#faq-table input[type="text"]:focus,
+#faq-table textarea:focus {
+    border-color: #5c9ded;
+    outline: none;
+}
+
+#add-faq {
+    display: inline-block;
+    margin-bottom: 15px;
 }

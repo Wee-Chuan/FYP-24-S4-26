@@ -195,8 +195,6 @@ def manage_landing_page():
                 deleted_feature_ids = deleted_features.split(',')
                 for feature_id in deleted_feature_ids:
                     success = Admin.delete_influencer_feature(feature_id)
-                    if not success:
-                        flash(f"Failed to delete feature with ID {feature_id}", "danger")
             
             # Handle newly added features
             added_features = request.form.get("added_features")
@@ -214,10 +212,10 @@ def manage_landing_page():
         # Handle success or failure
         if success:
             flash(f"{section.capitalize()} content updated successfully!", "success")
-            return redirect(url_for('admin_boundary.manage_landing_page', section=section))
         else:
             flash(f"Failed to update {section} content", "danger")
-            return redirect(url_for('admin_boundary.manage_landing_page', section=section))
+        
+        return redirect(url_for('admin_boundary.manage_landing_page', section=section))
 
 @admin_boundary.route('/admin/manage-about-us-page', methods=['GET', 'POST', 'PUT'])
 def manage_about_us_page():
@@ -303,5 +301,79 @@ def manage_about_us_page():
             flash(f"Failed to update {section} content", "danger")
         
         return redirect(url_for('admin_boundary.manage_about_us_page', section=section))
+
+@admin_boundary.route('/admin/manage-customer-support-page', methods=['GET', 'POST', 'PUT'])
+def manage_customer_support_page():
+    # Get the section from query parameters (default to 'overview' if not provided) 
+    current_section = request.args.get('section', 'faqs')
+
+    faq_content = Admin.get_faq_content()
+    faqs = Admin.get_faqs()
+
+    # Handle GET requests: Render the template with the fetched data
+    if request.method == 'GET':
+        return render_template(
+            'dashboard/admin_menu/manage_customer_support_page.html',
+            current_section=current_section,
+            faq_content=faq_content,
+            faqs=faqs
+        )
+    
+    # Handle POST requests for form submissions
+    if request.method == 'POST':
+        success = False  # Flag to track success of updates
+
+        # Determine the section
+        section = request.args.get('section')
+        
+        # Handle form for 'overview' section 
+        if section == 'faqs':
+            # Update overview content
+            main_heading = request.form['main_heading']
+            main_paragraph = request.form['main_paragraph']
+            faq_heading = request.form['faq_heading']
+            faq_paragraph = request.form['faq_paragraph']
+            contact_heading = request.form['contact_heading']
+            contact_paragraph = request.form['contact_paragraph']
+            success = Admin.update_faq_content(faq_heading, faq_paragraph, contact_heading, contact_paragraph, main_heading, main_paragraph)
+
+            # Handle updated FAQs
+            faqs = request.form.to_dict(flat=False)
+            for key, value in faqs.items():
+                if key.startswith('faq_question_'):
+                    faq_id = key.split('_')[-1]
+                    question = request.form.get(f'faq_question_{faq_id}')
+                    answer = request.form.get(f'faq_answer_{faq_id}')
+                    if question and answer:
+                        success = Admin.update_faq(faq_id, question, answer)
+
+            # Handle added FAQs
+            added_faqs = request.form.get('added_faqs', '')
+            if added_faqs:
+                added_faqs_id = added_faqs.split(',')
+                for faq_id in added_faqs_id:
+                    if faq_id:
+                        question = request.form.get(f'faq_question_{faq_id}', '')
+                        answer = request.form.get(f'faq_answer_{faq_id}', '')
+                        if question and answer:
+                            success = Admin.add_faq(question, answer)
+
+            # Handle deleted FAQs
+            deleted_faqs = request.form.get('deleted_faqs', '')
+            if deleted_faqs:
+                deleted_faqs_ids = deleted_faqs.split(',')
+                for faq_id in deleted_faqs_ids:
+                    if faq_id:
+                        success = Admin.delete_faq(faq_id) 
+
+        # Return an appropriate response based on success or failure
+        if success:
+            flash('FAQs updated successfully!', 'success')
+        else:
+            flash('Failed to update FAQs. Please try again.', 'error')
+
+        return redirect(url_for('admin_boundary.manage_customer_support_page', section=section))
+
+            
         
 # ======================================================= #
