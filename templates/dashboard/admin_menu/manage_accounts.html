@@ -58,7 +58,7 @@
                             <td>{{ 'Suspended' if user.is_suspended else ( 'Pending Approval' if user.account_type == 'business_analyst' and not user.is_approved else 'Active' ) }}</td>
                             <td>
                                 <button class="action-button" id="view" onclick="viewUserDetails('{{ user.user_id }}')"><i class="fas fa-eye"></i> View</button>
-                                <button class="action-button" id="suspend" onclick="suspendUser('{{ user.user_id }}')"><i class="fas fa-ban"></i> Suspend</button>
+                                <button class="suspend-button" id="suspend" onclick="suspendUser('{{ user.user_id }}')"><i class="fas fa-ban"></i> Suspend</button>
                             </td>
                         </tr>
                         {% endfor %}
@@ -174,7 +174,7 @@
                     <td>${user.account_type === 'business_analyst' && !user.is_approved ? 'Pending Approval' : 'Active'}</td>
                     <td>
                         <button class="action-button" id="view" onclick="viewUserDetails('${user.user_id}')"><i class="fas fa-eye"></i> View</button>
-                        <button class="action-button" id="suspend" onclick="suspendUser('${user.user_id}')"><i class="fas fa-ban"></i> Suspend</button>
+                        <button class="suspend-button" id="suspend" onclick="suspendUser('${user.user_id}')"><i class="fas fa-ban"></i> Suspend</button>
                     </td>`;
                 userTableBody.appendChild(userRow);
             });

@@ -20,12 +20,19 @@
 
     <!-- Main Content -->
     <div class="dashboard-container">
-        <h1>Manage About Us Page</h1>
+        <!-- Navigation Buttons -->
+        <section class="navigation-buttons">
+            <a class="btn btn-secondary {% if current_section == 'overview' %}active{% endif %}" href="{{ url_for('admin_boundary.manage_about_us_page', section='overview') }}">Overview</a>
+            <a class="btn btn-secondary {% if current_section == 'goals' %}active{% endif %}" href="{{ url_for('admin_boundary.manage_about_us_page', section='goals') }}">Goals</a>
+            <a class="btn btn-secondary {% if current_section == 'testimonials' %}active{% endif %}" href="{{ url_for('admin_boundary.manage_about_us_page', section='testimonials') }}">Testimonials</a>
+        </section>
+
+        <h2 id="content-title">Manage {{ current_section|capitalize }} Content</h2>
 
         <!-- Overview Section -->
+        {% if current_section == 'overview' %}
         <section class="overview">
-            <h2>Overview</h2>
-            <form action="{{ url_for('admin_boundary.manage_about_us_page', section='overview') }}" method="POST">
+            <form action="{{ url_for('admin_boundary.manage_about_us_page', section=current_section) }}" method="POST">
                 <div class="form-group">
                     <label for="overview_title">Title</label>
                     <input type="text" id="overview_title" name="overview_title" value="{{ overview_content['title'] }}" required>
@@ -36,24 +43,22 @@
                 </div>
                 <div class="form-group">
                     <label for="overview_paragraph">Paragraph 2</label>
-                    <textarea id="overview_paragraph" name="overview_paragraph" required>{{ overview_content['paragraph2'] }}</textarea>
+                    <textarea id="overview_paragraph" name="overview_paragraph2" required>{{ overview_content['paragraph2'] }}</textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Save Changes</button>
             </form>
         </section>
+        {% endif %}
 
         <!-- Goals Section -->
+        {% if current_section == 'goals' %}
         <section class="goals">
-            <h2>Goals</h2>
-            <form action="{{ url_for('admin_boundary.manage_about_us_page', section='goals_heading') }}" method="POST">
+            <form action="{{ url_for('admin_boundary.manage_about_us_page', section=current_section) }}" method="POST">
                 <div class="form-group">
                     <label for="goals_title">Goals Heading</label>
                     <input type="text" id="goals_heading" name="goals_heading" value="{{ goals_heading['heading'] }}" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Save Title</button>
-            </form>
 
-            <form action="{{ url_for('admin_boundary.manage_about_us_page', section='goals') }}" method="POST">
                 {% for goal in our_goals %}
                 <div class="goal-block">
                     <h3>Goal {{ loop.index }}</h3>
@@ -90,15 +95,43 @@
                 <button type="submit" class="btn btn-primary">Save Goals</button>
             </form>
         </section>
+        {% endif %}
 
         <!-- Testimonials Section -->
+        {% if current_section == 'testimonials' %}
         <section class="testimonials">
-            <h2>Testimonials</h2>
-            <form action="{{ url_for('admin_boundary.manage_about_us_page', section='testimonials') }}" method="POST">
-                
-                <button type="submit" class="btn btn-primary">Save Changes</button>
+            <form action="{{ url_for('admin_boundary.manage_about_us_page', section=current_section) }}" method="POST">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Select</th>
+                            <th>Content</th>
+                            <th>Rating</th>
+                            <th>Category</th>
+                            <th>Author</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for testimonial in testimonials %}
+                        <tr>
+                            <td>
+                                <!-- Checkbox for selecting a testimonial -->
+                                <input type="checkbox" 
+                                       name="testimonial_display_{{ testimonial.id }}" 
+                                       {% if testimonial.is_selected %}checked{% endif %}>
+                            </td>
+                            <td>{{ testimonial.review }}</td>
+                            <td> {{ testimonial.rating }} </td>
+                            <td></td>
+                            <td>{{ testimonial.username }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-primary">Save Selected Testimonials</button>
             </form>
         </section>
+        {% endif %}
     </div>
 </div>
 

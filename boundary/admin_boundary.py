@@ -187,48 +187,81 @@ def manage_landing_page():
                     title = request.form.get(f'influencer_title_{feature_id}')
                     paragraph = request.form.get(f'influencer_paragraph_{feature_id}')
                     # Update each influencer feature based on its ID
-                    Admin.update_influencer_feature(feature_id, title, paragraph)
-
+                    success = Admin.update_influencer_feature(feature_id, title, paragraph)
+            
+            # Handle deleted features
+            deleted_features = request.form.get("deleted_features")
+            if deleted_features:
+                deleted_feature_ids = deleted_features.split(',')
+                for feature_id in deleted_feature_ids:
+                    success = Admin.delete_influencer_feature(feature_id)
+                    if not success:
+                        flash(f"Failed to delete feature with ID {feature_id}", "danger")
+            
+            # Handle newly added features
+            added_features = request.form.get("added_features")
+            if added_features:
+                added_feature_ids = added_features.split(',')
+                for feature_id in added_feature_ids:
+                    title = request.form.get(f"influencer_title_{feature_id}")
+                    paragraph = request.form.get(f"influencer_paragraph_{feature_id}")
+                    print("Feature ID:", feature_id)
+                    success = Admin.add_influencer_feature(title, paragraph)
         else:
-            return jsonify({"error": "Invalid section"}), 400
+            flash("Invalid section", "error")
+            return redirect(url_for('admin_boundary.manage_landing_page'))
 
         # Handle success or failure
         if success:
+            flash(f"{section.capitalize()} content updated successfully!", "success")
             return redirect(url_for('admin_boundary.manage_landing_page', section=section))
         else:
-            return jsonify({"error": f"Failed to update {section} content"}), 500
+            flash(f"Failed to update {section} content", "danger")
+            return redirect(url_for('admin_boundary.manage_landing_page', section=section))
 
 @admin_boundary.route('/admin/manage-about-us-page', methods=['GET', 'POST', 'PUT'])
 def manage_about_us_page():
-    overview_content = Admin.get_overview_content()
+    # Get the section from query parameters (default to 'overview' if not provided) 
+    current_section = request.args.get('section', 'overview') 
+
+    # Fetch content for each section from the Admin model
+    overview_content = Admin.get_overview_content() 
     goals_heading = Admin.get_goals_heading()  
     our_goals = Admin.get_our_goals()
+    testimonials = Admin.get_testimonials()
 
+    # Handle GET requests: Render the template with the fetched data
     if request.method == 'GET':
-        # Render the template with all content
         return render_template(
             'dashboard/admin_menu/manage_about_us_page.html',
+            current_section=current_section,
             overview_content=overview_content,
             goals_heading=goals_heading,
-            our_goals=our_goals
+            our_goals=our_goals,
+            testimonials=testimonials
         )
     
     # Handle POST requests for form submissions
     if request.method == 'POST':
-        section = request.args.get('section', '')
+        success = False  # Flag to track success of updates
+
+        # Determine the section
+        section = request.args.get('section')
         
+        # Handle form for 'overview' section 
         if section == 'overview':
             # Update overview content
             overview_title = request.form['overview_title']
             overview_paragraph = request.form['overview_paragraph']
-            Admin.update_overview_content(overview_title, overview_paragraph) 
+            overview_paragraph2 = request.form['overview_paragraph2']
+            success = Admin.update_overview_content(overview_title, overview_paragraph, overview_paragraph2) 
             
-        elif section == 'goals_heading':
+        # Handle form for 'goals' section
+        elif section == 'goals':
             # Update main goals title
             goals_heading = request.form['goals_heading']
-            Admin.update_goals_heading(goals_heading)  
+            success = Admin.update_goals_heading(goals_heading)  
             
-        elif section == "goals":
             # Extract data from the form for goals
             goals_data = request.form.to_dict(flat=False)
             for key, value in goals_data.items():
@@ -238,14 +271,37 @@ def manage_about_us_page():
                     description = request.form.get(f'goal_description_{goal_id}')
                     icon = request.form.get(f'goal_icon_{goal_id}')
                     # Update each goal based on its ID
-                    Admin.update_our_goals(goal_id, title, description, icon)
+                    success = Admin.update_our_goals(goal_id, title, description, icon)
 
+        # Handle form for 'testimonials' section
         elif section == 'testimonials':
-            # Update testimonials 
-            pass
+            # Get all testimonials selected by the admin
+            selected_testimonial_ids = [
+                key.split('_')[-1]
+                for key in request.form if key.startswith('testimonial_display')
+            ]
+
+            # Fetch currently selected testimonial IDs from the database
+            current_selected_ids = {testimonial['id'] for testimonial in testimonials if testimonial['is_selected']}
+
+            # Identify changes: testimonials to select and deselect
+            to_select = set(selected_testimonial_ids) - current_selected_ids
+            to_deselect = current_selected_ids - set(selected_testimonial_ids)
+            
+            # If there are changes, update testimonials in Firestore
+            if to_select or to_deselect:
+                success = True
+                for review_id in to_select:
+                    success = Admin.update_testimonial_selection(review_id, is_selected=True)
+                for review_id in to_deselect:
+                    success = Admin.update_testimonial_selection(review_id, is_selected=False)
         
         # After processing, reload the page with updated data
-        return redirect(url_for('admin_boundary.manage_about_us_page'))
-
-
+        if success:
+            flash(f"{section.capitalize()} content updated successfully!", "success")
+        else:
+            flash(f"Failed to update {section} content", "danger")
+        
+        return redirect(url_for('admin_boundary.manage_about_us_page', section=section))
+        
 # ======================================================= #

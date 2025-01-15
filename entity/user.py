@@ -452,61 +452,14 @@ class User:
             reviews_ref.add({
                 'rating': rating,
                 'review': review,
-                'date': datetime.now()
+                'date': datetime.now(),
+                'is_selected': False
             })
         except Exception as e:
             print(f"Error saving review: {e}")
             return False
         return True
     
-    def get_reviews():
-        """
-        Fetch top 5 ratings and reviews from Firestore, sorted by rating.
-        """
-        try:
-            reviews_ref = db.collection('ratings_and_reviews')
-            all_reviews = []
-
-            # Loop through each user document in the 'ratings_and_reviews' collection
-            for user_doc in reviews_ref.stream():
-                user_data = user_doc.to_dict()
-                user_id = user_data.get('user_id')
-                username = user_data.get('username')
-                reviews_subcollection = user_doc.reference.collection('reviews')
-
-                # Fetch reviews for the user
-                reviews = []
-                for review in reviews_subcollection.stream():
-                    review_data = review.to_dict()
-                    # Add 'rating', 'review' and 'date' fields to the reviews list
-                    reviews.append({
-                        'rating': review_data.get('rating'),
-                        'review': review_data.get('review'),
-                        'date': review_data.get('date')
-                    })
-
-                all_reviews.extend([{
-                    'user_id': user_id,
-                    'username': username,
-                    'rating': review['rating'],
-                    'review': review['review'],
-                    'date': review['date']
-                } for review in reviews])
-
-            # Sort all reviews by rating in descending order
-            sorted_reviews = sorted(all_reviews, key=lambda x: x['rating'], reverse=True)
-
-            # Get the top 5 reviews
-            top_reviews = sorted_reviews[:5]
-
-            print("Top reviews:", top_reviews)
-            return top_reviews
-        except Exception as e:
-            print(f"Error retrieving reviews: {e}")
-            return []
-        
-
-
     @staticmethod
     def get_influencer_data():
         """Retrieves influencer data from Firebase."""

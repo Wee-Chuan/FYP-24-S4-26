@@ -368,8 +368,50 @@ class Admin:
         except Exception as e:
             print(f"Error updating influencer feature: {e}")
             return False  # Indicate failure
+    
+    @staticmethod
+    def delete_influencer_feature(feature_id):
+        # Reference to the 'features' document inside 'landing_page' collection
+        features_ref = db.collection('landing_page').document('features')
 
-    # ============================== Manage landing page ==================================#
+        # Reference to the influencer_features subcollection
+        influencer_features_ref = features_ref.collection('influencer_features')
+
+        # Fetch the influencer feature document by ID
+        influencer_feature_ref = influencer_features_ref.document(feature_id)
+
+        try:
+            # Delete the influencer feature document
+            influencer_feature_ref.delete()
+            print(f"Influencer feature with ID {feature_id} successfully deleted.")
+            return True  # Indicate success
+        except Exception as e:
+            print(f"Error deleting influencer feature with ID {feature_id}: {e}")
+            return False  # Indicate failure
+    
+    @staticmethod
+    def add_influencer_feature(title, paragraph):
+        # Reference to the 'features' document inside 'landing_page' collection
+        features_ref = db.collection('landing_page').document('features')
+
+        # Reference to the influencer_features subcollection
+        influencer_features_ref = features_ref.collection('influencer_features')
+
+        try:
+            # Add a new document to the influencer_features subcollection
+            new_feature_ref = influencer_features_ref.add({
+                "title": title,
+                "paragraph": paragraph
+            })
+
+            print(f"Influencer feature successfully created with ID {new_feature_ref[1].id}.")
+            return True  # Indicate success
+        except Exception as e:
+            print(f"Error creating influencer feature: {e}")
+            return False  # Indicate failure
+
+
+    # ============================== Manage about us page ==================================#
     @staticmethod
     def get_overview_content():
         """Fetch overview content from Firestore."""
@@ -388,14 +430,15 @@ class Admin:
             return None
         
     @staticmethod
-    def update_overview_content(overview_title, overview_paragraph):
+    def update_overview_content(overview_title, overview_paragraph, overview_paragraph2):
         """Update overview content in Firestore."""
         try:
             overview_ref = db.collection('about_us_page').document('overview')
             # Set the new data (overwrites if the document exists)
             overview_ref.set({
                 'title': overview_title,
-                'paragraph': overview_paragraph
+                'paragraph': overview_paragraph,
+                'paragraph2': overview_paragraph2
             }, merge=True)
 
             print(f"Overview content updated successfully.")
@@ -491,3 +534,66 @@ class Admin:
         except Exception as e:
             print(f"Error updating our goals: {e}")
             return False  # Indicate failure
+    
+    @staticmethod
+    def get_testimonials():
+        """
+        Fetch all ratings and reviews from Firestore, grouped by users.
+        """
+        try:
+            reviews_ref = db.collection('ratings_and_reviews')
+            all_reviews = []
+
+            # Loop through each user document in the 'ratings_and_reviews' collection
+            for user_doc in reviews_ref.stream():
+                user_data = user_doc.to_dict()
+                user_id = user_data.get('user_id')
+                username = user_data.get('username')
+                reviews_subcollection = user_doc.reference.collection('reviews')
+
+                # Fetch reviews for the user
+                for review in reviews_subcollection.stream():
+                    review_data = review.to_dict()
+                    # Add 'rating', 'review' and 'date' fields to the reviews list
+                    all_reviews.append({
+                        'id': review.id,
+                        'user_id': user_id,
+                        'username': username,
+                        'rating': review_data.get('rating'),
+                        'review': review_data.get('review'),
+                        'date': review_data.get('date'),
+                        'is_selected': review_data.get('is_selected')
+                    })
+
+            print("All reviews:", all_reviews)
+            return all_reviews
+        except Exception as e:
+            print(f"Error retrieving reviews: {e}")
+            return []
+    
+    @staticmethod
+    def update_testimonial_selection(review_id, is_selected=True):
+        try:
+            # Reference the main 'ratings_and_reviews' collection
+            reviews_ref = db.collection('ratings_and_reviews')
+
+            # Loop through each user document
+            for user_doc in reviews_ref.stream():
+                # Access the 'reviews' subcollection for the user
+                reviews_subcollection = user_doc.reference.collection('reviews')
+                
+                 # Iterate through each review in the subcollection
+                for review_doc in reviews_subcollection.stream():
+                    if review_doc.id == review_id:  # Check if the document ID matches the given review_id
+                        # Update the 'is_selected' field for the matching document
+                        review_doc.reference.update({'is_selected': is_selected})
+                        print(f"Updated review ID {review_id} in user {user_doc.id}: is_selected = {is_selected}")
+                        return True  # Exit after updating the first match
+
+            print(f"Review ID {review_id} not found in any subcollection.")
+            return False
+        except Exception as e:
+            print(f"Error updating review ID {review_id}: {e}")
+            return False
+
+

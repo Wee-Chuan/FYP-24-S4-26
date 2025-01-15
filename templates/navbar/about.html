@@ -53,20 +53,22 @@
                 <button class="carousel-button left" onclick="showPreviousReview()">&#9664;</button>
                 
                 <!-- Block to display the current testimonial -->
-                {% if reviews %}
+                {% if testimonials %}
+                    <!-- Loop through the selected testimonials -->
                     <div class="carousel-item active">
                         <blockquote id="testimonial-text">
-                            <!-- First review is shown by default -->
                             <p>
-                                <strong>{{ reviews[0].username }}</strong>
-                                <!-- Loop to generate star icons for the rating -->
-                                <span id="rating-stars">{% for i in range(reviews[0].rating|int) %}<i class="fas fa-star"></i>{% endfor %}</span>
+                                <strong>{{ testimonials[0].username }}</strong>
+                                <span id="rating-stars">
+                                    {% for i in range(testimonials[0].rating|int) %}
+                                        <i class="fas fa-star"></i>
+                                    {% endfor %}
+                                </span>
                             </p>
-                            <p>"{{ reviews[0].review }}"</p>
+                            <p>"{{ testimonials[0].review }}"</p>
                         </blockquote>
                     </div>
                 {% else %}
-                    <!-- Fallback message if no reviews are available -->
                     <div class="carousel-item active">
                         <blockquote id="testimonial-text">
                             No reviews available at the moment.
@@ -83,14 +85,14 @@
 <script>
     // Array of testimonials, dynamically populated from server-side data
     const testimonials = [
-        {% for review in reviews %}
+        {% for testimonial in testimonials %}
             {   
                 // The review text
-                text: "{{ review.review }}",
+                text: "{{ testimonial.review }}",
                 // The reviewer's username
-                author: "{{ review.username }}",
+                author: "{{ testimonial.username }}",
                 // The rating (number of stars)
-                rating: "{{ review.rating }}"
+                rating: "{{ testimonial.rating }}"
             }{% if not loop.last %},{% endif %}
         {% endfor %}
     ];

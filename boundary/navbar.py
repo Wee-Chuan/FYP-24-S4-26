@@ -93,12 +93,12 @@ def login():
 
 @navbar.route('/about', methods=['GET'])
 def about():
-    reviews = User.get_reviews()  # Fetch reviews from the database
+    testimonials = [testimonial for testimonial in Admin.get_testimonials() if testimonial['is_selected']] # Only get selected testimonials
     overview_content_about_us = Admin.get_overview_content()
     goals_heading = Admin.get_goals_heading()
     our_goals = Admin.get_our_goals()
     return render_template('navbar/about.html', 
-                           reviews=reviews, 
+                           testimonials=testimonials, 
                            overview_content_about_us=overview_content_about_us,
                            goals_heading=goals_heading,
                            our_goals=our_goals)

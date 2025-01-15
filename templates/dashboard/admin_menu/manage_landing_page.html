@@ -48,20 +48,42 @@
                 
                 <!-- Influencer Features Section -->
                 {% if current_section == 'features' %}
-                <div class="form-group">
+                <div class="form-group" id="features-container">
                     <h3>Manage Influencer Features</h3>
-                    {% for feature in influencer_features %}
-                        <div class="feature-item">
-                            <div class="form-group">
-                                <label for="influencer-title-{{ feature.id }}">Title for Feature {{ loop.index }}</label>
-                                <input type="text" id="influencer-title-{{ feature.id }}" name="influencer_title_{{ feature.id }}" value="{{ feature.title }}" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="influencer-paragraph-{{ feature.id }}">Feature Paragraph</label>
-                                <textarea id="influencer-paragraph-{{ feature.id }}" name="influencer_paragraph_{{ feature.id }}" required>{{ feature.paragraph }}</textarea>
-                            </div>
-                        </div>
-                    {% endfor %}
+
+                    <!-- Table for Influencer Features -->
+                    <table class="table table-bordered" id="features-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Paragraph</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for feature in influencer_features %}
+                                <tr class="feature-item" id="{{ feature.id }}">
+                                    <td>
+                                        <input type="text" name="influencer_title_{{ feature.id }}" value="{{ feature.title }}" required>
+                                    </td>
+                                    <td>
+                                        <textarea name="influencer_paragraph_{{ feature.id }}" required>{{ feature.paragraph }}</textarea>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-delete delete-feature" data-feature-id="{{ feature.id }}">Delete</button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <!-- Button to Add New Feature -->
+                    <button type="button" class="btn btn-add" id="add-feature">Add New Feature</button>
+
+                    <!-- Hidden input to track added features -->
+                    <input type="hidden" id="added-features" name="added_features" value="">
+                    <!-- Hidden input to track deleted features -->
+                    <input type="hidden" id="deleted-features" name="deleted_features" value="">
                 </div>
                 {% endif %}
 
@@ -71,4 +93,79 @@
         </section>
     </div>
 </div>
+
+<!-- JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const featuresTable = document.getElementById('features-table').getElementsByTagName('tbody')[0];
+        const deletedFeaturesInput = document.getElementById('deleted-features');
+        const addedFeaturesInput = document.getElementById('added-features');
+        const addFeatureButton = document.getElementById('add-feature');
+
+        // Track unique IDs for newly added features
+        let newFeatureIndex = 1;
+
+        // Add New Feature
+        addFeatureButton.addEventListener('click', () => {
+            const featureId = `new_${newFeatureIndex++}`;
+
+            const featureRow = featuresTable.insertRow();
+            featureRow.classList.add('feature-item');
+            featureRow.setAttribute('id', featureId);
+
+            const titleCell = featureRow.insertCell(0);
+            const paragraphCell = featureRow.insertCell(1);
+            const actionsCell = featureRow.insertCell(2);
+
+            titleCell.innerHTML = `
+                <input type="text" name="influencer_title_${featureId}" required>
+            `;
+            paragraphCell.innerHTML = `
+                <textarea name="influencer_paragraph_${featureId}" required></textarea>
+            `;
+            actionsCell.innerHTML = `
+                <button type="button" class="btn btn-delete delete-feature" data-feature-id="${featureId}">Delete</button>
+            `;
+
+            // Track the new feature
+            let addedFeatures = addedFeaturesInput.value ? addedFeaturesInput.value.split(',') : [];
+            addedFeatures.push(featureId);
+            addedFeaturesInput.value = addedFeatures.join(',');
+        });
+
+        // Delete Feature
+        featuresTable.addEventListener('click', (event) => {
+            if (event.target.classList.contains('delete-feature')) {
+                const featureId = event.target.getAttribute('data-feature-id');
+                console.log(`Delete clicked for feature ID: ${featureId}`);
+
+                // Remove the feature item from the table
+                const featureRow = document.querySelector(`.feature-item[id="${featureId}"]`);
+                console.log(`Feature row:`, featureRow);
+
+                if (featureRow) {
+                    featureRow.remove();
+                    console.log(`Feature row with ID ${featureId} removed from the table.`);
+                } else {
+                    console.error(`Feature row with ID ${featureId} not found.`);
+                }
+
+                // Add the deleted feature ID to the hidden input
+                let deletedFeatures = deletedFeaturesInput.value ? deletedFeaturesInput.value.split(',') : [];
+                if (!deletedFeatures.includes(featureId)) {
+                    deletedFeatures.push(featureId);
+                    deletedFeaturesInput.value = deletedFeatures.join(',');
+                }
+
+                // Remove the feature from added_features if it's a new feature
+                let addedFeatures = addedFeaturesInput.value ? addedFeaturesInput.value.split(',') : [];
+                addedFeatures = addedFeatures.filter(id => id !== featureId);
+                addedFeaturesInput.value = addedFeatures.join(',');
+
+                console.log(`Deleted features: ${deletedFeaturesInput.value}`);
+            }
+        });
+    });
+
+</script>
 {% endblock %}
