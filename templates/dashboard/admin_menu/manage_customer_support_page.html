@@ -81,7 +81,7 @@
                                 <td><input type="text" name="faq_question_{{ faq.id }}" value="{{ faq.question }}" required></td>
                                 <td><textarea name="faq_answer_{{ faq.id }}" rows="2" required>{{ faq.answer }}</textarea></td>
                                 <td>
-                                    <button type="button" class="btn btn-delete delete-faq" data-feature-id="{{ faq.id }}">Delete</button>
+                                    <button type="button" class="btn btn-delete delete-faq" data-faq-id="{{ faq.id }}">Delete</button>
                                 </td>
                             </tr>
                         {% endfor %}
