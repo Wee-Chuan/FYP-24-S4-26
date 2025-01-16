@@ -1,9 +1,11 @@
-from flask import Blueprint, render_template, redirect, url_for, session, flash, request, jsonify
+import os
+
+from flask import Blueprint, render_template, redirect, url_for, session, flash, request, current_app
 from entity.user import User
 from entity.followers_hist_entity import FollowerHist
 import networkVisFinal, globals, influencer_centrality_ranking
-import numpy as np
 
+from werkzeug.utils import secure_filename
 
 influencer_boundary = Blueprint('influencer_boundary', __name__)
 
@@ -63,42 +65,80 @@ def engagement_metrics():
         flash("An error occurred while fetching engagement metrics.", "danger")
         return redirect(url_for('dashboard_boundary.dashboard'))
 
-@influencer_boundary.route('/followers')
+@influencer_boundary.route('/followers', methods=['GET', 'POST'])
 def followers():
     """
     Route to display followers forecast for the user.
     """
     try:
         user_id = session.get('user_id')
+        print(f"User ID from session: {user_id}")
+
         user = User.get_profile(user_id)
 
         # Ensure session is valid
         if not user_id or not user:
             flash("Session expired or user not found. Please log in again.", "danger")
-            return redirect(url_for('auth_boundary.login'))  # Redirect to login if session is invalid
+            print("Session expired or user_id not found") 
+            return redirect(url_for('navbar.login'))  # Redirect to login if session is invalid
+        
+        # Handle file upload if present
+        if request.method == 'POST' and 'folder_zip' in request.files:
+            file = request.files['folder_zip']
+            if file and FollowerHist.allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                # upload_folder = current_app.config['UPLOAD_FOLDER']
+                
+                # # Ensure the uploads folder exists
+                # if not os.path.exists(upload_folder):
+                #     os.makedirs(upload_folder) 
 
-        # CHECKING IF ACCOUNT IS LINKEDDDDDDDDDDDDDDDDDDDDDDDDDDD 
-        if user['linked_social_account'] == "":
-            flash("Please link to your social media acccount first", "danger")
-            return redirect(url_for('dashboard_boundary.dashboard'))
+                # file_path = os.path.join(upload_folder, filename)
+                # file.save(file_path)
 
-        # Fetch historical data and calculate forecast
-        historical_data = FollowerHist.get_followers_hist(user_id)
-        if not historical_data:
-            flash('No follower data found for this user.', 'danger')
-            return render_template('dashboard/influencer_menu/followers.html', user_id=user_id, user=user)
+                # # Unzip the file
+                # folder_path = os.path.join(upload_folder, filename.rsplit('.', 1)[0])
+                # with zipfile.ZipFile(file_path, 'r') as zip_ref:
+                #     for member in zip_ref.namelist():
+                #         if 'connections/followers_and_following' in member:
+                #             zip_ref.extract(member, folder_path)
 
-        forecast, error = FollowerHist.calculate_follower_growth(historical_data)
-        if error:
-            flash(error, 'warning')
+                ## Process the extracted folder
+                #followers_data = FollowerHist.process_uploaded_folder(folder_path)
+                
+                # Upload to Firebase Storage
+                file_url = FollowerHist.upload_to_firebase(file, filename)
+                
+                if not file_url:
+                    flash("Error uploading file to Firebase.", "danger")
+                    return redirect(url_for('influencer_boundary.followers'))  # Redirect to avoid errors
+                
+                print("file url:", file_url)
+                
+                # Process from firebase
+                followers_data = FollowerHist.process_uploaded_folder_from_firebase(file_url)
 
-        # Render the template with data
-        return render_template(
-            'dashboard/influencer_menu/followers.html',
-            user_id=user_id,
-            user=user,
-            forecast=forecast,
-        )
+                if not followers_data:
+                    flash('No follower data found for this user.', 'danger')
+                    return render_template('dashboard/influencer_menu/followers.html', user_id=user_id, user=user)
+
+                forecast, error = FollowerHist.calculate_follower_growth(followers_data)
+                if error:
+                    flash(error, 'warning')
+                    print(f"Error in calculating follower growth: {error}")
+
+                print(f"Forecast data: {forecast}") 
+
+                # Render the template with data
+                return render_template(
+                    'dashboard/influencer_menu/followers.html',
+                    user_id=user_id,
+                    user=user,
+                    forecast=forecast,
+                )
+        # If no file is uploaded, return the followers page without any forecast
+        return render_template('dashboard/influencer_menu/followers.html', user_id=user_id, user=user)
+    
     except Exception as e:
         # Handle unexpected errors
         print(f"Error in followers route: {e}")

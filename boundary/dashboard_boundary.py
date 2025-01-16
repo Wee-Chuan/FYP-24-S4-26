@@ -41,27 +41,27 @@ def dashboard():
         else:
             total_likes = total_comments = total_shares = 0
 
-        # Fetch historical data for the user
-        historical_data = FollowerHist.get_followers_hist(user_id) # ~~~~~~~unsure of followerHist~~~~~~~~~~~
-        if historical_data:
-            forecast, error = FollowerHist.calculate_follower_growth(historical_data)
+        # # Fetch historical data for the user
+        # historical_data = FollowerHist.get_followers_data(user_id) # ~~~~~~~unsure of followerHist~~~~~~~~~~~
+        # if historical_data:
+        #     forecast, error = FollowerHist.calculate_follower_growth(historical_data)
 
-            if not error:
-                last_month_followers = forecast['historical_data'][-2] if len(forecast['historical_data']) > 1 else 0
-                this_month_followers = forecast['historical_data'][-1]
-                followers_gained = (
-                    (this_month_followers - last_month_followers) 
-                    if last_month_followers > 0 else 0
-                )
-            else:
-                followers_gained = None
-        else:
-            followers_gained = None
+        #     if not error:
+        #         last_month_followers = forecast['historical_data'][-2] if len(forecast['historical_data']) > 1 else 0
+        #         this_month_followers = forecast['historical_data'][-1]
+        #         followers_gained = (
+        #             (this_month_followers - last_month_followers) 
+        #             if last_month_followers > 0 else 0
+        #         )
+        #     else:
+        #         followers_gained = None
+        # else:
+        #     followers_gained = None
 
         return render_template(
             'dashboard/influencer_dashboard.html', # html page for influencer dashboard, with needed paras
             user_id=user_id, user=user, 
-            followers_gained=followers_gained, 
+            #followers_gained=followers_gained, 
             linked_account=linked_account,
             total_likes=total_likes, 
             total_comments=total_comments, 

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Followers Forecast{% endblock %}
+{% block title %}Monthly Followers Count{% endblock %}
 
 {% block styles %}
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -20,36 +20,97 @@
     </aside>
 
     <div class="dashboard-container">
-        <h2>Followers Forecast for {{ user['username'] }}</h2>
+        <h2>Monthly Followers Count for {{ user['username'] }}</h2>
+
+        <h4>Steps to Download Your Information from Instagram:</h4>
+        <ol class="steps-ol">
+            <li>
+                <span class="step-header">Go to the Instagram Website</span><br>
+                <span class="step-details">Open your web browser and go to <a href="https://www.instagram.com" target="_blank">https://www.instagram.com</a>.</span>
+            </li>
+            <li>
+                <span class="step-header">Log in to Your Account</span><br>
+                <span class="step-details">Enter your username and password to log in to your Instagram account.</span>
+            </li>
+            <li>
+                <span class="step-header">Go to Your Profile</span><br>
+                <span class="step-details">Click on your <strong>profile icon</strong> at the top right corner of the page.</span>
+            </li>
+            <li>
+                <span class="step-header">Access Settings</span><br>
+                <span class="step-details">On your profile page, click on the <strong>gear icon</strong> next to the Edit Profile button to access the <strong>Settings</strong> menu.</span>
+            </li>
+            <li>
+                <span class="step-header">Navigate to Accounts Center</span><br>
+                <span class="step-details">In the Settings menu, click on <strong>Accounts Center</strong>.</span>
+            </li>
+            <li>
+                <span class="step-header">Navigate to Your Information and permissions</span><br>
+                <span class="step-details">In the Accounts Center, click on <strong>Your Information and permissions</strong>.</span>
+            </li>
+            <li>
+                <span class="step-header">Download Your Information</span><br>
+                <span class="step-details">Click on <strong>Download Your Information</strong>.</span>
+            </li>
+            <li>
+                <span class="step-header">Choose Your Information</span><br>
+                <span class="step-details">
+                    Click on <strong>Download or transfer information</strong>. <br>
+                    Select <strong>All available Information</strong> for a complete data download. <br>
+                    Select <strong>Download to device</strong> to download it on your computer. <br>
+                    You can filter the data by selecting <strong>Last Year</strong> and choose the file format as <strong>HTML</strong>.
+                </span>
+            </li>
+            <li>
+                <span class="step-header">Wait for the Download to Finish</span><br>
+                <span class="step-details">Instagram will prepare the download, and once it's ready, you can click download under <strong>Available downloads</strong>. Key in your password and the download will begin.</span>
+            </li>
+        </ol>
+
+        <!-- Form to Upload ZIP file -->
+        <h4>Upload your Downloaded File (ZIP format)</h4>
+        <form action="{{ url_for('influencer_boundary.followers') }}" method="POST" enctype="multipart/form-data">
+            <label for="folder_zip">Upload File (ZIP file):</label>
+            <input type="file" name="folder_zip" accept=".zip" required>
+            <button type="submit">Upload and Process</button>
+        </form>
 
         {% if forecast and forecast['historical_data'] and forecast['future_data'] %}
             <!-- Key Metrics Cards -->
             <div class="row">
                 <div class="col">
                     <div class="card">
-                        <h4>Follower Growth (This Month)</h4>
+                        <h4>Followers Gained This Month</h4>
                         {% if forecast['historical_data']|length > 1 %}
                             {% set last_month = forecast['historical_data'][-2] %}
                             {% set current_month = forecast['historical_data'][-1] %}
-                            {% set percentage_change = ((current_month - last_month) / last_month) * 100 %}
-                            <p id="percentage">{{ percentage_change|round(2) }}%</p>
-                            <p>Change from last month</p>
+                            {% if last_month != 0 %}
+                                {% set percentage_change = ((current_month - last_month) / last_month) * 100 %}
+                                <p id="percentage">{{ percentage_change|round(2) }}%</p>
+                                <p>Change from last month</p>
+                            {% else %}
+                                <p>No growth from last month (previous month was 0 followers).</p>
+                            {% endif %}
                         {% else %}
                             <p>No previous data available for comparison.</p>
-                        {% endif %}                  
+                        {% endif %}                   
                     </div>
                 </div>
                 <div class="col">
                     <div class="card">
                         <h4>Future Forecast</h4>
-                        <p id="percentage">{{ (((forecast['future_data'][-1] - forecast['future_data'][0]) / forecast['future_data'][0]) * 100)|round(2) }}%</p>
-                        <p>Predicted Forecast for next 12 months</p>
+                        {% if forecast['future_data'][0] != 0 %}
+                            <p id="percentage">{{ (((forecast['future_data'][-1] - forecast['future_data'][0]) / forecast['future_data'][0]) * 100)|round(2) }}%</p>
+                            <p>Predicted Forecast for next 12 months</p>
+                        {% else %}
+                            <p>No valid forecast data to calculate the percentage change.</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
 
             <!-- Charts Section -->
-            <h4>Past Follower Data (Past 12 Months)</h4>
+            <h4>Monthly Follower Data (Past 12 Months)</h4>
             <div class="chart-container">
                 <canvas id="historicalFollowersChart" width="800" height="400"></canvas>
             </div>
@@ -72,7 +133,11 @@
                 if (historicalData.length > 0 && futureData.length > 0) {
                     // Calculate Percentage Change for Tooltips
                     const calculateChange = (data) => {
-                        return data.map((val, index, arr) => index === 0 ? 0 : (((val - arr[index - 1]) / arr[index - 1]) * 100).toFixed(2));
+                        return data.map((val, index, arr) => {
+                            if (index === 0) return "N/A"; // Skip first value (no previous month to compare)
+                            if (arr[index - 1] === 0 && val > 0) return "Initial Growth"; // Handle growth from 0 followers
+                            return (((val - arr[index - 1]) / arr[index - 1]) * 100).toFixed(2); // Calculate percentage change
+                        });
                     };
 
                     // Historical Followers Chart
@@ -151,7 +216,7 @@
                 }
             </script>
         {% else %}
-            <p>No forecast data available for this user. Please check back later or contact support.</p>
+            <p>No forecast data available for this user. Please upload the ZIP file you want to process.</p>
         {% endif %}
     </div>
 </div>

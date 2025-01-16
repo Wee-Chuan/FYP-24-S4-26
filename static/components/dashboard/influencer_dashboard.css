@@ -369,4 +369,80 @@ canvas {
     height: auto; 
 }
 
+/* Input Form Styling */
+form {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
+form input[type="file"] {
+    padding: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+form button {
+    background-color: #1abc9c;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #16a085;
+}
+
+.steps-ol {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 0px;
+}
+
+h4 {
+    margin-bottom: 0;
+}
+
+
+.steps-ol li {
+    background-color: #ffffff;
+    
+    padding: 15px;
+    font-size: 16px;
+    color: #555;
+}
+
+.steps-ol li strong {
+    color: #0073e6;
+}
+
+.steps-ol li a {
+    color: #0073e6;
+    text-decoration: none;
+}
+
+.steps-ol li a:hover {
+    text-decoration: underline;
+}
+
+
+.step-header {
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+}
+
+.step-details {
+    color: #555;
+    font-size: 16px;
+}
