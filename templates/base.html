@@ -24,9 +24,15 @@
                     <a href="{{ url_for('index') }}">SocioSith</a>
                 </div>
                 {% else %}
-                <div class="logo">
-                    SocioSith
-                </div> 
+                    {% if session.get('account_type') == 'admin' %}
+                        <div class="logo">
+                            SocioSith <span class="admin">| Administrator</span>
+                        </div> 
+                    {% else %}
+                        <div class="logo">
+                            SocioSith
+                        </div> 
+                    {% endif %}
                 {% endif %}
                 <ul class="nav-links">
                     <!--header for user that is logged in-->

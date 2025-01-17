@@ -19,6 +19,12 @@ html, body {
     text-decoration: none;
 }
 
+.admin {
+    font-size: 30px; 
+    font-weight: normal; 
+    color: #777; 
+}
+
 .logo a {
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 40px;

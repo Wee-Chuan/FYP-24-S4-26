@@ -62,6 +62,11 @@
     font-weight: bold;
 }
 
+.sidebar .divider {
+    border-top: 1px solid #ddd; /* Thin light gray line */
+    margin: 15px 0; /* Add some space around the divider */
+}
+
 /* dashboard container styling */
 .dashboard-container {
     flex-grow: 1;
