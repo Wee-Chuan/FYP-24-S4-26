@@ -4,6 +4,8 @@ from flask import Blueprint, render_template, redirect, url_for, session, flash,
 from entity.user import User
 from entity.followers_hist_entity import FollowerHist
 import networkVisFinal, globals, influencer_centrality_ranking
+import csv
+from apify_client import ApifyClient
 
 from werkzeug.utils import secure_filename
 
@@ -147,51 +149,76 @@ def followers():
 
 @influencer_boundary.route('/network')  # when 'Network Visualization' is clicked in the sidebar from influencer's side
 def network():
-    """
-    Route to generate and display the network visualization for the user.
-    """
-    try:
-        user_id = session.get('user_id')
-        user = User.get_profile(user_id)
-        username = user['username']
-        print(username)
+    return render_template('dashboard/influencer_menu/network.html')
 
-        # Ensure session is valid
-        if not user_id or not user:
-            flash("Session expired or user not found. Please log in again.", "danger")
-            return redirect(url_for('auth_boundary.login'))  # Redirect to login if session is invalid
 
-        # CHECKING IF ACCOUNT IS LINKEDDDDDDDDDDDDDDDDDDDDDDDDDDD 
-        if user['linked_social_account'] == "":
-            flash("Please link to your social media acccount first", "danger")
-            return redirect(url_for('dashboard_boundary.dashboard'))
+from flask import render_template, request
+import csv
+from apify_client import ApifyClient
 
-        # render the graph html files!
-        nodes = networkVisFinal.plot_user_network_with_3d(username, save_as_html=True)
+@influencer_boundary.route('/display_network', methods=['POST'])
+def display_network():
+    # Get the username from the POST request
+    username = request.form['username']
+
+    # Replace with your APIFY token
+    APIFY_API_TOKEN = "apify_api_iGbTvXBtw6Lawc81y3AvuZnoyKZ2IT156FKk"
+
+    # Initialize the ApifyClient with your API token
+    client = ApifyClient(APIFY_API_TOKEN)
+
+    # Prepare the Actor input for the Instagram Post scraper using the username entered in the form
+    run_input = {
+        "username": [username],  # Dynamically pass the username from the form
+        "resultsLimit": 1,  # Get 1 post to fetch comments from
+    }
+
+    # Run the Actor and wait for it to finish
+    run = client.actor("nH2AHrwxeTRJoN5hX").call(run_input=run_input)
+
+    # Collect the post URLs from the results
+    postURLs = []
+    for item in client.dataset(run["defaultDatasetId"]).iterate_items():
+        post_url = item.get("url")  # Access the post URL
+        postURLs.append(post_url)
+
+    # Prepare the Actor input for the Instagram Comments scraper
+    run_input = {
+        "directUrls": postURLs,
+        "resultsLimit": 1,  # Modify this number as needed to capture more comments
+    }
+
+    # Run the Actor and wait for it to finish
+    run = client.actor("SbK00X0JYCPblD2wp").call(run_input=run_input)
+
+    # Open a CSV file to save the comments data
+    with open('commentData.csv', 'w', newline='', encoding='utf-8') as csvfile:
+        # Fetch all the unique keys across all items
+        all_fieldnames = set()
+
+        # Fetch all items and find all the keys
+        for item in client.dataset(run["defaultDatasetId"]).iterate_items():
+            all_fieldnames.update(item.keys())
+
+        # Convert the set to a sorted list for consistent column order
+        all_fieldnames = sorted(list(all_fieldnames))
+
+        # Initialize the CSV writer
+        writer = csv.DictWriter(csvfile, fieldnames=all_fieldnames)
         
-        if nodes == None:
-            flash("An error occurred while generating the network visualization.", "danger")
-            return render_template(
-            'dashboard/influencer_menu/network.html',  
-            user_id=user_id,
-            user=user,
-            graph = False
-        )
-        
-        # Render the network visualization page
-        return render_template(
-            'dashboard/influencer_menu/network.html',  
-            user_id=user_id,
-            user=user,
-            graph = True,
-            central_nodes = nodes
-        )
-    except Exception as e:
-        # Handle unexpected errors
-        print(f"Error in network visualization: {e}")
-        flash("An error occurred while generating the network visualization.", "danger")
-        return redirect(url_for('dashboard_boundary.dashboard'))
+        # Write the header row with dynamic fields
+        writer.writeheader()
 
+        # Fetch and save Actor results from the run's dataset (all comments)
+        for item in client.dataset(run["defaultDatasetId"]).iterate_items():
+            # Write each comment as a new row in the CSV file
+            writer.writerow(item)
+
+    print("All comments saved to commentData.csv")
+    
+    # Return the template and pass the username as context only after all work is done
+    return render_template('dashboard/influencer_menu/network.html', username=username, fetched=True)
+    
 @influencer_boundary.route('/dashboard/ranking')
 def ranking():
     user_id = session.get('user_id')
