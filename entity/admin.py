@@ -565,6 +565,7 @@ class Admin:
                         'user_id': user_id,
                         'username': username,
                         'rating': review_data.get('rating'),
+                        'category': review_data.get('category'),
                         'review': review_data.get('review'),
                         'date': review_data.get('date'),
                         'is_selected': review_data.get('is_selected')

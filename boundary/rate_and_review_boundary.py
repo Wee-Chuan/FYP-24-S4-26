@@ -11,15 +11,16 @@ def rate_and_review():
 
     if request.method == 'POST':
         rating = request.form.get('rating')
+        category = request.form.get('category')
         review = request.form.get('review')
 
         # Save the review
         if rating and review:
-            User.save_rate_and_review(user_id, rating, review, username)
+            User.save_rate_and_review(user_id, rating, category, review, username)
             flash('Review Submitted', 'success')
             return redirect(url_for('dashboard_boundary.dashboard'))
         else:
-            flash('Please provide both rating and review', 'error')
+            flash('Please provide rating, category, and review', 'error')
     
     return render_template('rate_and_review/rate_and_review.html')
 
