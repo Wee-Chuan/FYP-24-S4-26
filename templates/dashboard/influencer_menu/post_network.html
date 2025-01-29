@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+{% block title %}Network Position{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='components/dashboard/influencer_dashboard.css') }}">
+    <style>
+        /* Set dimensions for the network graph */
+        #networkGraph {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ccc;
+        }
+
+        /* Hide the loading screen initially */
+        #loadingScreen {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #loadingScreen img {
+            width: 50px;
+            height: 50px;
+        }
+
+        /* Hide the analysis results and conversation details initially */
+        #analysisResults,
+        #conversationDetails {
+            display: none;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* Back button styling */
+        .back-btn {
+            margin: 20px 0;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <h3>Dashboard Menu</h3>
+            <ul class="menu">
+                <li><a href="{{ url_for('influencer_boundary.engagement_metrics') }}"><i class="fas fa-chart-line"></i> Engagement Metrics</a></li>
+                <li><a href="{{ url_for('influencer_boundary.followers') }}"><i class="fas fa-users"></i> Followers Forecast</a></li>
+                <li><a href="{{ url_for('influencer_boundary.network') }}"><i class="fas fa-network-wired"></i> Account Network Visualization</a></li>
+                <li><a href="{{ url_for('influencer_boundary.post_page') }}"><i class="fas fa-trophy"></i> Post Analysis</a></li>
+            </ul>
+        </aside>
+
+        <div class="dashboard-container">
+            <h3>Instagram Post Analysis</h3>
+            
+            <!-- Form to input the POST URL to analyze -->
+            <form id="usernameForm" method="POST" onsubmit="submitForm(event)">
+                <p>Enter Instagram Post URL to Analyze:</p>
+                <input type="url" id="URL" name="URL" required placeholder="https://www.instagram.com/p/xyz123/">
+                <button type="submit">Analyze</button>
+            </form>
+
+            <!-- Loading screen (initially hidden) -->
+            <div id="loadingScreen">
+                <p>Loading...</p>
+                <img src="{{ url_for('static', filename='images/loading.gif') }}" alt="Loading...">
+            </div>
+
+            <!-- Placeholder for the comment tree -->
+            <div id="analysisResults">
+                <!-- iframe will be inserted here dynamically -->
+                <iframe id="commentTreeIframe" style="width: 100%; height: 600px; border: 1px solid #ccc; display:none;"></iframe>
+            </div>
+
+            <!-- Placeholder for conversation details -->
+            <div id="conversationDetails" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function submitForm(event) {
+        event.preventDefault(); // Prevent the form from reloading the page
+    
+        // Show loading screen
+        document.getElementById("loadingScreen").style.display = "block";
+    
+        // Create a FormData object and send a POST request to the backend
+        var formData = new FormData(document.getElementById("usernameForm"));
+    
+        fetch('/post_analysis', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("loadingScreen").style.display = "none";
+    
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+    
+            // Open the comment tree URL in a new tab
+            if (data.comment_tree_url) {
+                window.open(data.comment_tree_url, '_blank');
+            }
+    
+            // Fetch the conversations.json file and display the conversation table
+            loadConversationTable(); // Load the conversation table dynamically
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+            document.getElementById("loadingScreen").style.display = "none";
+        });
+    }
+    
+
+    function loadConversationTable() {
+        fetch('/static/conversations.json')
+            .then(response => response.json())
+            .then(conversations => {
+                const conversationTableDiv = document.getElementById('conversationDetails');
+                let tableHtml = '<h3>Conversation List</h3><table>';
+                tableHtml += '<thead><tr><th>Conversation ID</th><th>Number of Comments</th></tr></thead><tbody>';
+
+                // Loop through conversations and create rows for each
+                for (const convoId in conversations) {
+                    const convo = conversations[convoId];
+                    tableHtml += `
+                        <tr onclick="showConversationDetails('${convoId}')">
+                            <td>${convo.conversation_id}</td>
+                            <td>${convo.comments.length}</td>
+                        </tr>
+                    `;
+                }
+
+                tableHtml += '</tbody></table>';
+                conversationTableDiv.innerHTML = tableHtml;
+
+                // Display the conversation table after data is loaded
+                document.getElementById("conversationDetails").style.display = "block";
+            })
+            .catch(error => {
+                console.error("Error loading conversation data:", error);
+            });
+    }
+
+    function showConversationDetails(convoId) {
+        fetch('/static/conversations.json')
+            .then(response => response.json())
+            .then(conversations => {
+                const convo = conversations[convoId];
+                const sortedComments = convo.comments.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)); // Sort by timestamp
+
+                let conversationHtml = `
+                    <h3>Conversation: ${convoId}</h3>
+                    <button class="back-btn" onclick="loadConversationTable()">Back to Conversation List</button>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Comment Text</th>
+                                <th>Likes</th>
+                                <th>Replies Count</th>
+                                <th>Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                sortedComments.forEach(comment => {
+                    conversationHtml += `
+                        <tr>
+                            <td>${comment.username}</td>
+                            <td>${comment.text}</td>
+                            <td>${comment.likes}</td>
+                            <td>${comment.replies_count}</td>
+                            <td>${comment.timestamp}</td>
+                        </tr>
+                    `;
+                });
+
+                conversationHtml += '</tbody></table>';
+                document.getElementById('conversationDetails').innerHTML = conversationHtml;
+            })
+            .catch(error => {
+                console.error("Error loading conversation details:", error);
+            });
+    }
+</script>
+{% endblock %}

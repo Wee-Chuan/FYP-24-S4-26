@@ -48,12 +48,13 @@
 
 /* Rating Input */
 .rate-review-container input[type="number"] {
-    width: 100%; /* Full width */
-    padding: 10px; /* Padding inside inputs */
-    margin-bottom: 20px; /* Space below inputs */
-    border: 1px solid #ccc; /* Light border */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 16px; /* Font size for inputs */
+    width: 100%; 
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    font-size: 16px; 
+    box-sizing: border-box;
 }
 
 /* Review Textarea */
@@ -65,6 +66,7 @@
     border-radius: 5px; 
     font-size: 16px; 
     resize: vertical; 
+    box-sizing: border-box;
 }
 
 /* Button Container */
@@ -114,3 +116,35 @@
     transform: scale(1.05); 
 }
 
+/* Style for the Select Element */
+.rate-review-container select {
+    width: 100%; 
+    padding: 10px; 
+    margin-bottom: 20px; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    font-size: 16px; 
+    background-color: #f9f9f9; 
+    color: #333; 
+    outline: none; 
+    cursor: pointer; 
+    box-sizing: border-box;
+}
+
+.rate-review-container select:hover {
+    border-color: #007c9d; 
+    background-color: #ffffff;
+}
+
+.rate-review-container select:focus {
+    border-color: #007c9d; 
+    box-shadow: 0 0 5px rgba(0, 124, 157, 0.5); 
+    background-color: #ffffff; 
+}
+
+.rate-review-container select option {
+    font-size: 16px; 
+    padding: 10px; 
+    color: #333; 
+    background-color: #ffffff;
+}

@@ -25,12 +25,16 @@ pip install bcrypt
 pip install requests
 pip install python-louvain
 
-
 pip install scikit-learn 
 pip install pandas
 pip install plotly
 pip install python-louvain
 pip install seaborn
+pip install bs4
+pip install apify-client
+pip install bertopic
+pip install classes
+pip install pyvis
 
 
 # BOUNDARY #
