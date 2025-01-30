@@ -1,11 +1,15 @@
-import os
-
+import network as nw
 from flask import Blueprint, render_template, redirect, url_for, session, flash, request, current_app
 from entity.user import User
 from entity.followers_hist_entity import FollowerHist
-import networkVisFinal, globals, influencer_centrality_ranking
+import influencer_centrality_ranking
 import csv
 from apify_client import ApifyClient
+from flask import jsonify
+from flask import request, jsonify
+from apify_client import ApifyClient
+import csv, os
+
 
 from werkzeug.utils import secure_filename
 
@@ -147,19 +151,93 @@ def followers():
         flash("An error occurred while fetching followers data.", "danger")
         return redirect(url_for('dashboard_boundary.dashboard'))
 
+@influencer_boundary.route('/post_page')  # when 'Network Visualization' is clicked in the sidebar from influencer's side
+def post_page():
+    return render_template('dashboard/influencer_menu/post_network.html')
+
+
+@influencer_boundary.route('/commenttree')  
+def commenttree():
+    return render_template('templates/comment_tree.html')
+
+
+from flask import request, jsonify
+from apify_client import ApifyClient
+import csv
+import createUsers as cu
+
+@influencer_boundary.route('/post_analysis', methods=['POST'])
+def post_analysis():
+    # Get the post URL from the form input
+    post_url = request.form.get('URL')
+
+    if not post_url:
+        return jsonify({'error': 'Post URL is required'}), 400
+
+    # Replace with your APIFY token
+    APIFY_API_TOKEN = "apify_api_iGbTvXBtw6Lawc81y3AvuZnoyKZ2IT156FKk"
+
+    # Initialize the ApifyClient with your API token
+    client = ApifyClient(APIFY_API_TOKEN)
+
+    # Prepare the input for the Instagram Comments scraper
+    comments_scraper_input = {
+        "directUrls": [post_url],
+        "includeNestedComments": True,
+        "isNewestComments": False,
+        "resultsLimit": 50
+    }
+
+    # Run the Actor and wait for it to finish
+    comments_run = client.actor("SbK00X0JYCPblD2wp").call(run_input=comments_scraper_input)
+
+    # Open a CSV file to save the comments data
+    csv_file_path = 'commentData.csv'  # Save in the static folder
+    with open(csv_file_path, 'w', newline='', encoding='utf-8') as csvfile:
+        # Fetch all the unique keys across all items
+        all_fieldnames = set()
+
+        # Fetch all items and find all the keys
+        for item in client.dataset(comments_run["defaultDatasetId"]).iterate_items():
+            all_fieldnames.update(item.keys())
+
+        # Convert the set to a sorted list for consistent column order
+        all_fieldnames = sorted(list(all_fieldnames))
+
+        # Initialize the CSV writer
+        writer = csv.DictWriter(csvfile, fieldnames=all_fieldnames)
+
+        # Write the header row with dynamic fields
+        writer.writeheader()
+
+        # Fetch and save Actor results from the run's dataset (all comments)
+        for item in client.dataset(comments_run["defaultDatasetId"]).iterate_items():
+            writer.writerow(item)
+
+    print(f"All comments saved to {csv_file_path}")
+
+    # Generate the network graph
+    cu.create_user_json()
+    cu.make_convo_file()
+    cu.show_network()
+
+    # Return success in JSON response
+    return jsonify({
+        'message': 'Post analysis completed.',
+        'comment_tree_url': '/static/comment_tree.html'
+    })
+
 @influencer_boundary.route('/network')  # when 'Network Visualization' is clicked in the sidebar from influencer's side
 def network():
     return render_template('dashboard/influencer_menu/network.html')
 
-
-from flask import render_template, request
-import csv
-from apify_client import ApifyClient
-
 @influencer_boundary.route('/display_network', methods=['POST'])
 def display_network():
     # Get the username from the POST request
-    username = request.form['username']
+    username = request.form.get('username')
+
+    if not username:
+        return jsonify({'error': 'Username is required'}), 400
 
     # Replace with your APIFY token
     APIFY_API_TOKEN = "apify_api_iGbTvXBtw6Lawc81y3AvuZnoyKZ2IT156FKk"
@@ -185,7 +263,7 @@ def display_network():
     # Prepare the Actor input for the Instagram Comments scraper
     run_input = {
         "directUrls": postURLs,
-        "resultsLimit": 1,  # Modify this number as needed to capture more comments
+        "resultsLimit": 300,  # Modify this number as needed to capture more comments
     }
 
     # Run the Actor and wait for it to finish
@@ -216,9 +294,13 @@ def display_network():
 
     print("All comments saved to commentData.csv")
     
-    # Return the template and pass the username as context only after all work is done
-    return render_template('dashboard/influencer_menu/network.html', username=username, fetched=True)
+    nw.generateGraphs()
     
+    # Return the username in a JSON response (no need for full page render)
+    return jsonify({
+        'username': username,
+    })
+
 @influencer_boundary.route('/dashboard/ranking')
 def ranking():
     user_id = session.get('user_id')
@@ -267,3 +349,20 @@ def ranking():
         user_score=user_score,
         score_diff=score_diff,
     )
+
+@influencer_boundary.route('/check-file', methods=['POST'])
+def check_file():
+    data = request.json
+    file_path = data.get('file_path')
+    if file_path and os.path.exists(file_path):
+        return jsonify({"exists": True, "message": "File exists."})
+    return jsonify({"exists": False, "message": "File does not exist."})
+
+
+@influencer_boundary.route('/display_sentiment_graph')
+def display_sentiment_graph():
+    return render_template('dashboard/influencer_menu/sentimentgraph.html')
+
+@influencer_boundary.route('/display_topic_graph')
+def display_topic_graph():
+    return render_template('dashboard/influencer_menu/topicnetwork.html')

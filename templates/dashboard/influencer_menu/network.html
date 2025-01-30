@@ -10,6 +10,18 @@
             height: 600px;
             border: 1px solid #ccc;
         }
+
+        /* Hide the loading screen initially */
+        #loadingScreen {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #loadingScreen img {
+            width: 50px;
+            height: 50px;
+        }
     </style>
 {% endblock %}
 
@@ -18,43 +30,74 @@
         <aside class="sidebar">
             <h3>Dashboard Menu</h3>
             <ul class="menu">
-                <li><a href="{{ url_for('influencer_boundary.engagement_metrics') }}"><i class="fas fa-chart-line"></i>Engagement Metrics</a></li>
-                <li><a href="{{ url_for('influencer_boundary.followers') }}"><i class="fas fa-users"></i>Followers Forecast</a></li>
-                <li><a href="{{ url_for('influencer_boundary.network') }}" class="active"><i class="fas fa-network-wired"></i>Network Visualization</a></li>
-                <li><a href="{{ url_for('influencer_boundary.ranking') }}"><i class="fas fa-trophy"></i>Network Position</a></li>
+                <li><a href="{{ url_for('influencer_boundary.engagement_metrics') }}"><i class="fas fa-chart-line"></i> Engagement Metrics</a></li>
+                <li><a href="{{ url_for('influencer_boundary.followers') }}"><i class="fas fa-users"></i> Followers Forecast</a></li>
+                <li><a href="{{ url_for('influencer_boundary.network') }}"><i class="fas fa-network-wired"></i> Account Network Visualization</a></li>
+                <li><a href="{{ url_for('influencer_boundary.post_page') }}"><i class="fas fa-trophy"></i> Post Analysis</a></li>
             </ul>
         </aside>
 
         <div class="dashboard-container">
-            <h2>Network Details for {{ user['username'] }}</h2>
-            <p>Analyze your influence within the network.</p>
+            <h3>Network Analysis</h3>
             
-            
-            <!-- Display the follower network graph -->
-            <h3>Follower Network Graph</h3>
+            <!-- Form to input the username to analyze -->
+            <form id="usernameForm" method="POST" onsubmit="submitForm(event)">
+                <label for="username">Enter Instagram Username to Analyze:</label>
+                <input type="text" id="username" name="username" required placeholder="e.g., john_doe">
+                <button type="submit">Analyze</button>
+            </form>
 
-            {% if graph %}
-                <h4>Graph 1: Network with Communities</h4>
-                <iframe src="{{ url_for('serve_graphs', filename='3d_network.html') }}" width="100%" height="600px"></iframe>
+            <!-- Loading screen (initially hidden) -->
+            <div id="loadingScreen">
+                <p>Loading...</p>
+                <img src="{{ url_for('static', filename='images/loading.gif') }}" alt="Loading...">
+            </div>
 
-                <h4>Graph 2: Influential Nodes Highlighted</h4>
-                <iframe src="{{ url_for('serve_graphs', filename='3d_network_centrality.html') }}" width="100%" height="600px"></iframe>
-
-                    <h4>Top Central Nodes:</h4>
-                <ul>
-                    {% for node, score in central_nodes.items() %}
-                        <li>{{ node }}: {{ score }}</li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>No data found.</p>
-            {% endif %}
-
-            
-
-
-
-        
+            <div id="analysisResults"></div>
+            <div id="sentimentGraph" data-sentiment-url="{{ url_for('influencer_boundary.display_sentiment_graph') }}"></div>
+            <div id="topicGraph" data-topic-url="{{ url_for('influencer_boundary.display_topic_graph') }}"></div>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function submitForm(event) {
+            event.preventDefault(); // Prevent the form from reloading the page
+
+            // Show loading
+            document.getElementById("loadingScreen").style.display = "block";
+            
+            // Create a FormData object and send a POST request to the backend
+            var formData = new FormData(document.getElementById("usernameForm"));
+            
+            fetch('/display_network', {
+                method: 'POST',  // Ensure method is POST
+                body: formData
+            })            
+
+            .then(response => response.json())
+            .then(data => {
+                // Hide loading and show the result
+                document.getElementById("loadingScreen").style.display = "none";
+                
+                // Dynamically update the page with the returned username
+                const username = data.username;
+                const analysisResultsDiv = document.getElementById("analysisResults");
+                analysisResultsDiv.innerHTML = `<p>Network analysis completed for <strong>${username}</strong></p>`;
+
+                const sentimentGraph = document.getElementById("sentimentGraph");
+                const sentimentUrl = sentimentGraph.getAttribute('data-sentiment-url');
+                sentimentGraph.innerHTML = `<iframe src="${sentimentUrl}" width="100%" height="600px" frameborder="0"></iframe>`;
+
+                const topicGraph = document.getElementById("topicGraph");
+                const topicUrl = topicGraph.getAttribute('data-topic-url');
+                topicGraph.innerHTML = `<iframe src="${topicUrl}" width="100%" height="600px" frameborder="0"></iframe>`;
+
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+                document.getElementById("loadingScreen").style.display = "none";
+            });
+        }
+    </script>        
 {% endblock %}

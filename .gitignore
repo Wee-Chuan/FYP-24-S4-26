@@ -1,6 +1,7 @@
 .env
 
 # Ignore virtual environment
+fyp_env3
 fyp_env
 
 __pycache__/
