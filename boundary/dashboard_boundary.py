@@ -21,12 +21,12 @@ def dashboard():
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INFLUENCER DASHBOARD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     elif account_type == 'influencer':
         
-        if user['linked_social_account']:
-            # get the ranking
-            ranking_dict = influencer_centrality_ranking.build_graph_and_calculate_centrality()
-            rank = next((i for i, key in enumerate(ranking_dict.keys()) if key == user['username']), None) + 1
-        else:
-            rank = "Not available"
+        # if user['linked_social_account']:
+        #     # get the ranking
+        #     ranking_dict = influencer_centrality_ranking.build_graph_and_calculate_centrality()
+        #     rank = next((i for i, key in enumerate(ranking_dict.keys()) if key == user['username']), None) + 1
+        # else:
+        #     rank = "Not available"
         
         # ~~~ can be removed ~~~ #
         # # Check if the linked social media account
@@ -49,7 +49,7 @@ def dashboard():
             total_likes=total_likes, 
             total_comments=total_comments, 
             total_shares=total_shares,
-            rank = rank
+            # rank = rank
         )
     
     

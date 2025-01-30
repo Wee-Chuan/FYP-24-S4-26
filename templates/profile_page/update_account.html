@@ -19,6 +19,15 @@
                 <label for="email">Email</label>
                 <input type="text" id="email" name="email" value="{{ user['email'] }}" required>
 
+                <label for="gender">Gender</label>
+                <select id="gender" name="gender" required>
+                    <option value="male" {% if user['gender'] == 'male' %}selected{% endif %}>Male</option>
+                    <option value="female"{% if user['gender'] == 'female' %}selected{% endif %}>Female</option>
+                </select>
+
+                <label for="age">Age</label>
+                <input type="number" id="age" name="age"  min="16" max="99" value="{{ user['age'] }}" required>
+
                 <label for="password">New Password (leave blank if not changing)</label>
                 <input type="password" id="password" name="password">
 
@@ -42,13 +51,13 @@
 
 
                 <!-- Additional fields for business analysts -->
-                {% if user.account_type == "business_analyst" %}
+                <!-- {% if user.account_type == "business_analyst" %}
                     <label for="business_name">Business Name</label>
                     <input type="text" id="business_name" name="business_name" value="{{ user.business_name }}" required>
 
                     <label for="business_number">Business Number</label>
                     <input type="text" id="business_number" name="business_number" value="{{ user.business_number }}" required>
-                {% endif %}
+                {% endif %} -->
                 
                 <div class="button-container">
                     <button type="submit">Update Account</button>

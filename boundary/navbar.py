@@ -14,6 +14,8 @@ def register():
     if request.method == 'POST':
         account_type = request.form['account_type']
         email = request.form['email']
+        gender = request.form['gender']
+        age = request.form['age']
         password = request.form['password']
         confirm_password = request.form['confirm_password']
         username = request.form['username']
@@ -52,7 +54,7 @@ def register():
         # if account_type == "business_analyst":
         #     User.create_user(username, email, password, account_type, business_number=business_number, business_name=business_name)
         
-        User.create_user(username, email, password, account_type)
+        User.create_user(username, email, gender, age, password, account_type)
         #    
         flash("User registered successfully!", "success")
         return redirect(url_for('navbar.login')) # navbar/login endpoint
