@@ -301,55 +301,6 @@ def display_network():
         'username': username,
     })
 
-@influencer_boundary.route('/dashboard/ranking')
-def ranking():
-    user_id = session.get('user_id')
-    user = User.get_profile(user_id)  # Fetch user profile using your custom method
-    username = user['username']
-
-    # CHECKING IF ACCOUNT IS LINKEDDDDDDDDDDDDDDDDDDDDDDDDDDD 
-    if user['linked_social_account'] == "":
-        flash("Please link to your social media acccount first", "danger")
-        return redirect(url_for('dashboard_boundary.dashboard'))
-
-    # Get ranked influencers (assuming it returns a dictionary {username: centrality_score})
-    ranked_influencers = influencer_centrality_ranking.build_graph_and_calculate_centrality()
-
-    # Sort influencers by centrality score in descending order
-    sorted_influencers = sorted(ranked_influencers.items(), key=lambda x: x[1], reverse=True)
-
-    # Prepare top 3 influencers
-    top_3_users = [
-        {"rank": i + 1, "username": user, "score": score}
-        for i, (user, score) in enumerate(sorted_influencers[:3])
-    ]
-
-    # Find the current user's rank and score
-    user_rank = next((i + 1 for i, (user, _) in enumerate(sorted_influencers) if user == username), None)
-    user_score = ranked_influencers.get(username, 0)
-    score_diff = ranked_influencers.get(sorted_influencers[0][0], 0) - user_score if user_rank != 1 else None
-
-    # Get 3 users above and below the current user (if available)
-    if user_rank:
-        surrounding_indices = range(max(0, user_rank - 4), min(len(sorted_influencers), user_rank + 3))
-        surrounding_users = [
-            {"rank": i + 1, "username": user, "score": score}
-            for i, (user, score) in enumerate(sorted_influencers) if i in surrounding_indices
-        ]
-    else:
-        surrounding_users = []
-
-    return render_template(
-        'dashboard/influencer_menu/ranking.html',
-        username=username,
-        top_3_users=top_3_users,
-        surrounding_users=surrounding_users,
-        current_user=username,
-        user_rank=user_rank,
-        user_score=user_score,
-        score_diff=score_diff,
-    )
-
 @influencer_boundary.route('/check-file', methods=['POST'])
 def check_file():
     data = request.json

@@ -88,9 +88,8 @@
 
         <iframe id="hehe" src= "static/comment_tree.html"style="width: 100%; height: 600px; border: 1px solid #ccc; display:none;"></iframe>
 
-        <div id="analysisResults">
-            <iframe id="commentTreeIframe" style="width: 100%; height: 600px; border: 1px solid #ccc;"></iframe>
-        </div>
+        <iframe id="centralityGraph" src= "static/post_graph.html"style="width: 100%; height: 600px; border: 1px solid #ccc; display:none;"></iframe>
+        
 
         <div id="conversationDetails" style="margin-top: 20px;"></div>
     </div>
@@ -117,19 +116,18 @@
                 return;
             }
 
-            if (data.comment_tree_url) {
-                window.open(data.comment_tree_url, '_blank');
-            }
-
             loadConversationTable();
+            location.reload();
         })
         .catch(error => {
             console.error("Error fetching data:", error);
             document.getElementById("loadingScreen").style.display = "none";
         });
+
+        
     }
 
-    let currentPage = 1; // Default to the first page
+let currentPage = 1; // Default to the first page
 const resultsPerPage = 10; // Limit results per page
 
 function loadConversationTable() {
@@ -271,7 +269,6 @@ function nextPage() {
                 console.log("tre have")
                 commenttree = document.getElementById("hehe");
                 commenttree.style.display = "block";
-                // Perform your custom logic here
             } else {
                 console.log(data.message);
                 console.log("HELLO");
@@ -281,9 +278,31 @@ function nextPage() {
             console.error('Error checking file:', error);
         }
 
+        filePath = 'static/post_graph.html'; // Replace with actual file path
+        try {
+            const response = await fetch('/check-file', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ file_path: filePath })
+            });
 
+            const data = await response.json();
+            if (data.exists) {
+                centralityGraph = document.getElementById('centralityGraph');
+                centralityGraph.style.display = "block";
+            } else {
+                console.log(data.message);
+                console.log("HELLO");
+                console.log(filePath);
+            }
+        } catch (error) {
+            console.error('Error checking file:', error);
+        }
 
     })();
+    
 
     
 </script>
