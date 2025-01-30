@@ -55,6 +55,7 @@
 
 .update-account-container input[type="text"],
 .update-account-container input[type="password"],
+input[type="number"],
 .update-account-container select {
     width: 100%; /* Full width */
     padding: 10px; /* Padding inside inputs */

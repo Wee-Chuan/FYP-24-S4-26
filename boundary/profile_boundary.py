@@ -13,10 +13,20 @@ def update_account():
     
     # Check if any data is changed
     current_user_data = User.get_profile(user_id)
+
+    if current_user_data is None:
+        flash("User profile not found!", "danger")
+        return redirect(url_for('dashboard_boundary.dashboard'))
+    
+    # Safely handle missing fields
+    current_gender = current_user_data.get('gender', '') 
+    current_age = current_user_data.get('age', '') 
     
     if request.method == 'POST':
         username = request.form['username']
         email = request.form['email']
+        gender = request.form['gender']
+        age = request.form['age']
         password = request.form.get('password')  
         confirm_password = request.form['confirm_password']
         account_type = request.form['account_type'] 
@@ -30,6 +40,10 @@ def update_account():
         if current_user_data['username'] != username:
             changes_made = True
         if current_user_data['email'] != email:
+            changes_made = True
+        if current_gender != gender:
+            changes_made = True
+        if current_age != age:
             changes_made = True
         if current_user_data['account_type'] != account_type:
             changes_made = True
@@ -51,7 +65,7 @@ def update_account():
         # If there is changes
         if changes_made:
             # Call the update_user method with the new data
-            User.update_user(user_id, username, email, password, account_type, business_name, business_number)
+            User.update_user(user_id, username, email, gender, age, password, account_type, business_name, business_number)
             flash("Account details updated successfully!", "success")
         else:
             flash("No changes were made to your account.", "info")  # Notify the user

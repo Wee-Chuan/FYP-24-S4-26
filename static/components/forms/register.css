@@ -47,7 +47,8 @@ label {
 
 /* ============================= Input Field Styling ============================= */
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="number"] {
     width: 100%; /* Full width */
     padding: 10px; /* Spacing inside the input */
     margin-bottom: 20px; /* Spacing between inputs */
