@@ -3,6 +3,7 @@ import json
 import re
 from collections import defaultdict
 from postclasses import Comment, User
+import matplotlib.pyplot as plt
 
 def extract_parent_id_from_url(url):
     """Extract the parent ID from the URL."""
@@ -248,3 +249,4 @@ def show_network():
     conversation_file = 'static/conversations.json'  # Input JSON file containing conversations data
     conversations_data = load_conversations(conversation_file)
     create_conversation_tree(conversations_data)
+    
