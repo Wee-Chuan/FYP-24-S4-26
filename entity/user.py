@@ -48,6 +48,7 @@ if not firebase_admin._apps:
 db = firestore.client()
 
 class User:
+    # ~~~ can be removed ~~~ #
     # @staticmethod
     # def generate_followers_following(username, num_users, follower_limit=20):
     #     """Generate fake followers and following lists for a new user."""
@@ -74,34 +75,35 @@ class User:
 
     #     return follower_list, following_list
     
-    @staticmethod
-    def generate_social_accounts(user_id, username):
-        """Generates fake social accounts for a user and stores them in Firestore."""
-        platforms = ['twitter_social_accounts', 'facebook_social_accounts']
+    # ~~~ can be removed ~~~ #
+    # @staticmethod
+    # def generate_social_accounts(user_id, username):
+    #     """Generates fake social accounts for a user and stores them in Firestore."""
+    #     platforms = ['twitter_social_accounts', 'facebook_social_accounts']
         
-        for platform in platforms:
-            # Generate fake login details
-            account_username = username  
-            account_password = username
+    #     for platform in platforms:
+    #         # Generate fake login details
+    #         account_username = username  
+    #         account_password = username
 
-            # Hash the password for storage
-            hashed_password = bcrypt.hashpw(account_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    #         # Hash the password for storage
+    #         hashed_password = bcrypt.hashpw(account_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
-            ## Generate fake social media data
-            # follower_list, following_list = User.generate_followers_following(username, 15)
-            social_data = {
-                'username': account_username,
-                'password': hashed_password,
-                'profile_created': firestore.SERVER_TIMESTAMP  # Timestamp for when the account was created
-            }
+    #         ## Generate fake social media data
+    #         # follower_list, following_list = User.generate_followers_following(username, 15)
+    #         social_data = {
+    #             'username': account_username,
+    #             'password': hashed_password,
+    #             'profile_created': firestore.SERVER_TIMESTAMP  # Timestamp for when the account was created
+    #         }
 
-            # Store data in the respective social media collection
-            db.collection(platform).document(user_id).set(social_data)
+    #         # Store data in the respective social media collection
+    #         db.collection(platform).document(user_id).set(social_data)
 
-        print(f"Fake social accounts created for user {username}.")
+    #     print(f"Fake social accounts created for user {username}.")
         
     @staticmethod
-    def create_user(username, email, password, account_type, business_number=0, business_name=""):
+    def create_user(username, email, password, account_type):
         """Creates a new user and stores the hashed password in Firestore."""
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         user_id = str(uuid.uuid4())  # Generate a unique UUID for admin reference
@@ -113,16 +115,19 @@ class User:
             'account_type': account_type,
             'user_id': user_id,
             'is_suspended': False,
-            'linked_social_account': ""
+            # 'linked_social_account': "" # ~~~ can be removed ~~~ #
         }
-        # Handle fields based on account type
-        if account_type == "business_analyst":
-            user_data['business_name'] = business_name  
-            user_data['business_number'] = business_number  # Store business number
-            user_data['is_approved'] = False
-        else:
-            # Generate and store fake social accounts for the user
-            User.generate_social_accounts(user_id, username)
+
+        # ~~~ can be removed ~~~ #
+        # # Handle fields based on account type 
+        # if account_type == "business_analyst":
+        #     user_data['business_name'] = business_name  
+        #     user_data['business_number'] = business_number  # Store business number
+        #     user_data['is_approved'] = False
+        # else:
+        #     # Generate and store fake social accounts for the user
+        #     User.generate_social_accounts(user_id, username)
+        # ~~~ can be removed ~~~ #
             
         db.collection('users').document(user_id).set(user_data)
 
@@ -199,11 +204,12 @@ class User:
             update_data['password'] = hashed_password
         if account_type is not None:
             update_data['account_type'] = account_type
-        if account_type == 'business_analyst':
-            if business_name is not None:
-                update_data['business_name'] = business_name
-            if business_number is not None:
-                update_data['business_number'] = business_number
+        # ~~~ can be removed ~~~ #
+        # if account_type == 'business_analyst':
+        #     if business_name is not None:
+        #         update_data['business_name'] = business_name
+        #     if business_number is not None:
+        #         update_data['business_number'] = business_number
 
         # Update only if there's any data to change
         if update_data:
@@ -228,87 +234,88 @@ class User:
         except Exception as e:
             print(f"Error deleting user account: {e}")
 
-    # ================ Social Media Accounts ================ #
-    @staticmethod
-    def get_social_account(user_id, platform):
-        """Fetch social media data for a specific platform for the user from Firestore."""
-        try:
-            # Validate the platform
-            valid_platforms = ['twitter_social_accounts', 'facebook_social_accounts']
-            if platform not in valid_platforms:
-                raise ValueError(f"Invalid platform: {platform}. Choose from {valid_platforms}.")
+    # ~~~ can be removed ~~~ #
+    # # ================ Social Media Accounts ================ #
+    # @staticmethod
+    # def get_social_account(user_id, platform):
+    #     """Fetch social media data for a specific platform for the user from Firestore."""
+    #     try:
+    #         # Validate the platform
+    #         valid_platforms = ['twitter_social_accounts', 'facebook_social_accounts']
+    #         if platform not in valid_platforms:
+    #             raise ValueError(f"Invalid platform: {platform}. Choose from {valid_platforms}.")
 
-            # Fetch the social media account data
-            doc_ref = db.collection(platform).document(user_id)
-            doc = doc_ref.get()
-            if doc.exists:
-                return doc.to_dict()  # Return the account data
-            else:
-                return None  # No account found for the user
-        except ValueError as ve:
-            print(f"Validation error: {ve}")
-            raise
-        except Exception as e:
-            print(f"Error fetching social account for user {user_id} on platform {platform}: {e}")
-            return None
+    #         # Fetch the social media account data
+    #         doc_ref = db.collection(platform).document(user_id)
+    #         doc = doc_ref.get()
+    #         if doc.exists:
+    #             return doc.to_dict()  # Return the account data
+    #         else:
+    #             return None  # No account found for the user
+    #     except ValueError as ve:
+    #         print(f"Validation error: {ve}")
+    #         raise
+    #     except Exception as e:
+    #         print(f"Error fetching social account for user {user_id} on platform {platform}: {e}")
+    #         return None
 
 
-    @staticmethod
-    def update_linked_social(user_id, social_media):
-        """Update the user document to mark the social media account as linked."""
-        try:
-            user_ref = db.collection('users').document(user_id)
+    # @staticmethod
+    # def update_linked_social(user_id, social_media):
+    #     """Update the user document to mark the social media account as linked."""
+    #     try:
+    #         user_ref = db.collection('users').document(user_id)
 
-            # Prepare the update data
-            update_data = {
-                'linked_social_account': social_media  # # Set to 'twitter', 'facebook', etc.
-            }
+    #         # Prepare the update data
+    #         update_data = {
+    #             'linked_social_account': social_media  # # Set to 'twitter', 'facebook', etc.
+    #         }
 
-            # Update the user document with the new field
-            user_ref.update(update_data)
-            print(f"User {user_id} social account linked successfully to {social_media}.")
-        except Exception as e:
-            print(f"Error updating linked social account for user {user_id} to {social_media}: {e}")
-            return None
+    #         # Update the user document with the new field
+    #         user_ref.update(update_data)
+    #         print(f"User {user_id} social account linked successfully to {social_media}.")
+    #     except Exception as e:
+    #         print(f"Error updating linked social account for user {user_id} to {social_media}: {e}")
+    #         return None
 
-    @staticmethod
-    def check_social_exist(user_id, platform):    
-        """Check if the social media account is valid for the user."""
-        try:
-            # Check if social media account exists for the given platform
-            doc_ref = db.collection(platform).document(user_id)
-            doc = doc_ref.get()
+    # @staticmethod
+    # def check_social_exist(user_id, platform):    
+    #     """Check if the social media account is valid for the user."""
+    #     try:
+    #         # Check if social media account exists for the given platform
+    #         doc_ref = db.collection(platform).document(user_id)
+    #         doc = doc_ref.get()
 
-            # Return True if the social account exists, else False
-            return doc.exists
-        except Exception as e:
-            print(f"Error checking existence of social account for user {user_id} on platform {platform}: {e}")
-            return False
+    #         # Return True if the social account exists, else False
+    #         return doc.exists
+    #     except Exception as e:
+    #         print(f"Error checking existence of social account for user {user_id} on platform {platform}: {e}")
+    #         return False
     
-    @staticmethod
-    def check_if_social_account_linked(user_id):
-        """Check if the user has already linked the given social media platform."""
-        try:
-            user_ref = db.collection('users').document(user_id)
-            user_doc = user_ref.get()
+    # @staticmethod
+    # def check_if_social_account_linked(user_id):
+    #     """Check if the user has already linked the given social media platform."""
+    #     try:
+    #         user_ref = db.collection('users').document(user_id)
+    #         user_doc = user_ref.get()
 
-            # Check if the document exists
-            if not user_doc.exists:
-                print(f"User document with ID {user_id} does not exist.")
-                return ""
+    #         # Check if the document exists
+    #         if not user_doc.exists:
+    #             print(f"User document with ID {user_id} does not exist.")
+    #             return ""
             
-            current_data = user_doc.to_dict()
+    #         current_data = user_doc.to_dict()
 
-            linked_social_account = current_data["linked_social_account"]
+    #         linked_social_account = current_data["linked_social_account"]
 
-            return linked_social_account
-        except Exception as e:
-            print(f"Error checking if social account is linked for user {user_id}: {e}")
-            return "" 
+    #         return linked_social_account
+    #     except Exception as e:
+    #         print(f"Error checking if social account is linked for user {user_id}: {e}")
+    #         return "" 
         
-        # if 'linked_social_account' in current_data and current_data['linked_social_account'] != "":
-        #     return True  # Social media account is already linked
-        # return False
+    #     # if 'linked_social_account' in current_data and current_data['linked_social_account'] != "":
+    #     #     return True  # Social media account is already linked
+    #     # return False
     
     # ========================================================== #
 
@@ -361,6 +368,7 @@ class User:
     #     plt.close(fig)  # Close the plot to avoid display issues
 
     #     return interactive_plot
+    # ~~~ can be removed ~~~ #
     
     
     #=======================KEVIN======================================================================#
@@ -431,7 +439,7 @@ class User:
             return None
     
     #===================== Ratings and Reviews ==============================#
-    def save_rate_and_review(user_id, rating, review, username):
+    def save_rate_and_review(user_id, rating, category, review, username):
         """
         Add ratings and reviews into Firestore.
         """
@@ -451,6 +459,7 @@ class User:
             # Add the rating and review as a new document in the 'reviews' subcollection
             reviews_ref.add({
                 'rating': rating,
+                'category': category,
                 'review': review,
                 'date': datetime.now(),
                 'is_selected': False

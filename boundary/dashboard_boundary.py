@@ -28,8 +28,9 @@ def dashboard():
         else:
             rank = "Not available"
         
-        # Check if the linked social media account
-        linked_account = User.check_if_social_account_linked(user_id)
+        # ~~~ can be removed ~~~ #
+        # # Check if the linked social media account
+        # linked_account = User.check_if_social_account_linked(user_id)
 
         # Fetch total engagement metrics for the user
         metrics = User.visualize_engagement_metrics(user_id)
@@ -41,28 +42,10 @@ def dashboard():
         else:
             total_likes = total_comments = total_shares = 0
 
-        # # Fetch historical data for the user
-        # historical_data = FollowerHist.get_followers_data(user_id) # ~~~~~~~unsure of followerHist~~~~~~~~~~~
-        # if historical_data:
-        #     forecast, error = FollowerHist.calculate_follower_growth(historical_data)
-
-        #     if not error:
-        #         last_month_followers = forecast['historical_data'][-2] if len(forecast['historical_data']) > 1 else 0
-        #         this_month_followers = forecast['historical_data'][-1]
-        #         followers_gained = (
-        #             (this_month_followers - last_month_followers) 
-        #             if last_month_followers > 0 else 0
-        #         )
-        #     else:
-        #         followers_gained = None
-        # else:
-        #     followers_gained = None
-
         return render_template(
             'dashboard/influencer_dashboard.html', # html page for influencer dashboard, with needed paras
-            user_id=user_id, user=user, 
-            #followers_gained=followers_gained, 
-            linked_account=linked_account,
+            user_id=user_id, user=user,  
+            # linked_account=linked_account,
             total_likes=total_likes, 
             total_comments=total_comments, 
             total_shares=total_shares,

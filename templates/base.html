@@ -56,9 +56,7 @@
                                 <a href="{{ url_for('profile_boundary.update_account') }}">Profile</a>
                                 <!--profile_boundary.update_account endpoint-->
                             </li>
-                            <li class="{{ 'active' if request.path == url_for('profile_boundary.link_social') else '' }}">
-                                <a href="{{ url_for('profile_boundary.link_social') }}">Link Social</a>
-                            </li>
+                            
                             <li class="{{ 'active' if request.path == url_for('rate_and_review_boundary.rate_and_review') else '' }}">
                                 <a href="{{ url_for('rate_and_review_boundary.rate_and_review') }}">Leave a Review</a>
                             </li>

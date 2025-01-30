@@ -82,47 +82,47 @@ def delete_account():
 
     return redirect(url_for('index'))
 
-@profile_boundary.route("/link_social", methods=['GET', 'POST'])
-def link_social():
-    user_id = session.get('user_id')
+# @profile_boundary.route("/link_social", methods=['GET', 'POST'])
+# def link_social():
+#     user_id = session.get('user_id')
 
-    # Only logged-in users should be able to link social accounts
-    if not user_id:
-        flash('You must be logged in to link social media accounts.', 'danger')
-        return redirect(url_for('navbar.login'))
+#     # Only logged-in users should be able to link social accounts
+#     if not user_id:
+#         flash('You must be logged in to link social media accounts.', 'danger')
+#         return redirect(url_for('navbar.login'))
     
-    # Check if the social media account is already linked
-    linked_account = User.check_if_social_account_linked(user_id)
+#     # Check if the social media account is already linked
+#     linked_account = User.check_if_social_account_linked(user_id)
     
-    if request.method == 'POST':
-        social_media = request.form.get('social_media')
-        username = request.form.get('username')
-        password = request.form.get('password')
+#     if request.method == 'POST':
+#         social_media = request.form.get('social_media')
+#         username = request.form.get('username')
+#         password = request.form.get('password')
 
-        if not social_media or not username or not password:
-            flash('Please provide both social media platform and login details.', 'danger')
-            return redirect(url_for('profile_boundary.link_social'))
+#         if not social_media or not username or not password:
+#             flash('Please provide both social media platform and login details.', 'danger')
+#             return redirect(url_for('profile_boundary.link_social'))
         
-        # Check which platform to process
-        platform = f"{social_media}_social_accounts"
+#         # Check which platform to process
+#         platform = f"{social_media}_social_accounts"
 
-        if linked_account == social_media:
-            flash(f"This {social_media.capitalize()} account is already linked.", 'danger')
-            return render_template('profile_page/link_social.html')
+#         if linked_account == social_media:
+#             flash(f"This {social_media.capitalize()} account is already linked.", 'danger')
+#             return render_template('profile_page/link_social.html')
 
-        # Retrieve the stored account details
-        social_account = User.get_social_account(user_id, platform)
-        if social_account:
-            # Validate username and password
-            stored_username = social_account.get('username')
-            stored_password = social_account.get('password')  # Assumes password is hashed
+#         # Retrieve the stored account details
+#         social_account = User.get_social_account(user_id, platform)
+#         if social_account:
+#             # Validate username and password
+#             stored_username = social_account.get('username')
+#             stored_password = social_account.get('password')  # Assumes password is hashed
 
-            if username == stored_username and bcrypt.checkpw(password.encode('utf-8'), stored_password.encode('utf-8')):
-                User.update_linked_social(user_id, social_media)
-                flash(f'{social_media.capitalize()} account linked successfully.', 'success')
-            else:
-                flash('Invalid username or password. Please try again.', 'danger')
-        else:
-            flash(f"{social_media.capitalize()} account does not exist", "danger")
+#             if username == stored_username and bcrypt.checkpw(password.encode('utf-8'), stored_password.encode('utf-8')):
+#                 User.update_linked_social(user_id, social_media)
+#                 flash(f'{social_media.capitalize()} account linked successfully.', 'success')
+#             else:
+#                 flash('Invalid username or password. Please try again.', 'danger')
+#         else:
+#             flash(f"{social_media.capitalize()} account does not exist", "danger")
     
-    return render_template('profile_page/link_social.html')
+#     return render_template('profile_page/link_social.html')

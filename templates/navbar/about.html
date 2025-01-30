@@ -48,33 +48,30 @@
         <!-- Section for Testimonials -->
         <section class="testimonials">
             <h2>Customer Testimonials</h2>
+
+            <!-- Dropdown to select a category -->
+            <div class="filter-container">
+                <label for="testimonial-category">Filter by Category:</label>
+                <select id="testimonial-category" onchange="filterTestimonials()">
+                    <option value="all">All</option>
+                    <option value="service">Service</option>
+                    <option value="usability">Usability</option>
+                    <option value="performance">Performance</option>
+                    <option value="design">Design</option>
+                    <option value="support">Support</option>
+                </select>
+            </div>
+
             <div class="testimonial-carousel">
                 <!-- Button to show the previous testimonial -->
                 <button class="carousel-button left" onclick="showPreviousReview()">&#9664;</button>
                 
                 <!-- Block to display the current testimonial -->
-                {% if testimonials %}
-                    <!-- Loop through the selected testimonials -->
-                    <div class="carousel-item active">
-                        <blockquote id="testimonial-text">
-                            <p>
-                                <strong>{{ testimonials[0].username }}</strong>
-                                <span id="rating-stars">
-                                    {% for i in range(testimonials[0].rating|int) %}
-                                        <i class="fas fa-star"></i>
-                                    {% endfor %}
-                                </span>
-                            </p>
-                            <p>"{{ testimonials[0].review }}"</p>
-                        </blockquote>
-                    </div>
-                {% else %}
-                    <div class="carousel-item active">
-                        <blockquote id="testimonial-text">
-                            No reviews available at the moment.
-                        </blockquote>
-                    </div>
-                {% endif %}
+                <div class="carousel-item active">
+                    <blockquote id="testimonial-text">
+                        No reviews available at the moment.
+                    </blockquote>
+                </div>
                 
                 <!-- Button to show the next testimonial -->
                 <button class="carousel-button right" onclick="showNextReview()">&#9654;</button>
@@ -92,10 +89,14 @@
                 // The reviewer's username
                 author: "{{ testimonial.username }}",
                 // The rating (number of stars)
-                rating: "{{ testimonial.rating }}"
+                rating: "{{ testimonial.rating }}",
+                category: "{{ testimonial.category }}"
             }{% if not loop.last %},{% endif %}
         {% endfor %}
     ];
+
+    // Filtered testimonials array
+    let filteredTestimonials = testimonials;
 
     // Current index of the testimonial being displayed
     let currentIndex = 0;
@@ -104,8 +105,14 @@
     function updateTestimonial() {
         // Select the blockquote element to update its content
         const testimonialText = document.getElementById('testimonial-text');
+
+        if (filteredTestimonials.length === 0) {
+            testimonialText.innerHTML = "No reviews available for this category.";
+            return;
+        }
+
         // Get the current testimonial data
-        const currentTestimonial = testimonials[currentIndex];
+        const currentTestimonial = filteredTestimonials[currentIndex];
 
         // Generate star icons for the rating
         let stars = '';
@@ -114,31 +121,53 @@
         }
 
         // Update the testimonial content with the text, author, and stars
-        testimonialText.innerHTML = `<p><strong>${currentTestimonial.author}</strong> </p>
-                                     <p><span id="rating-stars">${stars}</span></p>
-                                     <p>"${currentTestimonial.text}"</p>`;
+        testimonialText.innerHTML = `
+            <p><strong>${currentTestimonial.author}</strong> </p>
+            <p><span id="rating-stars">${stars}</span></p>
+            <p>"${currentTestimonial.text}"</p>
+        `;
 
-        // Reset and reapply the active class for a fade-in effect
-        testimonialText.classList.remove('active');
-        setTimeout(() => testimonialText.classList.add('active'), 10);
+        // // Reset and reapply the active class for a fade-in effect
+        // testimonialText.classList.remove('active');
+        // setTimeout(() => testimonialText.classList.add('active'), 10);
+    }
+
+    // Function to filter testimonials based on category
+    function filterTestimonials() {
+        const selectedCategory = document.getElementById('testimonial-category').value;
+
+        if (selectedCategory === 'all') {
+            filteredTestimonials = testimonials;
+        } else {
+            filteredTestimonials = testimonials.filter(
+                (testimonial) => testimonial.category === selectedCategory
+            );
+        }
+
+        currentIndex = 0; // Reset index to 0 for the new category
+        updateTestimonial(); // Update the testimonial display
     }
 
     // Function to show the next testimonial in the carousel
     function showNextReview() {
-        // Increment the index, wrapping around if at the end
-        currentIndex = (currentIndex + 1) % testimonials.length;
-        updateTestimonial(); // Update the displayed testimonial
+        if (filteredTestimonials.length > 0) {
+            currentIndex = (currentIndex + 1) % filteredTestimonials.length;
+            updateTestimonial();
+        }
     }
 
     // Function to show the previous testimonial in the carousel
     function showPreviousReview() {
-        // Decrement the index, wrapping around if at the beginning
-        currentIndex = (currentIndex - 1 + testimonials.length) % testimonials.length;
-        updateTestimonial(); // Update the displayed testimonial
+        if (filteredTestimonials.length > 0) {
+            currentIndex = (currentIndex - 1 + filteredTestimonials.length) % filteredTestimonials.length;
+            updateTestimonial();
+        }
     }
 
     // Initialize the first testimonial when the page is loaded
-    document.addEventListener("DOMContentLoaded", updateTestimonial);
+    document.addEventListener("DOMContentLoaded", () => {
+        updateTestimonial();
+    });
 </script>
 {% endblock %}
 
