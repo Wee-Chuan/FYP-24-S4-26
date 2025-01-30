@@ -8,7 +8,7 @@ from apify_client import ApifyClient
 from flask import jsonify
 from flask import request, jsonify
 from apify_client import ApifyClient
-import csv
+import csv, os
 
 
 from werkzeug.utils import secure_filename
@@ -349,6 +349,14 @@ def ranking():
         user_score=user_score,
         score_diff=score_diff,
     )
+
+@influencer_boundary.route('/check-file', methods=['POST'])
+def check_file():
+    data = request.json
+    file_path = data.get('file_path')
+    if file_path and os.path.exists(file_path):
+        return jsonify({"exists": True, "message": "File exists."})
+    return jsonify({"exists": False, "message": "File does not exist."})
 
 
 @influencer_boundary.route('/display_sentiment_graph')

@@ -157,9 +157,6 @@ def generate_random_color():
 
 import os
 from pyvis.network import Network
-
-import os
-from pyvis.network import Network
 import random
 
 # Function to generate random colors
@@ -190,7 +187,7 @@ def create_conversation_tree(conversations_data):
                     net.add_node(
                         comment_id,
                         label=f"Comment {comment_id}",
-                        title=f"Community: {convo_id}<br>{comment['text']}",
+                        title=f"Community: {convo_id} \nComment: {comment['text']}",
                         size=10,
                         color=conversation_colors[convo_id]
                     )
