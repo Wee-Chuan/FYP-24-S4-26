@@ -78,11 +78,13 @@
 }
 
 .dashboard-container .header {
+    background-color: #f8f9fa;
+    padding: 30px 20px;
+    border-bottom: 2px solid #e1e1e1; 
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    margin-bottom: 20px;
-    padding: 0 10px;
+    justify-content: center;
 }
 
 .dashboard-container .header h2 {
@@ -92,240 +94,56 @@
     margin: 0;
 }
 
-.dashboard-container .header .linked-info {
-    font-size: 1em;
-    color: #555;
-    background-color: #f1f1f1;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.dashboard-container .header p {
+    font-size: 18px;
+    color: #555; 
+    margin-top: 5px;
 }
 
-.dashboard-container .header .linked-info p {
-    margin: 0;
-    font-size: 1em;
-    font-weight: 500;
-}
 
-/* General Metrics Section */
-.general-metrics {
-    background-color: #fff;
+/* Feature Explanation Section */
+.feature-explanation {
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
 }
 
-.general-metrics h3 {
+.feature-explanation h3 {
     font-size: 1.8em;
+    color: #2c3e50;
     margin-bottom: 20px;
 }
-.metric-grid{
+
+.feature-grid {
     display: flex;
-    gap: 40px;
-    justify-content: center;
-    margin-top: 40px;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
 }
 
-.metric {
-    background: #fff;
-    border-radius: 10px;
-    padding: 50px;
-    width: 300px;
-    height: 500px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 250px;
-    text-align: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    flex-grow: 1;
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.metric:hover {
-    transform: translateY(-5px); /* Slight lift effect */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
-}
-
-.metric h4 {
-    margin-bottom: 15px;
-    font-size: 1.2em;
-    color: #333;
-}
-
-.post-info {
-    display: flex;
-    align-items: center;
-}
-
-.post-info img {
-    max-width: 100px;
-    margin-right: 15px;
-}
-
-.metric ul {
-    list-style-type: disc;
-    padding-left: 20px;
-}
-
-.metric p{
-    font-size: 0.9em;
-}
-
-/* Followers Metrics Styling */
-.metric.followers-gained {
-    text-align: center;
-    border-radius: 10px;
-    padding: 50px;
-    width: 300px;
-    height: 500px;
-    background: linear-gradient(135deg, #f9f9f9, #e8f5e9);
+.feature {
+    background-color: #ecf0f1;
+    padding: 20px;
+    border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
-.followers-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 10px;
+.feature h4 {
+    font-size: 1.4em;
+    color: #2c3e50;
+    margin-bottom: 15px;
 }
 
-.followers-info .followers-count {
-    display: flex;
-    align-items: center;
-    font-size: 2rem;
-    color: #27ae60;
-}
-
-.followers-info .followers-count i {
-    margin-right: 10px;
-    font-size: 2.5rem;
-}
-
-.no-data {
+.feature p {
+    font-size: 1.1em;
     color: #7f8c8d;
-    font-style: italic;
+    line-height: 1.6;
 }
 
-
-/* Total Engagement Metric Styling */
-.total-engagement-info {
-    display: flex;
-    justify-content: space-between; /* Space items evenly */
-    margin-top: 15px; /* Space above the items */
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.engagement-item {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px; 
-}
-
-.engagement-item i {
-    font-size: 2em; 
-    /* color: #018067;  */
-    margin-right: 10px;
-}
-
-.engagement-item div{
-    box-sizing: border-box;
-    display: flex;
-    flex: 1;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.engagement-item p {
-    font-size: 0.9em; 
-    /* color: #018067;  */
-}
-
-.engagement-item strong {
-    /* color: #018067;  */
-    white-space: nowrap;
-}
-
-.engagement-item-comments {
-    color: #1abc9c;
-}
-
-.engagement-item-likes {
-    color: #148a73ef;
-}
-
-.engagement-item-shares {
-    color: #0c5a4a;
-}
-
-#engagementChart{
-    max-width: 100%; /* Responsive sizing */
-    height: auto; /* Maintain aspect ratio */
-    margin-top: 20px; /* Spacing above chart */
-}
-
-#followersChart {
-    max-width: 100%; /* Responsive sizing */
-    height: 80%; /* Maintain aspect ratio */
-    margin-top: 20px; /* Spacing above chart */
-    padding: 50px;
-}
-
-#networkGraph {
-    width: 100%;
-    height: auto;  /* Let height adjust automatically */
-    display: flex;
-    justify-content: center; 
-    margin: 20px 0;  
-    background-color: #ffffff;
-}
-
-#graph {
-    width: 90%;  
-    max-width: 840px; 
-    height: auto; 
-    background-color: #ffffff; 
-    border-radius: 8px; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: relative;
-}
-
-.mpld3-toolbar {
-    position: absolute; /* Absolute positioning to adjust placement */
-    bottom: 10px; /* Place toolbar 10px from the bottom */
-    left: 10px; /* Place toolbar 10px from the left */
-    background: rgba(255, 255, 255, 0.8); /* Light background for readability */
-    padding: 5px; /* Padding for toolbar */
-    border-radius: 5px; /* Rounded corners for toolbar */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
-    z-index: 10; /* Make sure toolbar appears above other elements */
-}
-
-/* Rank Info */
-.rank-info {
-    background-color: #e0e0e0; /* Light gray background for rank info */
-    padding: 15px;
-    border-radius: 5px;
-    margin-top: 10px; /* Space above rank info */
-}
-
-.rank-info p {
-    margin: 5px 0; /* Space between paragraphs */
-    color: #34495e; /* Consistent text color */
-}
-
-/* Follower Forecast Styling */
-.row {
-    display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-    gap: 1rem; 
-    margin: 0 auto; 
-    max-width: 1200px; 
-    padding: 1rem; 
+/* Hover Effect for Features */
+.feature:hover {
+    color: #fff;
+    transform: translateY(-5px);
+    transition: 0.3s ease;
 }
 
 .card {
@@ -349,25 +167,21 @@
     color: #6c757d;
 }
 
-.card #percentage {
+.card #percentage, #forecast-increase {
     font-size: 1.5rem; /* Makes the percentage stand out */
     font-weight: bold;
 }
 
-.chart-container {
-    width: 100%; 
-    max-width: 100%;
-    height: auto; 
+.row {
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 1rem; 
     margin: 0 auto; 
+    max-width: 1200px; 
     padding: 1rem; 
     box-sizing: border-box; 
 }
 
-canvas {
-    display: block; 
-    max-width: 100%; 
-    height: auto; 
-}
 
 /* Input Form Styling */
 form {

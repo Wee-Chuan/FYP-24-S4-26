@@ -24,117 +24,34 @@
         <div class="dashboard-container">
             <div class="header">
                 <h2>Welcome, {{ user['username'] }}!</h2>
-                {% if linked_account %}
-                    <div class="linked-info">
-                        <p><strong>Currently Linked Account:</strong> {{ linked_account | title }}</p>
-                    </div>
-                {% else %}
-                    <div class="linked-info">
-                        <p><strong>No social media account is linked yet.</strong></p>
-                    </div>
-                {% endif %}
+                <p>Start your journey to growing your influence today.</p>
             </div>
 
             <!-- General Metrics Section -->
-            <section class="dashboard-section general-metrics">
-                <h3>General Information</h3>
-                <div class="metric-grid">
-                    <div class="metric">
-                        <h4>Current Ranking</h4>
-                        <div class="post-info">
-                            {% if rank %}
-                                <p>Rank: {{ rank }}</p>
-                            {% else %}
-                                <p>Unable to retrieve ranking.</p>
-                            {% endif %}
-                        </div>
+            <section class="dashboard-section feature-explanation">
+                <h3>Platform Features</h3>
+                
+                <div class="feature-grid">
+                    <div class="feature">
+                        <h4>Engagement Metrics</h4>
+                        <p></p>
                     </div>
-                    <div class="metric followers-gained">
-                        <h4>Followers Gained This Month</h4>
-                        {% if followers_gained is not none %}
-                            <div class="followers-info">
-                                <div class="followers-count">
-                                    <i class="fas fa-user-plus"></i>
-                                    <span>{{ followers_gained }}</span>
-                                </div>
-                                <p>New followers this month</p>
-                            </div>
-                        {% else %}
-                            <p class="no-data">No data available for this month.</p>
-                        {% endif %}
+                    <div class="feature">
+                        <h4>Followers Forecast</h4>
+                        <p>Upload your instagram HTML file to start forecasting follower growth. This tool helps you predict the potential outcome of your social media efforts and make informed decisions for future growth.</p>
                     </div>
-                    <div class="metric">
-                        <canvas id="engagementChart" width="400" height="400"></canvas>
-                        <h4>Total Engagements</h4>
-                        <div class="total-engagement-info">
-                            <div class="engagement-item">
-                                <div class="engagement-item-comments">
-                                    <i class="fas fa-comments"></i>
-                                    <div>
-                                        <p>Comments: </p>
-                                        <strong>{{ total_comments  }}</strong>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="engagement-item">
-                                <div class="engagement-item-likes">
-                                    <i class="fas fa-thumbs-up"></i>
-                                    <div>
-                                        <p>Likes: </p>
-                                        <strong>{{ total_likes }}</strong>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="engagement-item">
-                                <div class="engagement-item-shares">
-                                    <i class="fas fa-share"></i>
-                                    <div>
-                                        <p>Shares: </p>
-                                        <strong>{{ total_shares }}</strong>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="feature">
+                        <h4>Account Network Visualization</h4>
+                        <p>Search for a username to visualize your account network and relationships with other accounts. You can see how accounts are interconnected and how information flows between them, giving you a better understanding of your online social network.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>Post Analysis</h4>
+                        <p>Dive into the platform's analytics to gain insights into engagement metrics and post performance. You can enter the url for a post to generate detailed performance insights.</p>
                     </div>
                 </div>
+                 
             </section>
         </div>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const comments = {{ total_comments | tojson }};
-            const likes = {{ total_likes | tojson }};
-            const shares = {{ total_shares | tojson }};
-            
-            console.log('Comments:', comments);
-            console.log('Likes:', likes);
-            console.log('Shares:', shares);
-            
-            const ctx = document.getElementById('engagementChart').getContext('2d');
-            const engagementChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: ['Comments', 'Likes', 'Shares'],
-                    datasets: [{
-                        data: [comments, likes, shares],
-                        backgroundColor: ['#1abc9c', '#148a73ef', '#0c5a4a'],
-                        borderColor: '#fff',
-                        borderWidth: 2,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                    }
-                }
-            });
-        });
-    </script>
-    
-     
+    </div>     
         
 {% endblock %}
