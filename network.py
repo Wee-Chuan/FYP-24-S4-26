@@ -192,7 +192,7 @@ def visualize_graph_3d_with_sentiment_legend():
     fig = go.Figure(data=[edge_trace, node_trace] + legend_traces, layout=layout)
 
     # Save the figure as an HTML file
-    pio.write_html(fig, file="templates/dashboard/influencer_menu/sentimentgraph.html", auto_open=False)
+    pio.write_html(fig, file="static/sentimentgraph.html", auto_open=False)
 
 # Load users from a file
 def load_users_from_file(filename="users_data.json"):
@@ -375,7 +375,7 @@ def visualize_topic_graph_2d(topic_graph, user_topics):
     fig = go.Figure(data=[edge_trace, node_trace] + topic_labels, layout=layout)
 
     # Save the figure as an HTML file
-    pio.write_html(fig, file="templates/dashboard/influencer_menu/topicnetwork.html", auto_open=False)
+    pio.write_html(fig, file="static/topicnetwork.html", auto_open=False)
 
 # Main function to visualize topic-based clustering
 def visualize_topics():

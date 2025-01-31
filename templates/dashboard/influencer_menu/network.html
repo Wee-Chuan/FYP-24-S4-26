@@ -52,15 +52,78 @@
                 <p>Loading...</p>
                 <img src="{{ url_for('static', filename='images/loading.gif') }}" alt="Loading...">
             </div>
-
+            
             <div id="analysisResults"></div>
-            <div id="sentimentGraph" data-sentiment-url="{{ url_for('influencer_boundary.display_sentiment_graph') }}"></div>
-            <div id="topicGraph" data-topic-url="{{ url_for('influencer_boundary.display_topic_graph') }}"></div>
+            <iframe 
+  id="sentimentGraph" 
+  src="static/sentimentgraph.html" 
+  style="width: 100%; height: 600px; border: 1px solid #ccc; display: none;">
+</iframe>
+
+<iframe 
+  id="topicGraph" 
+  src="static/topicnetwork.html" 
+  style="width: 100%; height: 600px; border: 1px solid #ccc; display: none;">
+</iframe>
+
+            
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+
+        (async function checkFileExistence() {
+            filePath = 'static/sentimentgraph.html'; // Replace with actual file path
+            try {
+                const response = await fetch('/check-file', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ file_path: filePath })
+                });
+                
+                const data = await response.json();
+                if (data.exists) {
+                    console.log("tre have")
+                    commenttree = document.getElementById("sentimentGraph");
+                    commenttree.style.display = "block";
+                } else {
+                    console.log(data.message);
+                    console.log("HELLO");
+                    console.log(filePath);
+                }
+            } catch (error) {
+                console.error('Error checking file:', error);
+            }
+    
+            filePath = 'static/topicnetwork.html'; // Replace with actual file path
+            try {
+                const response = await fetch('/check-file', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ file_path: filePath })
+                });
+    
+                const data = await response.json();
+                if (data.exists) {
+                    centralityGraph = document.getElementById('topicGraph');
+                    centralityGraph.style.display = "block";
+                    
+                } else {
+                    console.log(data.message);
+                    console.log("HELLO");
+                    console.log(filePath);
+                }
+            } catch (error) {
+                console.error('Error checking file:', error);
+            }
+    
+        })();
+
         function submitForm(event) {
             event.preventDefault(); // Prevent the form from reloading the page
 
@@ -86,17 +149,17 @@
                 analysisResultsDiv.innerHTML = `<p>Network analysis completed for <strong>${username}</strong></p>`;
 
                 const sentimentGraph = document.getElementById("sentimentGraph");
-                const sentimentUrl = sentimentGraph.getAttribute('data-sentiment-url');
-                sentimentGraph.innerHTML = `<iframe src="${sentimentUrl}" width="100%" height="600px" frameborder="0"></iframe>`;
+                sentimentGraph.display = "block";
 
                 const topicGraph = document.getElementById("topicGraph");
-                const topicUrl = topicGraph.getAttribute('data-topic-url');
-                topicGraph.innerHTML = `<iframe src="${topicUrl}" width="100%" height="600px" frameborder="0"></iframe>`;
+                topicGraph.display = "block";
+                location.reload();
 
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
                 document.getElementById("loadingScreen").style.display = "none";
+                location.reload();
             });
         }
     </script>        
