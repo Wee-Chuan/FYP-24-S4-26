@@ -20,7 +20,7 @@
     </aside>
 
     <div class="dashboard-container">
-        <h2>Monthly Followers Count for {{ user['username'] }}</h2>
+        <h2>Followers Forecast</h2>
 
         <h4>Steps to Download Your Information from Instagram:</h4>
         <ol class="steps-ol">
@@ -100,10 +100,11 @@
                     <div class="card">
                         <h4>Future Forecast</h4>
                         {% if forecast['future_data'][0] != 0 %}
-                            <p id="percentage">{{ (((forecast['future_data'][-1] - forecast['future_data'][0]) / forecast['future_data'][0]) * 100)|round(2) }}%</p>
-                            <p>Predicted Forecast for next 12 months</p>
+                            {% set total_increase = forecast['future_data']|sum %}
+                            <p id="forecast-increase">{{ total_increase }}</p>
+                            <p>Predicted Total Increase in Followers for the Next 6 Months</p>
                         {% else %}
-                            <p>No valid forecast data to calculate the percentage change.</p>
+                            <p>No valid forecast data to calculate the increase.</p>
                         {% endif %}
                     </div>
                 </div>

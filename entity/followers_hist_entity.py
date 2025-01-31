@@ -288,14 +288,9 @@ class FollowerHist:
         # Round the predictions to the nearest integer to avoid decimals
         future_growth_predictions = np.round(future_growth_predictions).astype(int)
 
-        last_follower_count = monthly_data['follower_count'].iloc[-1]
-        future_follower_counts = [last_follower_count]
-        for growth in future_growth_predictions:
-            future_follower_counts.append(future_follower_counts[-1] + growth)
-
         return {
             "historical_data": monthly_data['follower_count'].astype(int).tolist(),
-            "future_data": [int(count) for count in future_follower_counts[1:]],  # Exclude the initial count
+            "future_data": future_growth_predictions.tolist(),
             "historical_labels": monthly_data['year_month'].dt.strftime('%b %Y').tolist(),
             "future_labels": future_dates,
             "granularity": "Monthly"
