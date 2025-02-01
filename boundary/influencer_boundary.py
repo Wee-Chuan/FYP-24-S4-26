@@ -263,7 +263,7 @@ def display_network():
     # Prepare the Actor input for the Instagram Comments scraper
     run_input = {
         "directUrls": postURLs,
-        "resultsLimit": 300,  # Modify this number as needed to capture more comments
+        "resultsLimit": 100,  # Modify this number as needed to capture more comments
     }
 
     # Run the Actor and wait for it to finish
@@ -294,7 +294,7 @@ def display_network():
 
     print("All comments saved to commentData.csv")
     
-    nw.generateGraphs()
+    nw.generateGraphs(username)
     
     # Return the username in a JSON response (no need for full page render)
     return jsonify({

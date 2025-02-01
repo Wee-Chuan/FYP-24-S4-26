@@ -111,7 +111,7 @@ def build_user_graph():
                 if any(comment.sentiment == other_comment.sentiment for comment in user.comments for other_comment in other_user.comments):
                     user_graph.add_edge(username, other_username)  # Add an edge
 
-def visualize_graph_3d_with_sentiment_legend():
+def visualize_graph_3d_with_sentiment_legend(username_para):
     # Use NetworkX's spring layout with 3D positions
     pos = nx.spring_layout(user_graph, dim=3)  # Spring layout with 3 dimensions
 
@@ -177,9 +177,10 @@ def visualize_graph_3d_with_sentiment_legend():
             )
         )
 
+    graph_title = "3D User Graph with Sentiment-Based Node Colors: " + username_para
     # Layout configuration
     layout = go.Layout(
-        title="3D User Graph with Sentiment-Based Node Colors",
+        title= graph_title,
         showlegend=True,
         scene=dict(
             xaxis_title='X',
@@ -383,7 +384,7 @@ def visualize_topics():
     visualize_topic_graph_2d(topic_graph, user_topics)
 
 # Modify the main function
-def generateGraphs():
+def generateGraphs(username):
     filename = "commentData.csv"
     processed_user_file = "users_data.json"
     topic_count_file = "topic_counts.json"
@@ -394,7 +395,7 @@ def generateGraphs():
     save_users_to_file(processed_user_file, topic_count_file, topic_keywords_file)  # Save users and topic data
 
     build_user_graph()  # Build the graph with nodes and edges
-    visualize_graph_3d_with_sentiment_legend()  # Visualize the graph
+    visualize_graph_3d_with_sentiment_legend(username)  # Visualize the graph
     visualize_topics()
 
 
