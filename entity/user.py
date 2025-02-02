@@ -525,10 +525,7 @@ class User:
                 f"👍 **Likes:** {likes} | 💬 **Comments:** {comments} | 🔥 **Engagement Score:** {engagement_score}\n"
                 f"📝 **Caption Preview:** \"{post_text[:150]}...\"\n\n"
                 f"🔍 **AI Insights:** {summary}\n\n"
-                f"💡 **Key Observations:**\n"
-                f"   - Posts with higher likes tend to attract more comments.\n"
-                f"   - Emotional or trending topics generate more engagement.\n"
-                f"   - Verified accounts generally have a stronger audience reach.\n"
+                
             )
 
             return final_summary
