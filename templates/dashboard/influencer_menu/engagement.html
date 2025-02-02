@@ -1,88 +1,37 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engagement Metrics</title>
+</head>
+<body>
+    <h1>Engagement Metrics Dashboard</h1>
 
-{% block title %}Engagement Metrics{% endblock %}
+    <h2>Select a Post</h2>
+    <select id="postDropdown">
+        {% for post in post_urls %}
+            <option value="{{ post }}">{{ post }}</option>
+        {% endfor %}
+    </select>
 
-{% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='components/dashboard/influencer_dashboard.css') }}">
-{% endblock %}
-
-{% block content %}
-<div class="dashboard-wrapper">
-    <aside class="sidebar">
-        <h3>Dashboard Menu</h3>
-        <ul class="menu">
-            <li><a href="{{ url_for('influencer_boundary.engagement_metrics') }}"><i class="fas fa-chart-line"></i> Engagement Metrics</a></li>
-        </ul>
-    </aside>
-
-    <div class="dashboard-container">
-        <h2>Engagement Metrics</h2>
-
-        <form method="post" enctype="multipart/form-data">
-            <input type="file" name="file" accept=".csv">
-            <button type="submit">Upload CSV</button>
-        </form>
-
-        {% if metrics %}
-            <h3>Engagement Data</h3>
-
-            <!-- Sentiment Distribution -->
-            <canvas id="sentimentChart"></canvas>
-
-            <!-- Verified vs. Non-Verified Engagement -->
-            <canvas id="verifiedChart"></canvas>
-
-            <!-- Bubble Chart -->
-            <canvas id="bubbleChart"></canvas>
-
-            <!-- Word Cloud -->
-            <img src="{{ url_for('static', filename='wordcloud.png') }}" alt="Word Cloud">
-
-            <script>
-                fetch("{{ url_for('influencer_boundary.get_visualization_data') }}")
-                .then(response => response.json())
-                .then(data => {
-                    // Sentiment Analysis Chart
-                    const sentimentLabels = ["Positive", "Neutral", "Negative"];
-                    const sentimentCounts = [0, 0, 0];
-
-                    data.forEach(item => {
-                        if (item.sentiment === "Positive") sentimentCounts[0]++;
-                        if (item.sentiment === "Neutral") sentimentCounts[1]++;
-                        if (item.sentiment === "Negative") sentimentCounts[2]++;
-                    });
-
-                    new Chart(document.getElementById("sentimentChart"), {
-                        type: "pie",
-                        data: {
-                            labels: sentimentLabels,
-                            datasets: [{
-                                data: sentimentCounts,
-                                backgroundColor: ["green", "blue", "red"]
-                            }]
-                        }
-                    });
-
-                    // Verified vs Non-Verified Engagement
-                    const verifiedLikes = data.filter(d => d["owner/is_verified"]).reduce((sum, d) => sum + d.likes, 0);
-                    const nonVerifiedLikes = data.filter(d => !d["owner/is_verified"]).reduce((sum, d) => sum + d.likes, 0);
-
-                    new Chart(document.getElementById("verifiedChart"), {
-                        type: "bar",
-                        data: {
-                            labels: ["Verified", "Non-Verified"],
-                            datasets: [{
-                                label: "Likes",
-                                data: [verifiedLikes, nonVerifiedLikes],
-                                backgroundColor: ["blue", "gray"]
-                            }]
-                        }
-                    });
-                });
-            </script>
+    <h2>Engagement Data</h2>
+    <div id="engagementData">
+        {% if engagement_data %}
+            <ul>
+                {% for data in engagement_data %}
+                    <li>Post URL: {{ data.postUrl }}, Likes: {{ data.likes }}, Comments: {{ data.comments }}</li>
+                {% endfor %}
+            </ul>
         {% else %}
-            <p>No engagement data available. Upload a CSV file to visualize metrics.</p>
+            <p>No engagement data available.</p>
         {% endif %}
     </div>
-</div>
-{% endblock %}
+
+    <h2>Visualizations</h2>
+    <canvas id="engagementChart"></canvas>
+    <canvas id="emojiChart"></canvas>
+    <img src="/static/wordcloud.png" alt="Word Cloud">
+
+</body>
+</html>

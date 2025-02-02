@@ -1,95 +1,86 @@
-import network as nw
-from flask import Blueprint, render_template, redirect, url_for, session, flash, request, current_app
-from entity.user import User
-from entity.followers_hist_entity import FollowerHist
-import influencer_centrality_ranking
+import os
 import csv
-from apify_client import ApifyClient
-from flask import jsonify
-from flask import request, jsonify
-from apify_client import ApifyClient
-import csv, os
-
-
+import pandas as pd
+import network as nw  
+from flask import (
+    Blueprint, render_template, jsonify, session, request, redirect, url_for, flash, current_app
+)
 from werkzeug.utils import secure_filename
+from apify_client import ApifyClient  
+from entity.user import User
+from entity.followers_hist_entity import FollowerHist  
+import influencer_centrality_ranking  
 
+# Define Flask Blueprint
 influencer_boundary = Blueprint('influencer_boundary', __name__)
 
-# =================== Influencer Dashboard Menu =================== #
+# Path for Engagement Metrics CSV
+ENGAGEMENT_CSV_PATH = "engagement_metrics.csv"
 
-#==========================KEVIN====================================#
-UPLOAD_FOLDER = 'uploads/'
-ALLOWED_EXTENSIONS = {'csv'}
 
-# Ensure uploads folder exists
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
-
-def allowed_file(filename):
-    """Check if uploaded file is a CSV"""
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-@influencer_boundary.route('/dashboard/engagement_metrics', methods=['GET', 'POST'])
+@influencer_boundary.route("/dashboard/engagement_metrics", methods=["GET"])
 def engagement_metrics():
     """
-    Route to handle CSV file upload and visualize engagement metrics using NMF.
+    Renders the engagement dashboard. Users can select a post to analyze.
     """
     try:
-        user_id = session.get('user_id')
-        account_type = session.get('account_type')
+        if not os.path.exists(ENGAGEMENT_CSV_PATH):
+            return "⚠️ Error: engagement_metrics.csv file not found!", 400
 
-        if not user_id or account_type != 'influencer':
-            flash("Unauthorized access. Only influencers can view engagement metrics.", "danger")
-            return redirect(url_for('dashboard_boundary.dashboard'))
+        # Process CSV and get post URLs
+        post_urls, engagement_data = User.process_engagement_data(ENGAGEMENT_CSV_PATH)
 
-        if request.method == 'POST':
-            if 'file' not in request.files:
-                flash("No file part", "danger")
-                return redirect(request.url)
-            
-            file = request.files['file']
-            if file.filename == '':
-                flash("No selected file", "danger")
-                return redirect(request.url)
+        if not engagement_data:
+            return render_template("dashboard/influencer_menu/engagement.html", post_urls=[], engagement_data=[])
 
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                filepath = os.path.join(UPLOAD_FOLDER, filename)
-                file.save(filepath)
+        # Store engagement CSV path in session
+        session["engagement_csv"] = ENGAGEMENT_CSV_PATH
 
-                session['engagement_csv'] = filepath  # Store CSV path in session
+        return render_template(
+            "dashboard/influencer_menu/engagement.html",
+            post_urls=post_urls,
+            engagement_data=engagement_data
+        )
 
-                flash("File uploaded successfully", "success")
-                return redirect(url_for('influencer_boundary.engagement_metrics'))
-
-        # Retrieve uploaded file path from session
-        csv_file = session.get('engagement_csv')
-        metrics = User.get_engagement_metrics(csv_file) if csv_file else None  # Ensure user.py uses NMF
-
-        return render_template('dashboard/influencer_menu/engagement.html', metrics=metrics, user_id=user_id)
-    
     except Exception as e:
-        flash(f"An error occurred: {str(e)}", "danger")
-        return redirect(url_for('dashboard_boundary.dashboard'))
+        print(f"❌ Error loading engagement dashboard: {e}")
+        return f"An error occurred: {e}", 500
 
-@influencer_boundary.route('/api/get_visualization_data', methods=['GET'])
+
+@influencer_boundary.route("/api/get_visualization_data", methods=["GET"])
 def get_visualization_data():
     """
-    API to return processed engagement metrics for visualization using NMF.
+    API endpoint to retrieve engagement data for a selected post.
     """
     try:
-        csv_file = session.get('engagement_csv')
-        if not csv_file:
-            return jsonify({"error": "No CSV file uploaded"}), 400
+        # Ensure engagement_metrics.csv exists
+        csv_file = session.get("engagement_csv", ENGAGEMENT_CSV_PATH)
 
-        data = User.get_engagement_metrics(csv_file)  # Ensure user.py uses NMF
-        if not data:
-            return jsonify({"error": "Invalid or empty CSV file"}), 400
+        if not os.path.exists(csv_file):
+            return jsonify({"error": "⚠️ No CSV file found. Please generate engagement data first."}), 404
 
-        return jsonify(data)
+        post_url = request.args.get("post_url")
+        if not post_url:
+            return jsonify({"error": "⚠️ Missing post URL parameter."}), 400
+
+        post_data = User.get_post_engagement(csv_file, post_url)
+        if not post_data:
+            return jsonify({"error": "⚠️ No data found for the selected post."}), 404
+
+        # Generate AI Summary
+        ai_summary = User.generate_ai_summary(post_data[0])
+
+        return jsonify({
+            "post_data": post_data,
+            "ai_summary": ai_summary
+        })
 
     except Exception as e:
+        print(f"❌ Error fetching visualization data: {e}")
         return jsonify({"error": str(e)}), 500
+
+
+
 ###################################################################################################################
 
 @influencer_boundary.route('/followers', methods=['GET', 'POST'])

@@ -5,6 +5,25 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import mpld3
 from datetime import datetime, timedelta
+from bertopic import BERTopic 
+
+import pandas as pd
+from wordcloud import WordCloud
+from transformers import pipeline
+
+import emoji
+from collections import Counter
+
+
+import os
+
+import torch
+from collections import Counter
+
+from transformers import pipeline
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+
 
 import uuid
 import sys
@@ -23,8 +42,15 @@ import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
-
 import json
+from transformers import pipeline
+
+# Ensure NLTK Vader Lexicon is available
+nltk.download('vader_lexicon', quiet=True)
+
+# Load AI Summarization Model (Runs Locally)
+device = "cuda" if torch.cuda.is_available() else "cpu"
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn", device=0 if torch.cuda.is_available() else -1)
 
 nltk.download('vader_lexicon')
 sia = SentimentIntensityAnalyzer()
@@ -33,6 +59,8 @@ sia = SentimentIntensityAnalyzer()
 load_dotenv()
 
 fake = Faker()
+
+
 
 import firebase_admin
 from firebase_admin import credentials, firestore, auth
@@ -392,102 +420,154 @@ class User:
     
     #=======================KEVIN======================================================================#
     @staticmethod
-    def get_engagement_metrics(csv_path):
+    def process_engagement_data(csv_path):
         """
-        Reads engagement metrics from the uploaded CSV file, processes data,
-        and extracts topics using NMF for visualization.
+        Reads engagement data, filters required columns, and creates engagement_metrics.csv.
+        Returns post URLs and engagement data.
         """
         try:
-            if not csv_path or not os.path.exists(csv_path):
-                return None
+            if not os.path.exists(csv_path):
+                raise FileNotFoundError("CSV file not found!")
 
             df = pd.read_csv(csv_path)
 
-            # Ensure required columns exist
-            required_columns = {'id', 'likesCount', 'repliesCount', 'text', 'owner/username', 'owner/is_verified', 'postUrl'}
-            if not required_columns.issubset(df.columns):
-                return None
+            # Required columns
+            required_columns = {'id', 'likesCount', 'repliesCount', 'text', 'owner/is_verified', 'postUrl'}
+            missing_columns = required_columns - set(df.columns)
 
-            # Process data
-            df_filtered = df[['id', 'likesCount', 'repliesCount', 'text', 'owner/username', 'owner/is_verified', 'postUrl']]
-            df_filtered = df_filtered.rename(columns={
+            if missing_columns:
+                raise ValueError(f"CSV is missing required columns: {missing_columns}")
+
+            # Filter and rename columns
+            df_filtered = df[list(required_columns)].rename(columns={
                 'likesCount': 'likes',
-                'repliesCount': 'comments'
+                'repliesCount': 'comments',
+                'owner/is_verified': 'verified'
             })
 
-            # Sentiment Analysis
-            df_filtered['sentiment'] = df_filtered['text'].apply(lambda x: User.analyze_sentiment(x))
+            # Compute engagement score
+            df_filtered["engagement_score"] = df_filtered["likes"] + df_filtered["comments"]
 
-            # Word Cloud Generation
-            User.generate_wordcloud(df_filtered['text'])
+            # Save processed engagement data
+            df_filtered.to_csv("engagement_metrics.csv", index=False)
 
-            # Topic Extraction Using NMF
-            df_filtered['topic'] = User.extract_topics_NMF(df_filtered['text'])
+            # Get unique post URLs for selection
+            post_urls = df_filtered["postUrl"].dropna().unique().tolist()
 
-            metrics = df_filtered.to_dict(orient='records')
-            return metrics
+            return post_urls, df_filtered.to_dict(orient="records")
 
         except Exception as e:
-            print(f"Error processing engagement CSV: {e}")
-            return None
+            print(f"❌ Error processing engagement CSV: {e}")
+            return [], []
 
     @staticmethod
-    def analyze_sentiment(comment):
+    def get_post_engagement(csv_path, post_url):
         """
-        Performs sentiment analysis on a comment.
+        Retrieves engagement data for a single post.
         """
-        if pd.isna(comment) or not isinstance(comment, str):
-            return "Neutral"
+        try:
+            if not os.path.exists(csv_path):
+                raise FileNotFoundError("CSV file not found!")
 
-        score = sia.polarity_scores(comment)['compound']
-        if score >= 0.05:
-            return "Positive"
-        elif score <= -0.05:
-            return "Negative"
-        else:
-            return "Neutral"
+            df = pd.read_csv(csv_path)
+            post_data = df[df["postUrl"] == post_url]
+
+            if post_data.empty:
+                return []
+
+            return post_data.to_dict(orient="records")
+
+        except Exception as e:
+            print(f"❌ Error retrieving post engagement: {e}")
+            return []
+
+    @staticmethod
+    def generate_ai_summary(post_data):
+        """
+        Generates AI summary based on engagement metrics with more depth.
+        """
+        try:
+            if isinstance(post_data, list) and len(post_data) > 0:
+                post_data = post_data[0]  # Take the first post entry
+            elif isinstance(post_data, dict):
+                pass  # Already in dictionary format
+            else:
+                return "⚠️ AI Summary not available (Invalid post data format)."
+
+            # Extract engagement data
+            post_text = post_data.get("text", "No caption available")
+            likes = post_data.get("likesCount", 0)
+            comments = post_data.get("repliesCount", 0)
+            engagement_score = likes + comments
+            verified = "✅ Verified Account" if post_data.get("owner/is_verified", False) else "❌ Non-Verified Account"
+
+            # Create structured input for AI summarization
+            summary_input = f"""
+            Post Analysis:
+            - {verified}
+            - Likes: {likes}
+            - Comments: {comments}
+            - Engagement Score: {engagement_score}
+            - Caption Preview: {post_text[:300]}...  # Limit text for AI input
+            - Observations:
+                * Higher engagement means better reach.
+                * Verified accounts typically get more engagement.
+                * Posts with questions or emotional words tend to perform better.
+            """
+
+            # Generate detailed summary with increased `max_length`
+            summary = summarizer(summary_input, max_length=120, min_length=50, do_sample=False)[0]["summary_text"]
+
+            # Final formatted summary
+            final_summary = (
+                f"📊 **Post Engagement Analysis**\n"
+                f"📌 **Account Status:** {verified}\n"
+                f"👍 **Likes:** {likes} | 💬 **Comments:** {comments} | 🔥 **Engagement Score:** {engagement_score}\n"
+                f"📝 **Caption Preview:** \"{post_text[:150]}...\"\n\n"
+                f"🔍 **AI Insights:** {summary}\n\n"
+                f"💡 **Key Observations:**\n"
+                f"   - Posts with higher likes tend to attract more comments.\n"
+                f"   - Emotional or trending topics generate more engagement.\n"
+                f"   - Verified accounts generally have a stronger audience reach.\n"
+            )
+
+            return final_summary
+
+        except Exception as e:
+            print(f"❌ Error generating AI summary: {e}")
+            return "⚠️ AI Summary not available."
+
+
+    @staticmethod
+    def extract_most_used_emojis(comments):
+        """
+        Extracts the most frequently used emojis from comments.
+        """
+        try:
+            emoji_list = []
+            for comment in comments.dropna():
+                emoji_list.extend([char for char in comment if char in emoji.EMOJI_DATA])
+
+            return dict(Counter(emoji_list).most_common(10))
+
+        except Exception as e:
+            print(f"❌ Error extracting emojis: {e}")
+            return {}
 
     @staticmethod
     def generate_wordcloud(comments):
         """
-        Generates and saves a word cloud from comment text.
+        Generates a word cloud from comment text.
         """
         try:
             text = " ".join(comments.dropna())
             wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text)
             wordcloud.to_file("static/wordcloud.png")
-        except Exception as e:
-            print(f"Error generating word cloud: {e}")
-
-    @staticmethod
-    def extract_topics_NMF(comments, num_topics=5, num_words=5):
-        """
-        Extracts topics from engagement comments using NMF (Non-negative Matrix Factorization).
-        """
-        try:
-            comments = comments.dropna().tolist()  # Remove NaN values
-            if len(comments) == 0:
-                return ["No Topic"] * len(comments)
-
-            vectorizer = TfidfVectorizer(stop_words='english')
-            X = vectorizer.fit_transform(comments)
-
-            nmf_model = NMF(n_components=num_topics, random_state=42)
-            nmf_model.fit(X)
-
-            words = vectorizer.get_feature_names_out()
-            topics = []
-
-            for text in X:
-                topic_idx = nmf_model.transform(text).argmax()
-                top_words = [words[i] for i in nmf_model.components_[topic_idx].argsort()[-num_words:]]
-                topics.append(", ".join(top_words))
-
-            return topics
+            return "static/wordcloud.png"
 
         except Exception as e:
-            print(f"Error extracting topics using NMF: {e}")
-            return ["Error extracting topics"] * len(comments)
+            print(f"❌ Error generating word cloud: {e}")
+            return None
     #===================== Ratings and Reviews ==============================#
     def save_rate_and_review(user_id, rating, category, review, username):
         """
