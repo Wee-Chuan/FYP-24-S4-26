@@ -17,59 +17,80 @@ influencer_boundary = Blueprint('influencer_boundary', __name__)
 
 # =================== Influencer Dashboard Menu =================== #
 
-@influencer_boundary.route('/dashboard/engagement_metrics', methods=['GET'])
+#==========================KEVIN====================================#
+UPLOAD_FOLDER = 'uploads/'
+ALLOWED_EXTENSIONS = {'csv'}
+
+# Ensure uploads folder exists
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+def allowed_file(filename):
+    """Check if uploaded file is a CSV"""
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@influencer_boundary.route('/dashboard/engagement_metrics', methods=['GET', 'POST'])
 def engagement_metrics():
     """
-    Route to visualize the user's engagement metrics.
+    Route to handle CSV file upload and visualize engagement metrics using NMF.
     """
     try:
-        # Get the logged-in user ID and account type
         user_id = session.get('user_id')
         account_type = session.get('account_type')
 
-        # Check if the user exists and is an influencer
-        user = User.get_profile(user_id)
-        if not user or account_type != 'influencer':
+        if not user_id or account_type != 'influencer':
             flash("Unauthorized access. Only influencers can view engagement metrics.", "danger")
             return redirect(url_for('dashboard_boundary.dashboard'))
-        
-        
-        # CHECKING IF ACCOUNT IS LINKEDDDDDDDDDDDDDDDDDDDDDDDDDDD 
-        if user['linked_social_account'] == "":
-            flash("Please link to your social media acccount first", "danger")
-            return redirect(url_for('dashboard_boundary.dashboard'))
 
-        metrics = User.visualize_engagement_metrics(user_id)
+        if request.method == 'POST':
+            if 'file' not in request.files:
+                flash("No file part", "danger")
+                return redirect(request.url)
+            
+            file = request.files['file']
+            if file.filename == '':
+                flash("No selected file", "danger")
+                return redirect(request.url)
 
-        # Check if any field is None or undefined
-        for metric in metrics:
-            for key, value in metric.items():
-                if value is None:
-                    print(f"Missing value for {key} in metric: {metric}")
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                filepath = os.path.join(UPLOAD_FOLDER, filename)
+                file.save(filepath)
 
-        # Handle cases where no engagement data is available
-        if not metrics:
-            flash("No engagement metrics available.", "danger")
-            return render_template(
-                'dashboard/influencer_menu/engagement.html',
-                user_id=user_id,
-                user=user,
-                metrics=None,
-            )
+                session['engagement_csv'] = filepath  # Store CSV path in session
 
-        # Pass metrics to the template
-        return render_template(
-            'dashboard/influencer_menu/engagement.html',
-            user_id=user_id,
-            user=user,
-            metrics=metrics,
-        )
+                flash("File uploaded successfully", "success")
+                return redirect(url_for('influencer_boundary.engagement_metrics'))
+
+        # Retrieve uploaded file path from session
+        csv_file = session.get('engagement_csv')
+        metrics = User.get_engagement_metrics(csv_file) if csv_file else None  # Ensure user.py uses NMF
+
+        return render_template('dashboard/influencer_menu/engagement.html', metrics=metrics, user_id=user_id)
+    
+    except Exception as e:
+        flash(f"An error occurred: {str(e)}", "danger")
+        return redirect(url_for('dashboard_boundary.dashboard'))
+
+@influencer_boundary.route('/api/get_visualization_data', methods=['GET'])
+def get_visualization_data():
+    """
+    API to return processed engagement metrics for visualization using NMF.
+    """
+    try:
+        csv_file = session.get('engagement_csv')
+        if not csv_file:
+            return jsonify({"error": "No CSV file uploaded"}), 400
+
+        data = User.get_engagement_metrics(csv_file)  # Ensure user.py uses NMF
+        if not data:
+            return jsonify({"error": "Invalid or empty CSV file"}), 400
+
+        return jsonify(data)
 
     except Exception as e:
-        # Handle unexpected errors and log them
-        print(f"Error fetching engagement metrics: {e}")
-        flash("An error occurred while fetching engagement metrics.", "danger")
-        return redirect(url_for('dashboard_boundary.dashboard'))
+        return jsonify({"error": str(e)}), 500
+###################################################################################################################
 
 @influencer_boundary.route('/followers', methods=['GET', 'POST'])
 def followers():

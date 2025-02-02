@@ -15,6 +15,19 @@ import random
 from faker import Faker
 from dotenv import load_dotenv
 import os
+from sklearn.decomposition import NMF
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+import pandas as pd
+import nltk
+from nltk.sentiment import SentimentIntensityAnalyzer
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+
+import json
+
+nltk.download('vader_lexicon')
+sia = SentimentIntensityAnalyzer()
 
 # Load environment variables
 load_dotenv()
@@ -379,71 +392,102 @@ class User:
     
     #=======================KEVIN======================================================================#
     @staticmethod
-    def visualize_engagement_metrics(user_id):
+    def get_engagement_metrics(csv_path):
         """
-        Visualizes engagement metrics (likes, comments, shares, followers) for the user over time.
+        Reads engagement metrics from the uploaded CSV file, processes data,
+        and extracts topics using NMF for visualization.
         """
         try:
-            # Check if the user has linked any social media accounts
-            if User.check_if_social_account_linked(user_id) == "":
-                return []  # Return an empty list if no account is linked
-            
-            if User.check_if_social_account_linked(user_id) == "twitter":
-                platform = "twitter_social_accounts"
-            else:
-                platform = "facebook_social_accounts"
-
-            # Fetch engagement metrics
-            print(f"Fetching engagement metrics for user_id: {user_id}")
-            metrics_ref = db.collection(platform).document(user_id).collection('history')
-            metrics = [doc.to_dict() for doc in metrics_ref.stream()]
-
-            if not metrics:
-                print(f"No engagement metrics found for user_id: {user_id}")
+            if not csv_path or not os.path.exists(csv_path):
                 return None
 
-            # Convert the date field to datetime if it's in string format
-            for metric in metrics:
-                if isinstance(metric.get("date"), str):
-                    metric["date"] = datetime.strptime(metric["date"], "%Y-%m-%d")
+            df = pd.read_csv(csv_path)
 
-            # Define the date one year ago from the latest available date
-            latest_date = max([metric["date"] for metric in metrics])
-            one_year_ago = latest_date - timedelta(days=365)
-
-            # Filter metrics for the last year
-            filtered_metrics = [
-                metric for metric in metrics
-                if isinstance(metric.get("date"), datetime) and metric["date"] >= one_year_ago
-            ]
-
-            if not filtered_metrics:
-                print("Not enough data for the past year.")
+            # Ensure required columns exist
+            required_columns = {'id', 'likesCount', 'repliesCount', 'text', 'owner/username', 'owner/is_verified', 'postUrl'}
+            if not required_columns.issubset(df.columns):
                 return None
 
-            # Sort the metrics by date
-            filtered_metrics.sort(key=lambda x: x["date"])
+            # Process data
+            df_filtered = df[['id', 'likesCount', 'repliesCount', 'text', 'owner/username', 'owner/is_verified', 'postUrl']]
+            df_filtered = df_filtered.rename(columns={
+                'likesCount': 'likes',
+                'repliesCount': 'comments'
+            })
 
-            processed_metrics = []
+            # Sentiment Analysis
+            df_filtered['sentiment'] = df_filtered['text'].apply(lambda x: User.analyze_sentiment(x))
 
-            # Prepare the final data structure for return
-            processed_metrics = [
-                {
-                    "date": metric["date"].strftime("%Y-%m-%d"),
-                    "follower_count": metric["follower_count"],
-                    "likes": metric["likes"],
-                    "comments": metric["comments"],
-                    "shares": metric["shares"]
-                }
-                for metric in filtered_metrics
-            ]
-            
-            return processed_metrics
-        
+            # Word Cloud Generation
+            User.generate_wordcloud(df_filtered['text'])
+
+            # Topic Extraction Using NMF
+            df_filtered['topic'] = User.extract_topics_NMF(df_filtered['text'])
+
+            metrics = df_filtered.to_dict(orient='records')
+            return metrics
+
         except Exception as e:
-            print(f"Error visualizing engagement metrics for user_id {user_id}: {e}")
+            print(f"Error processing engagement CSV: {e}")
             return None
-    
+
+    @staticmethod
+    def analyze_sentiment(comment):
+        """
+        Performs sentiment analysis on a comment.
+        """
+        if pd.isna(comment) or not isinstance(comment, str):
+            return "Neutral"
+
+        score = sia.polarity_scores(comment)['compound']
+        if score >= 0.05:
+            return "Positive"
+        elif score <= -0.05:
+            return "Negative"
+        else:
+            return "Neutral"
+
+    @staticmethod
+    def generate_wordcloud(comments):
+        """
+        Generates and saves a word cloud from comment text.
+        """
+        try:
+            text = " ".join(comments.dropna())
+            wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text)
+            wordcloud.to_file("static/wordcloud.png")
+        except Exception as e:
+            print(f"Error generating word cloud: {e}")
+
+    @staticmethod
+    def extract_topics_NMF(comments, num_topics=5, num_words=5):
+        """
+        Extracts topics from engagement comments using NMF (Non-negative Matrix Factorization).
+        """
+        try:
+            comments = comments.dropna().tolist()  # Remove NaN values
+            if len(comments) == 0:
+                return ["No Topic"] * len(comments)
+
+            vectorizer = TfidfVectorizer(stop_words='english')
+            X = vectorizer.fit_transform(comments)
+
+            nmf_model = NMF(n_components=num_topics, random_state=42)
+            nmf_model.fit(X)
+
+            words = vectorizer.get_feature_names_out()
+            topics = []
+
+            for text in X:
+                topic_idx = nmf_model.transform(text).argmax()
+                top_words = [words[i] for i in nmf_model.components_[topic_idx].argsort()[-num_words:]]
+                topics.append(", ".join(top_words))
+
+            return topics
+
+        except Exception as e:
+            print(f"Error extracting topics using NMF: {e}")
+            return ["Error extracting topics"] * len(comments)
     #===================== Ratings and Reviews ==============================#
     def save_rate_and_review(user_id, rating, category, review, username):
         """

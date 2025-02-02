@@ -8,110 +8,80 @@
 
 {% block content %}
 <div class="dashboard-wrapper">
-    <!-- Sidebar -->
     <aside class="sidebar">
         <h3>Dashboard Menu</h3>
         <ul class="menu">
             <li><a href="{{ url_for('influencer_boundary.engagement_metrics') }}"><i class="fas fa-chart-line"></i> Engagement Metrics</a></li>
-                <li><a href="{{ url_for('influencer_boundary.followers') }}"><i class="fas fa-users"></i> Followers Forecast</a></li>
-                <li><a href="{{ url_for('influencer_boundary.network') }}"><i class="fas fa-network-wired"></i> Account Network Visualization</a></li>
-                <li><a href="{{ url_for('influencer_boundary.post_page') }}"><i class="fas fa-trophy"></i> Post Analysis</a></li>
         </ul>
     </aside>
 
-    <!-- Main Content -->
     <div class="dashboard-container">
-        <h2>Engagement Metrics for {{ user['username'] }}</h2>
-        {% if metrics %}
-            <p>Here is a detailed visualization of your engagement metrics over time.</p>
+        <h2>Engagement Metrics</h2>
 
-            <!-- Engagement Metrics Chart -->
-            <canvas id="engagementChart" width="400" height="200"></canvas>
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".csv">
+            <button type="submit">Upload CSV</button>
+        </form>
+
+        {% if metrics %}
+            <h3>Engagement Data</h3>
+
+            <!-- Sentiment Distribution -->
+            <canvas id="sentimentChart"></canvas>
+
+            <!-- Verified vs. Non-Verified Engagement -->
+            <canvas id="verifiedChart"></canvas>
+
+            <!-- Bubble Chart -->
+            <canvas id="bubbleChart"></canvas>
+
+            <!-- Word Cloud -->
+            <img src="{{ url_for('static', filename='wordcloud.png') }}" alt="Word Cloud">
 
             <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const ctx = document.getElementById('engagementChart').getContext('2d');
+                fetch("{{ url_for('influencer_boundary.get_visualization_data') }}")
+                .then(response => response.json())
+                .then(data => {
+                    // Sentiment Analysis Chart
+                    const sentimentLabels = ["Positive", "Neutral", "Negative"];
+                    const sentimentCounts = [0, 0, 0];
 
-                    // Data passed from the backend
-                    const labels = {{ metrics | map(attribute='date') | list | tojson }};
-                    const likes = {{ metrics | map(attribute='likes') | list | tojson }};
-                    const comments = {{ metrics | map(attribute='comments') | list | tojson }};
-                    const shares = {{ metrics | map(attribute='shares') | list | tojson }};
-                    const followers = {{ metrics | map(attribute='follower_count') | list | tojson }};
+                    data.forEach(item => {
+                        if (item.sentiment === "Positive") sentimentCounts[0]++;
+                        if (item.sentiment === "Neutral") sentimentCounts[1]++;
+                        if (item.sentiment === "Negative") sentimentCounts[2]++;
+                    });
 
-                    // Initialize Chart.js
-                    new Chart(ctx, {
-                        type: 'line',
+                    new Chart(document.getElementById("sentimentChart"), {
+                        type: "pie",
                         data: {
-                            labels: labels,
-                            datasets: [
-                                {
-                                    label: 'Likes',
-                                    data: likes,
-                                    borderColor: 'rgba(75, 192, 192, 1)',
-                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                    borderWidth: 2,
-                                    tension: 0.4
-                                },
-                                {
-                                    label: 'Comments',
-                                    data: comments,
-                                    borderColor: 'rgba(255, 99, 132, 1)',
-                                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                                    borderWidth: 2,
-                                    tension: 0.4
-                                },
-                                {
-                                    label: 'Shares',
-                                    data: shares,
-                                    borderColor: 'rgba(54, 162, 235, 1)',
-                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                    borderWidth: 2,
-                                    tension: 0.4
-                                },
-                                {
-                                    label: 'Followers',
-                                    data: followers,
-                                    borderColor: 'rgba(153, 102, 255, 1)',
-                                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                                    borderWidth: 2,
-                                    tension: 0.4
-                                }
-                            ]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    display: true,
-                                    position: 'top'
-                                },
-                                tooltip: {
-                                    mode: 'index',
-                                    intersect: false
-                                }
-                            },
-                            scales: {
-                                x: {
-                                    title: {
-                                        display: true,
-                                        text: 'Date'
-                                    }
-                                },
-                                y: {
-                                    beginAtZero: true,
-                                    title: {
-                                        display: true,
-                                        text: 'Engagement Count'
-                                    }
-                                }
-                            }
+                            labels: sentimentLabels,
+                            datasets: [{
+                                data: sentimentCounts,
+                                backgroundColor: ["green", "blue", "red"]
+                            }]
+                        }
+                    });
+
+                    // Verified vs Non-Verified Engagement
+                    const verifiedLikes = data.filter(d => d["owner/is_verified"]).reduce((sum, d) => sum + d.likes, 0);
+                    const nonVerifiedLikes = data.filter(d => !d["owner/is_verified"]).reduce((sum, d) => sum + d.likes, 0);
+
+                    new Chart(document.getElementById("verifiedChart"), {
+                        type: "bar",
+                        data: {
+                            labels: ["Verified", "Non-Verified"],
+                            datasets: [{
+                                label: "Likes",
+                                data: [verifiedLikes, nonVerifiedLikes],
+                                backgroundColor: ["blue", "gray"]
+                            }]
                         }
                     });
                 });
             </script>
         {% else %}
-            <p>No engagement data available. Start engaging with your followers to generate metrics!</p>
+            <p>No engagement data available. Upload a CSV file to visualize metrics.</p>
         {% endif %}
     </div>
 </div>
