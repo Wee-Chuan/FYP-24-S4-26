@@ -10,45 +10,15 @@ dashboard_boundary = Blueprint('dashboard_boundary', __name__)
 def dashboard():
     account_type = session.get('account_type')
     user_id = session.get('user_id') 
-    user = User.get_profile(user_id)
-    
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ BUSINESS ANALYST DASHBOARD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    if account_type == 'business_analyst':
-        return render_template('dashboard/business_dashboard.html', user_id=user_id, user=user)
-    
+    user = User.get_profile(user_id)    
     
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INFLUENCER DASHBOARD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    elif account_type == 'influencer':
+    if account_type == 'influencer':
         
-        # if user['linked_social_account']:
-        #     # get the ranking
-        #     ranking_dict = influencer_centrality_ranking.build_graph_and_calculate_centrality()
-        #     rank = next((i for i, key in enumerate(ranking_dict.keys()) if key == user['username']), None) + 1
-        # else:
-        #     rank = "Not available"
-        
-        # ~~~ can be removed ~~~ #
-        # # Check if the linked social media account
-        # linked_account = User.check_if_social_account_linked(user_id)
-
-        # Fetch total engagement metrics for the user
-        metrics = User.visualize_engagement_metrics(user_id)
-    
-        if metrics:
-            total_likes = sum([metric['likes'] for metric in metrics])
-            total_comments = sum([metric['comments'] for metric in metrics])
-            total_shares = sum([metric['shares'] for metric in metrics])
-        else:
-            total_likes = total_comments = total_shares = 0
-
         return render_template(
             'dashboard/influencer_dashboard.html', # html page for influencer dashboard, with needed paras
-            user_id=user_id, user=user,  
-            # linked_account=linked_account,
-            total_likes=total_likes, 
-            total_comments=total_comments, 
-            total_shares=total_shares,
-            # rank = rank
+            user_id=user_id, 
+            user=user
         )
     
     

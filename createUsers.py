@@ -233,7 +233,7 @@ def create_conversation_tree(conversations_data):
 
 def create_top_users_table(conversations_file, output_html_file):
     # Load the JSON data
-    with open(conversations_file, 'r') as file:
+    with open(conversations_file, 'r', encoding='utf-8') as file:
         data = json.load(file)
 
     # Initialize the graph
