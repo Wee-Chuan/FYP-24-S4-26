@@ -1,14 +1,10 @@
 import network as nw
-from flask import Blueprint, render_template, redirect, url_for, session, flash, request, current_app
+from flask import Blueprint, render_template, redirect, url_for, session, flash, request, jsonify
 from entity.user import User
 from entity.followers_hist_entity import FollowerHist
-import csv
-from apify_client import ApifyClient
-from flask import jsonify
-from flask import request, jsonify
-from apify_client import ApifyClient
 import csv, os
-
+from apify_client import ApifyClient
+import createUsers as cu
 
 from werkzeug.utils import secure_filename
 
@@ -154,16 +150,9 @@ def followers():
 def post_page():
     return render_template('dashboard/influencer_menu/post_network.html')
 
-
 @influencer_boundary.route('/commenttree')  
 def commenttree():
     return render_template('templates/comment_tree.html')
-
-
-from flask import request, jsonify
-from apify_client import ApifyClient
-import csv
-import createUsers as cu
 
 @influencer_boundary.route('/post_analysis', methods=['POST'])
 def post_analysis():
@@ -307,7 +296,6 @@ def check_file():
     if file_path and os.path.exists(file_path):
         return jsonify({"exists": True, "message": "File exists."})
     return jsonify({"exists": False, "message": "File does not exist."})
-
 
 @influencer_boundary.route('/display_sentiment_graph')
 def display_sentiment_graph():
