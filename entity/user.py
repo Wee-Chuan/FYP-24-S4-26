@@ -103,7 +103,7 @@ class User:
     #     print(f"Fake social accounts created for user {username}.")
         
     @staticmethod
-    def create_user(username, email, gender, age, password, account_type):
+    def create_user(username, email, gender, age, niche, password, account_type):
         """Creates a new user and stores the hashed password in Firestore."""
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         user_id = str(uuid.uuid4())  # Generate a unique UUID for admin reference
@@ -113,6 +113,7 @@ class User:
             'email': email,  
             'gender': gender,
             'age': age,
+            'niche': niche,
             'password': hashed_password.decode('utf-8'),  # Store as string
             'account_type': account_type,
             'user_id': user_id,
@@ -188,7 +189,7 @@ class User:
             return None
         
     @staticmethod
-    def update_user(user_id, username, email=None, gender=None, age=None, password=None, account_type=None, business_name=None, business_number=None):
+    def update_user(user_id, username, email=None, gender=None, age=None, niche=None, password=None, account_type=None):
         """Updates user details in Firestore."""
         user_ref = db.collection('users').document(user_id)
 
@@ -205,17 +206,13 @@ class User:
             update_data['gender'] = gender
         if age is not None:
             update_data['age'] = age
+        if niche is not None:
+            update_data['niche'] = niche
         if password:
             hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')  # Hash new password
             update_data['password'] = hashed_password
         if account_type is not None:
             update_data['account_type'] = account_type
-        # ~~~ can be removed ~~~ #
-        # if account_type == 'business_analyst':
-        #     if business_name is not None:
-        #         update_data['business_name'] = business_name
-        #     if business_number is not None:
-        #         update_data['business_number'] = business_number
 
         # Update only if there's any data to change
         if update_data:

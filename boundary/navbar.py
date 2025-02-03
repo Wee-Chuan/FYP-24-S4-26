@@ -16,6 +16,7 @@ def register():
         email = request.form['email']
         gender = request.form['gender']
         age = request.form['age']
+        niche = request.form['niche']
         password = request.form['password']
         confirm_password = request.form['confirm_password']
         username = request.form['username']
@@ -25,20 +26,6 @@ def register():
         if not re.match(email_regex, email):
             flash("Invalid email format. Please provide a valid email address.", "danger")
             return render_template('navbar/register.html')
-
-        # # Handle the fields based on the account type
-        # if account_type == "business_analyst":
-        #     business_name = request.form['business_name']
-        #     business_number = request.form['business_number']
-        #     username = request.form['username']
-            
-        #     # Ensure required fields for Business Analyst are filled
-        #     if not business_name or not business_number:
-        #         flash("Business Name and Business Number are required for Business Analysts.", "danger")
-        #         return render_template('navbar/register.html')
-
-        # elif account_type == "influencer":
-        #     username = request.form['username']  # Standard username for influencers
 
         # Check if password and confirm password match
         if password != confirm_password:
@@ -50,11 +37,7 @@ def register():
             flash("Username or email already exists. Please use a different username or email.", "danger")
             return render_template('navbar/register.html')
         
-        # # Create user if password match
-        # if account_type == "business_analyst":
-        #     User.create_user(username, email, password, account_type, business_number=business_number, business_name=business_name)
-        
-        User.create_user(username, email, gender, age, password, account_type)
+        User.create_user(username, email, gender, age, niche, password, account_type)
         #    
         flash("User registered successfully!", "success")
         return redirect(url_for('navbar.login')) # navbar/login endpoint

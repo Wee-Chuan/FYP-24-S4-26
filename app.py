@@ -16,6 +16,9 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY')
 
+# Set session timeout to 30 minutes
+app.permanent_session_lifetime = timedelta(minutes=30)
+
 # Register blueprints
 app.register_blueprint(navbar)
 app.register_blueprint(dashboard_boundary)
@@ -23,6 +26,11 @@ app.register_blueprint(admin_boundary)
 app.register_blueprint(influencer_boundary)
 app.register_blueprint(profile_boundary)
 app.register_blueprint(rate_and_review_boundary)
+
+@app.before_request
+def make_session_permanent():
+    """Make the session permanent to respect the lifetime configuration."""
+    session.permanent = True
 
 @app.route('/')
 def index():
@@ -40,9 +48,7 @@ def index():
   
 @app.route('/logout', methods=['POST', 'GET'])
 def logout():
-    session.pop('user_id', None)
-    session.pop('access_token', None)
-    session.pop('threads_user_id', None)
+    session.clear()
     flash("You have been logged out", "info")
 
     return redirect(url_for('index'))

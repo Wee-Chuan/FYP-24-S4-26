@@ -27,7 +27,18 @@
                 </select>
 
                 <label for="age">Age</label>
-                <input type="number" id="age" name="age"  min="16" max="99" value="{{ user['age'] }}" required>
+                <input type="number" id="age" name="age"  min="16" max="99" value="{{ user['age'] if user['age'] is defined and user['age'] else ''}}" required>
+
+
+                <label for="niche">Niche</label>
+                <select id="niche" name="niche">
+                    <option value="" {% if user['niche'] is not defined or not user['niche'] %}selected{% endif %}>Select Niche</option>
+                    <option value="fashion&lifestyle" {% if user['niche'] == 'fashion&lifestyle' %}selected{% endif %}>Fashion & Lifestyle</option>
+                    <option value="health&fitness" {% if user['niche'] == 'health&fitness' %}selected{% endif %}>Health & Fitness</option>
+                    <option value="travel&adventure" {% if user['niche'] == 'travel&adventure' %}selected{% endif %}>Travel & Adventure</option>
+                    <option value="tech&gadgets" {% if user['niche'] == 'tech&gadgets' %}selected{% endif %}>Tech & Gadgets</option>
+                    <option value="beauty&skincare" {% if user['niche'] == 'beauty&skincare' %}selected{% endif %}>Beauty & Skincare</option>
+                </select>
 
                 <label for="password">New Password (leave blank if not changing)</label>
                 <input type="password" id="password" name="password">
@@ -35,21 +46,8 @@
                 <label for="password">Confirm New Password (leave blank if not changing)</label>
                 <input type="password" id="confirm_password" name="confirm_password">
 
-                {% if user.account_type == "admin" %}
-                    <!-- Display account type as read-only for admins -->
-                    <label for="account_type">Account Type</label>
-                    <input type="text" id="account_type" name="account_type" value="{{ user['account_type'] }}" readonly>
-                {% else %}
-                    <!-- Editable account type dropdown for non-admin users -->
-                    {% if user.account_type == "business_analyst" or user.account_type == "influencer" %}
-                        <label for="account_type">Account Type</label>
-                        <select id="account_type" name="account_type" required>
-                            <option value="business_analyst" {% if user['account_type'] == 'business_analyst' %}selected{% endif %}>Business Analyst</option>
-                            <option value="influencer" {% if user['account_type'] == 'influencer' %}selected{% endif %}>Influencer</option>
-                        </select>
-                    {% endif %}
-                {% endif %}
-
+                <label for="account_type">Account Type</label>
+                <input type="text" id="account_type" name="account_type" value="{{ user['account_type'] }}" readonly>
 
                 <!-- Additional fields for business analysts -->
                 <!-- {% if user.account_type == "business_analyst" %}
