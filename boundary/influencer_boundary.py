@@ -1,11 +1,10 @@
-<<<<<<< HEAD
 import network as nw
 from flask import Blueprint, render_template, redirect, url_for, session, flash, request, jsonify
 from entity.user import User
 from entity.followers_hist_entity import FollowerHist
-=======
+import createUsers as cu
 import os
->>>>>>> UpdatedKevin-subBranch
+
 import csv
 import pandas as pd
 import network as nw  
@@ -16,7 +15,7 @@ from werkzeug.utils import secure_filename
 from apify_client import ApifyClient  
 from entity.user import User
 from entity.followers_hist_entity import FollowerHist  
-import influencer_centrality_ranking  
+
 
 # Define Flask Blueprint
 influencer_boundary = Blueprint('influencer_boundary', __name__)
