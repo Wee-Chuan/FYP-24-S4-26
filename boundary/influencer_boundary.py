@@ -1,74 +1,94 @@
+<<<<<<< HEAD
 import network as nw
 from flask import Blueprint, render_template, redirect, url_for, session, flash, request, current_app
 from entity.user import User
 from entity.followers_hist_entity import FollowerHist
+=======
+import os
+>>>>>>> UpdatedKevin-subBranch
 import csv
-from apify_client import ApifyClient
-from flask import jsonify
-from flask import request, jsonify
-from apify_client import ApifyClient
-import csv, os
-
-
+import pandas as pd
+import network as nw  
+from flask import (
+    Blueprint, render_template, jsonify, session, request, redirect, url_for, flash, current_app
+)
 from werkzeug.utils import secure_filename
+from apify_client import ApifyClient  
+from entity.user import User
+from entity.followers_hist_entity import FollowerHist  
+import influencer_centrality_ranking  
 
+# Define Flask Blueprint
 influencer_boundary = Blueprint('influencer_boundary', __name__)
 
-# =================== Influencer Dashboard Menu =================== #
+# Path for Engagement Metrics CSV
+ENGAGEMENT_CSV_PATH = "engagement_metrics.csv"
 
-@influencer_boundary.route('/dashboard/engagement_metrics', methods=['GET'])
+
+@influencer_boundary.route("/dashboard/engagement_metrics", methods=["GET"])
 def engagement_metrics():
     """
-    Route to visualize the user's engagement metrics.
+    Renders the engagement dashboard. Users can select a post to analyze.
     """
     try:
-        # Get the logged-in user ID and account type
-        user_id = session.get('user_id')
-        account_type = session.get('account_type')
+        if not os.path.exists(ENGAGEMENT_CSV_PATH):
+            return "⚠️ Error: engagement_metrics.csv file not found!", 400
 
-        # Check if the user exists and is an influencer
-        user = User.get_profile(user_id)
-        if not user or account_type != 'influencer':
-            flash("Unauthorized access. Only influencers can view engagement metrics.", "danger")
-            return redirect(url_for('dashboard_boundary.dashboard'))
-        
-        
-        # CHECKING IF ACCOUNT IS LINKEDDDDDDDDDDDDDDDDDDDDDDDDDDD 
-        if user['linked_social_account'] == "":
-            flash("Please link to your social media acccount first", "danger")
-            return redirect(url_for('dashboard_boundary.dashboard'))
+        # Process CSV and get post URLs
+        post_urls, engagement_data = User.process_engagement_data(ENGAGEMENT_CSV_PATH)
 
-        metrics = User.visualize_engagement_metrics(user_id)
+        if not engagement_data:
+            return render_template("dashboard/influencer_menu/engagement.html", post_urls=[], engagement_data=[])
 
-        # Check if any field is None or undefined
-        for metric in metrics:
-            for key, value in metric.items():
-                if value is None:
-                    print(f"Missing value for {key} in metric: {metric}")
+        # Store engagement CSV path in session
+        session["engagement_csv"] = ENGAGEMENT_CSV_PATH
 
-        # Handle cases where no engagement data is available
-        if not metrics:
-            flash("No engagement metrics available.", "danger")
-            return render_template(
-                'dashboard/influencer_menu/engagement.html',
-                user_id=user_id,
-                user=user,
-                metrics=None,
-            )
-
-        # Pass metrics to the template
         return render_template(
-            'dashboard/influencer_menu/engagement.html',
-            user_id=user_id,
-            user=user,
-            metrics=metrics,
+            "dashboard/influencer_menu/engagement.html",
+            post_urls=post_urls,
+            engagement_data=engagement_data
         )
 
     except Exception as e:
-        # Handle unexpected errors and log them
-        print(f"Error fetching engagement metrics: {e}")
-        flash("An error occurred while fetching engagement metrics.", "danger")
-        return redirect(url_for('dashboard_boundary.dashboard'))
+        print(f"❌ Error loading engagement dashboard: {e}")
+        return f"An error occurred: {e}", 500
+
+
+@influencer_boundary.route("/api/get_visualization_data", methods=["GET"])
+def get_visualization_data():
+    """
+    API endpoint to retrieve engagement data for a selected post.
+    """
+    try:
+        # Ensure engagement_metrics.csv exists
+        csv_file = session.get("engagement_csv", ENGAGEMENT_CSV_PATH)
+
+        if not os.path.exists(csv_file):
+            return jsonify({"error": "⚠️ No CSV file found. Please generate engagement data first."}), 404
+
+        post_url = request.args.get("post_url")
+        if not post_url:
+            return jsonify({"error": "⚠️ Missing post URL parameter."}), 400
+
+        post_data = User.get_post_engagement(csv_file, post_url)
+        if not post_data:
+            return jsonify({"error": "⚠️ No data found for the selected post."}), 404
+
+        # Generate AI Summary
+        ai_summary = User.generate_ai_summary(post_data[0])
+
+        return jsonify({
+            "post_data": post_data,
+            "ai_summary": ai_summary
+        })
+
+    except Exception as e:
+        print(f"❌ Error fetching visualization data: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
+
+###################################################################################################################
 
 @influencer_boundary.route('/followers', methods=['GET', 'POST'])
 def followers():

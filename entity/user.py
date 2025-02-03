@@ -5,6 +5,25 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import mpld3
 from datetime import datetime, timedelta
+from bertopic import BERTopic 
+
+import pandas as pd
+from wordcloud import WordCloud
+from transformers import pipeline
+
+import emoji
+from collections import Counter
+
+
+import os
+
+import torch
+from collections import Counter
+
+from transformers import pipeline
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+
 
 import uuid
 import sys
@@ -15,11 +34,33 @@ import random
 from faker import Faker
 from dotenv import load_dotenv
 import os
+from sklearn.decomposition import NMF
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+import pandas as pd
+import nltk
+from nltk.sentiment import SentimentIntensityAnalyzer
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+import json
+from transformers import pipeline
+
+# Ensure NLTK Vader Lexicon is available
+nltk.download('vader_lexicon', quiet=True)
+
+# Load AI Summarization Model (Runs Locally)
+device = "cuda" if torch.cuda.is_available() else "cpu"
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn", device=0 if torch.cuda.is_available() else -1)
+
+nltk.download('vader_lexicon')
+sia = SentimentIntensityAnalyzer()
 
 # Load environment variables
 load_dotenv()
 
 fake = Faker()
+
+
 
 import firebase_admin
 from firebase_admin import credentials, firestore, auth
@@ -376,71 +417,151 @@ class User:
     
     #=======================KEVIN======================================================================#
     @staticmethod
-    def visualize_engagement_metrics(user_id):
+    def process_engagement_data(csv_path):
         """
-        Visualizes engagement metrics (likes, comments, shares, followers) for the user over time.
+        Reads engagement data, filters required columns, and creates engagement_metrics.csv.
+        Returns post URLs and engagement data.
         """
         try:
-            # Check if the user has linked any social media accounts
-            if User.check_if_social_account_linked(user_id) == "":
-                return []  # Return an empty list if no account is linked
-            
-            if User.check_if_social_account_linked(user_id) == "twitter":
-                platform = "twitter_social_accounts"
-            else:
-                platform = "facebook_social_accounts"
+            if not os.path.exists(csv_path):
+                raise FileNotFoundError("CSV file not found!")
 
-            # Fetch engagement metrics
-            print(f"Fetching engagement metrics for user_id: {user_id}")
-            metrics_ref = db.collection(platform).document(user_id).collection('history')
-            metrics = [doc.to_dict() for doc in metrics_ref.stream()]
+            df = pd.read_csv(csv_path)
 
-            if not metrics:
-                print(f"No engagement metrics found for user_id: {user_id}")
-                return None
+            # Required columns
+            required_columns = {'id', 'likesCount', 'repliesCount', 'text', 'owner/is_verified', 'postUrl'}
+            missing_columns = required_columns - set(df.columns)
 
-            # Convert the date field to datetime if it's in string format
-            for metric in metrics:
-                if isinstance(metric.get("date"), str):
-                    metric["date"] = datetime.strptime(metric["date"], "%Y-%m-%d")
+            if missing_columns:
+                raise ValueError(f"CSV is missing required columns: {missing_columns}")
 
-            # Define the date one year ago from the latest available date
-            latest_date = max([metric["date"] for metric in metrics])
-            one_year_ago = latest_date - timedelta(days=365)
+            # Filter and rename columns
+            df_filtered = df[list(required_columns)].rename(columns={
+                'likesCount': 'likes',
+                'repliesCount': 'comments',
+                'owner/is_verified': 'verified'
+            })
 
-            # Filter metrics for the last year
-            filtered_metrics = [
-                metric for metric in metrics
-                if isinstance(metric.get("date"), datetime) and metric["date"] >= one_year_ago
-            ]
+            # Compute engagement score
+            df_filtered["engagement_score"] = df_filtered["likes"] + df_filtered["comments"]
 
-            if not filtered_metrics:
-                print("Not enough data for the past year.")
-                return None
+            # Save processed engagement data
+            df_filtered.to_csv("engagement_metrics.csv", index=False)
 
-            # Sort the metrics by date
-            filtered_metrics.sort(key=lambda x: x["date"])
+            # Get unique post URLs for selection
+            post_urls = df_filtered["postUrl"].dropna().unique().tolist()
 
-            processed_metrics = []
+            return post_urls, df_filtered.to_dict(orient="records")
 
-            # Prepare the final data structure for return
-            processed_metrics = [
-                {
-                    "date": metric["date"].strftime("%Y-%m-%d"),
-                    "follower_count": metric["follower_count"],
-                    "likes": metric["likes"],
-                    "comments": metric["comments"],
-                    "shares": metric["shares"]
-                }
-                for metric in filtered_metrics
-            ]
-            
-            return processed_metrics
-        
         except Exception as e:
-            print(f"Error visualizing engagement metrics for user_id {user_id}: {e}")
+            print(f"❌ Error processing engagement CSV: {e}")
+            return [], []
+
+    @staticmethod
+    def get_post_engagement(csv_path, post_url):
+        """
+        Retrieves engagement data for a single post.
+        """
+        try:
+            if not os.path.exists(csv_path):
+                raise FileNotFoundError("CSV file not found!")
+
+            df = pd.read_csv(csv_path)
+            post_data = df[df["postUrl"] == post_url]
+
+            if post_data.empty:
+                return []
+
+            return post_data.to_dict(orient="records")
+
+        except Exception as e:
+            print(f"❌ Error retrieving post engagement: {e}")
+            return []
+
+    @staticmethod
+    def generate_ai_summary(post_data):
+        """
+        Generates AI summary based on engagement metrics with more depth.
+        """
+        try:
+            if isinstance(post_data, list) and len(post_data) > 0:
+                post_data = post_data[0]  # Take the first post entry
+            elif isinstance(post_data, dict):
+                pass  # Already in dictionary format
+            else:
+                return "⚠️ AI Summary not available (Invalid post data format)."
+
+            # Extract engagement data
+            post_text = post_data.get("text", "No caption available")
+            likes = post_data.get("likesCount", 0)
+            comments = post_data.get("repliesCount", 0)
+            engagement_score = likes + comments
+            verified = "✅ Verified Account" if post_data.get("owner/is_verified", False) else "❌ Non-Verified Account"
+
+            # Create structured input for AI summarization
+            summary_input = f"""
+            Post Analysis:
+            - {verified}
+            - Likes: {likes}
+            - Comments: {comments}
+            - Engagement Score: {engagement_score}
+            - Caption Preview: {post_text[:300]}...  # Limit text for AI input
+            - Observations:
+                * Higher engagement means better reach.
+                * Verified accounts typically get more engagement.
+                * Posts with questions or emotional words tend to perform better.
+            """
+
+            # Generate detailed summary with increased `max_length`
+            summary = summarizer(summary_input, max_length=120, min_length=50, do_sample=False)[0]["summary_text"]
+
+            # Final formatted summary
+            final_summary = (
+                f"📊 **Post Engagement Analysis**\n"
+                f"📌 **Account Status:** {verified}\n"
+                f"👍 **Likes:** {likes} | 💬 **Comments:** {comments} | 🔥 **Engagement Score:** {engagement_score}\n"
+                f"📝 **Caption Preview:** \"{post_text[:150]}...\"\n\n"
+                f"🔍 **AI Insights:** {summary}\n\n"
+                
+            )
+
+            return final_summary
+
+        except Exception as e:
+            print(f"❌ Error generating AI summary: {e}")
+            return "⚠️ AI Summary not available."
+
+
+    @staticmethod
+    def extract_most_used_emojis(comments):
+        """
+        Extracts the most frequently used emojis from comments.
+        """
+        try:
+            emoji_list = []
+            for comment in comments.dropna():
+                emoji_list.extend([char for char in comment if char in emoji.EMOJI_DATA])
+
+            return dict(Counter(emoji_list).most_common(10))
+
+        except Exception as e:
+            print(f"❌ Error extracting emojis: {e}")
+            return {}
+
+    @staticmethod
+    def generate_wordcloud(comments):
+        """
+        Generates a word cloud from comment text.
+        """
+        try:
+            text = " ".join(comments.dropna())
+            wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text)
+            wordcloud.to_file("static/wordcloud.png")
+            return "static/wordcloud.png"
+
+        except Exception as e:
+            print(f"❌ Error generating word cloud: {e}")
             return None
-    
     #===================== Ratings and Reviews ==============================#
     def save_rate_and_review(user_id, rating, category, review, username):
         """
