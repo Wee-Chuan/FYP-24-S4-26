@@ -15,8 +15,6 @@
         <ul class="menu">
             <li class="divider"></li>
             <li><a href="{{ url_for('admin_boundary.manage_accounts') }}" class="active"><i class="fas fa-users"></i>View All Users</a></li>
-            <li><a href="{{ url_for('admin_boundary.approve_accounts') }}"><i class="fas fa-user-check"></i> Approve Accounts</a></li>
-            <li class="divider"></li>
             <li><a href="{{ url_for('admin_boundary.manage_landing_page') }}"><i class="fas fa-pencil-alt"></i>Manage Landing Page</a></li>
             <li><a href="{{ url_for('admin_boundary.manage_about_us_page') }}"><i class="fas fa-info-circle"></i>Manage About Us Page</a></li>
             <li><a href="{{ url_for('admin_boundary.manage_customer_support_page') }}"><i class="fas fa-headset"></i>Manage Customer Support</a></li>
@@ -34,19 +32,12 @@
                 <!-- <button onclick="searchUser()"><i class="fas fa-search"></i> Search</button> -->
             </div>
 
-            <!-- Filter Buttons -->
-            <div class="filter-buttons">
-                <button onclick="filterUsers('influencer')" data-filter="influencer" class="{% if currentFilter == 'influencer' %}active{% endif %}">Influencers</button>
-                <button onclick="filterUsers('business_analyst')" data-filter="business_analyst" class="{% if currentFilter == 'business_analyst' %}active{% endif %}">Business Users</button>
-            </div>
-
             <!-- Results Container -->
             <div id="resultsContainer" class="user-list">
                 <table>
                     <thead>
                         <tr>
                             <th>Username</th>
-                            <!-- <th>Email</th> -->
                             <th>Account Type</th>
                             <th>Status</th>
                             <th>Actions</th>
@@ -58,7 +49,7 @@
                             <td>{{ user.username }}</td>
                             <!-- <td>{{ user.email }}</td> -->
                             <td>{{ user.account_type }}</td>
-                            <td>{{ 'Suspended' if user.is_suspended else ( 'Pending Approval' if user.account_type == 'business_analyst' and not user.is_approved else 'Active' ) }}</td>
+                            <td>{{ 'Suspended' if user.is_suspended else 'Active' }}</td>
                             <td>
                                 <button class="action-button" id="view" onclick="viewUserDetails('{{ user.user_id }}')"><i class="fas fa-eye"></i> View</button>
                                 <button class="suspend-button" id="suspend" onclick="suspendUser('{{ user.user_id }}')"><i class="fas fa-ban"></i> Suspend</button>
@@ -77,18 +68,9 @@
                 <h3>User Details</h3>
                 <p><strong>UserID:</strong> <span id="modalUserID"></span></p>
                 <p><strong>Username:</strong> <span id="modalUsername"></span></p>
-
-                <!-- Business Analyst Specific Information -->
-                <div id="businessDetails" style="display:none;">
-                    <p><strong>Business Name:</strong> <span id="modalBusinessName"></span></p>
-                    <p><strong>Business Number:</strong> <span id="modalBusinessNumber"></span></p>
-                </div>
-
                 <p><strong>Email:</strong> <span id="modalEmail"></span></p>
                 <p><strong>Account Type:</strong> <span id="modalAccountType"></span></p>
                 <p><strong>Linked Social Account:</strong> <span id="modalLinkedSocial"></span></p>
-                <!-- <p><strong>Followers:</strong> <span id="modalFollowers"></span></p>
-                <p><strong>Following:</strong> <span id="modalFollowing"></span></p> -->
                 <p><strong>Status:</strong> <span id="modalStatus"></span></p>
             </div>
         </div>
@@ -134,36 +116,6 @@
         }
     }
 
-    // Function to handle filtering by user type
-    function filterUsers(filter) {
-        currentFilter = filter; // Set the current filter to the selected value
-
-        // Log the filter change
-        console.log(`Filter changed to: ${currentFilter}`); // Log the new filter value
-        
-        // Update the active class on the filter buttons
-        const filterButtons = document.querySelectorAll('.filter-buttons button');
-        
-        // Remove 'active' class from all filter buttons
-        filterButtons.forEach(button => {
-            button.classList.remove('active');
-        });
-
-        // Add 'active' class to the clicked button
-        const activeButton = document.querySelector(`.filter-buttons button[data-filter="${filter}"]`);
-        if (activeButton) {
-            activeButton.classList.add('active');
-        }
-        
-        const query = document.getElementById('userSearchInput').value; // Get current search input
-        fetch(`/dashboard/admin/get_filtered_users?query=${encodeURIComponent(query)}&filter=${encodeURIComponent(currentFilter)}`)
-            .then(response => response.json())
-            .then(data => {
-                displaySearchResults(data); // Update the user list based on filter
-            })
-            .catch(error => console.error('Error fetching filtered users:', error));
-    }
-
     function displaySearchResults(data) {
         const userTableBody = document.getElementById('userTableBody');
         userTableBody.innerHTML = ''; // Clear previous results
@@ -174,7 +126,7 @@
                     <td>${user.username}</td>
                     
                     <td>${user.account_type}</td>
-                    <td>${user.account_type === 'business_analyst' && !user.is_approved ? 'Pending Approval' : 'Active'}</td>
+                    <td>${user.is_suspended ? 'Suspended' : 'Active'}</td>
                     <td>
                         <button class="action-button" id="view" onclick="viewUserDetails('${user.user_id}')"><i class="fas fa-eye"></i> View</button>
                         <button class="suspend-button" id="suspend" onclick="suspendUser('${user.user_id}')"><i class="fas fa-ban"></i> Suspend</button>
@@ -196,20 +148,7 @@
                 document.getElementById('modalAccountType').textContent = data.account_type;
                 document.getElementById('modalLinkedSocial').textContent = data.linked_social_account;
 
-                // Business analyst specific information
-                const businessDetailsSection = document.getElementById('businessDetails')
-                if (data.account_type === 'business_analyst') {
-                    businessDetailsSection.style.display = 'block';
-                    document.getElementById('modalBusinessName').textContent = data.business_name;
-                    document.getElementById('modalBusinessNumber').textContent = data.business_number;
-                } else {
-                    businessDetailsSection.style.display = 'none';
-                }
-
-                // Determine and display account status
-                if (data.account_type === 'business_analyst') {
-                    document.getElementById('modalStatus').textContent = !data.is_approved ? 'Pending Approval' : 'Active';
-                } else if (data.account_type === 'influencer') {
+                if (data.account_type === 'influencer') {
                     document.getElementById('modalStatus').textContent = data.is_suspended ? 'Suspended' : 'Active';
                 } else {
                     document.getElementById('modalStatus').textContent = 'Active'; // Default for other account types

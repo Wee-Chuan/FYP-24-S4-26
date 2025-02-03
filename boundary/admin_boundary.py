@@ -83,19 +83,6 @@ def approve_user():
         # Redirect back to the 'approve_accounts' page
         return redirect(url_for('admin_boundary.approve_accounts'))
 
-# Function to display business accounts who needs approval page
-@admin_boundary.route('/dashboard/admin/approve_accounts')
-def approve_accounts():
-    if session.get('account_type') != 'admin':
-        flash("Unauthorized access", "danger")
-        return redirect(url_for('index'))
-
-    all_users = Admin.get_all_users()
-    business_analysts = [user for user in all_users if user['account_type'] == 'business_analyst']
-
-    return render_template('dashboard/admin_menu/approve_accounts.html', business_analysts=business_analysts, current_page='approve_accounts')
-
-
 @admin_boundary.route('/dashboard/admin/get_user_details/<string:user_id>', methods=['GET'])
 def get_user_details(user_id):
     if session.get('account_type') != 'admin':

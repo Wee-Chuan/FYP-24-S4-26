@@ -21,19 +21,17 @@ def update_account():
     # Safely handle missing fields
     current_gender = current_user_data.get('gender', '') 
     current_age = current_user_data.get('age', '') 
+    current_niche = current_user_data.get('niche', '')
     
     if request.method == 'POST':
         username = request.form['username']
         email = request.form['email']
         gender = request.form['gender']
         age = request.form['age']
+        niche = request.form['niche']
         password = request.form.get('password')  
         confirm_password = request.form['confirm_password']
         account_type = request.form['account_type'] 
-
-        # Only fetch business-specific fields if the user is a business account
-        business_name = request.form.get('business_name') if account_type == 'business_analyst' else None
-        business_number = request.form.get('business_number') if account_type == 'business_analyst' else None
 
         changes_made = False
 
@@ -45,6 +43,8 @@ def update_account():
             changes_made = True
         if current_age != age:
             changes_made = True
+        if current_niche != niche:
+            changes_made = True
         if current_user_data['account_type'] != account_type:
             changes_made = True
 
@@ -55,17 +55,10 @@ def update_account():
                 return redirect(url_for('profile_boundary.update_account'))
             changes_made = True
 
-        # Check for changes in business-specific fields
-        if account_type == 'business_analyst':
-            if current_user_data.get('business_name') != business_name:
-                changes_made = True
-            if current_user_data.get('business_number') != business_number:
-                changes_made = True
-
         # If there is changes
         if changes_made:
             # Call the update_user method with the new data
-            User.update_user(user_id, username, email, gender, age, password, account_type, business_name, business_number)
+            User.update_user(user_id, username, email, gender, age, niche, password, account_type)
             flash("Account details updated successfully!", "success")
         else:
             flash("No changes were made to your account.", "info")  # Notify the user
