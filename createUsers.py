@@ -127,14 +127,14 @@ def create_conversations(users_data):
 
 def make_convo_file():
     # Load the users data (assuming the 'users.json' file is structured as shown)
-    with open('users.json', 'r', encoding='utf-8') as file:
+    with open('data/users.json', 'r', encoding='utf-8') as file:
         users_data = json.load(file)
 
     # Create conversations from the user data
     conversations = create_conversations(users_data)
 
     # Save the conversations to a JSON file
-    with open('static/conversations.json', 'w', encoding='utf-8') as file:
+    with open('data/conversations.json', 'w', encoding='utf-8') as file:
         json.dump(conversations, file, ensure_ascii=False, indent=4)
 
     print("Conversations have been saved to conversations.json.")
@@ -298,7 +298,6 @@ def create_top_users_table(conversations_file, output_html_file):
             table {
                 width: 100%;
                 border-collapse: collapse;
-                margin-top: 20px;
                 background-color: #ffffff;
                 border-radius: 10px;
                 overflow: hidden;
@@ -323,10 +322,6 @@ def create_top_users_table(conversations_file, output_html_file):
             h1 {
                 text-align: center;
                 color: #04647a;
-            }
-            .container {
-                border-radius: 10px;
-                padding: 20px;
             }
         </style>
     </head>
@@ -371,9 +366,10 @@ def create_top_users_table(conversations_file, output_html_file):
     print(f"Table saved to {output_html_file}")
 
 def show_network():
-    conversation_file = 'static/conversations.json'  # Input JSON file containing conversations data
+    conversation_file = 'data/conversations.json'  # Input JSON file containing conversations data
     conversations_data = load_conversations(conversation_file)
     create_conversation_tree(conversations_data)
-    create_top_users_table('conversations.json', 'static/top_users_table.html') 
+    create_top_users_table('data/conversations.json', 'static/top_users_table.html') 
 
+create_top_users_table('data/conversations.json', 'static/top_users_table.html') 
 
