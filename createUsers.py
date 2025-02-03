@@ -76,8 +76,8 @@ def write_users_to_json(users, output_file):
     print(f"User data has been written to {output_file}")
 
 def create_user_json():
-    input_file = 'commentData.csv'  # Input CSV file with comment data
-    output_file = 'users.json'  # Output JSON file to store user data
+    input_file = 'data/postCommentData.csv'  # Input CSV file with comment data
+    output_file = 'data/users.json'  # Output JSON file to store user data
 
     users = process_comment_data(input_file)
     write_users_to_json(users, output_file)

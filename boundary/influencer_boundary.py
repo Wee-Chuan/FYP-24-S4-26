@@ -2,7 +2,6 @@ import network as nw
 from flask import Blueprint, render_template, redirect, url_for, session, flash, request, current_app
 from entity.user import User
 from entity.followers_hist_entity import FollowerHist
-import influencer_centrality_ranking
 import csv
 from apify_client import ApifyClient
 from flask import jsonify

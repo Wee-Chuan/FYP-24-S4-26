@@ -3,7 +3,6 @@ from flask import Blueprint, render_template, redirect, url_for, session, flash,
 from entity.user import User
 from entity.admin import Admin
 from entity.followers_hist_entity import FollowerHist
-import influencer_centrality_ranking
 
 dashboard_boundary = Blueprint('dashboard_boundary', __name__)
 

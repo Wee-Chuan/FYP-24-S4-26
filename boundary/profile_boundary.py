@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, session, flash, request
 from entity.user import User
-import bcrypt
 
 profile_boundary = Blueprint('profile_boundary', __name__)
     
