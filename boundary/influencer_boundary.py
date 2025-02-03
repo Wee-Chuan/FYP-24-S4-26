@@ -192,7 +192,7 @@ def post_analysis():
     comments_run = client.actor("SbK00X0JYCPblD2wp").call(run_input=comments_scraper_input)
 
     # Open a CSV file to save the comments data
-    csv_file_path = 'commentData.csv'  # Save in the static folder
+    csv_file_path = 'data/postCommentData.csv'  # Save in the static folder
     with open(csv_file_path, 'w', newline='', encoding='utf-8') as csvfile:
         # Fetch all the unique keys across all items
         all_fieldnames = set()
@@ -270,7 +270,7 @@ def display_network():
     run = client.actor("SbK00X0JYCPblD2wp").call(run_input=run_input)
 
     # Open a CSV file to save the comments data
-    with open('commentData.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    with open('data/commentData.csv', 'w', newline='', encoding='utf-8') as csvfile:
         # Fetch all the unique keys across all items
         all_fieldnames = set()
 
@@ -292,7 +292,7 @@ def display_network():
             # Write each comment as a new row in the CSV file
             writer.writerow(item)
 
-    print("All comments saved to commentData.csv")
+    print("All comments saved to data/commentData.csv")
     
     nw.generateGraphs(username)
     

@@ -1,8 +1,8 @@
-import csv, re, json
+import csv, re, json, os, random
 from collections import defaultdict
 from postclasses import Comment, User
 import networkx as nx
-import plotly.graph_objects as go
+from pyvis.network import Network
 
 def extract_parent_id_from_url(url):
     """Extract the parent ID from the URL."""
@@ -139,10 +139,6 @@ def make_convo_file():
 
     print("Conversations have been saved to conversations.json.")
 
-import json
-from pyvis.network import Network
-import random
-
 # Load the conversations.json data
 def load_conversations(convo_file):
     with open(convo_file, 'r', encoding='utf-8') as file:
@@ -151,10 +147,6 @@ def load_conversations(convo_file):
 # Generate a random color
 def generate_random_color():
     return f"rgb({random.randint(100, 255)}, {random.randint(100, 255)}, {random.randint(100, 255)})"
-
-import os
-from pyvis.network import Network
-import random
 
 # Function to generate random colors
 def generate_random_color():
@@ -238,8 +230,8 @@ def create_conversation_tree(conversations_data):
         file.write(html_content)
 
     print(f"The comment tree has been saved to {output_path}")
-    
-def create_interactive_network_graph(conversations_file, output_html_file):
+
+def create_top_users_table(conversations_file, output_html_file):
     # Load the JSON data
     with open(conversations_file, 'r') as file:
         data = json.load(file)
@@ -249,7 +241,8 @@ def create_interactive_network_graph(conversations_file, output_html_file):
     G.add_node('post')
 
     comment_user_map = {}
-    user_conversations = {}
+    user_conversations = defaultdict(list)
+    user_comments = defaultdict(list)
 
     for conversation_id, conversation_data in data.items():
         comments = conversation_data['comments']
@@ -258,6 +251,7 @@ def create_interactive_network_graph(conversations_file, output_html_file):
             username = comment['username']
             comment_id = comment['comment_id']
             parent_id = comment['parent_id']
+            likes = comment.get('likes', 0)  # Default to 0 if 'likes' key is missing
 
             # Add the user to the graph and the 'post' node connection
             G.add_node(username)
@@ -267,10 +261,11 @@ def create_interactive_network_graph(conversations_file, output_html_file):
             comment_user_map[comment_id] = username
 
             # Track which conversations each user is in
-            if username not in user_conversations:
-                user_conversations[username] = []
             if conversation_id not in user_conversations[username]:
                 user_conversations[username].append(conversation_id)
+
+            # Track comments and likes for each user
+            user_comments[username].append(f"{comment['text']} (Likes: {likes})")
 
             # Add edges between users if there's a reply relationship
             if parent_id and parent_id in comment_user_map:
@@ -281,79 +276,104 @@ def create_interactive_network_graph(conversations_file, output_html_file):
     # Centrality analysis (degree centrality for simplicity)
     centrality = nx.degree_centrality(G)
 
-    # Sort nodes by centrality in descending order
-    sorted_nodes = sorted(centrality.items(), key=lambda x: x[1], reverse=True)
-
-    # Exclude the 'post' node from being highlighted
-    sorted_nodes = [node for node in sorted_nodes if node[0] != 'post']
+    # Sort nodes by centrality in descending order, excluding the 'post' node
+    sorted_nodes = [node for node, _ in sorted(centrality.items(), key=lambda x: x[1], reverse=True) if node != 'post']
 
     # Get the top 5 most central nodes
-    top_5_central_nodes = [node[0] for node in sorted_nodes[:5]]
+    top_5_central_nodes = sorted_nodes[:5]
 
-    # Get node positions for visualization
-    pos = nx.spring_layout(G)
+    # Build the HTML table
+    html_content = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Top 5 Central Users</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f9f9f9; 
+                margin: 2em;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                background-color: #ffffff;
+                border-radius: 10px;
+                overflow: hidden;
+            }
+            th, td {
+                border: 1px solid #ddd;
+                padding: 12px;
+                text-align: left;
+                word-wrap: break-word;
+                max-width: 300px;
+            }
+            th {
+                background-color: #04647a;
+                color: white;
+            }
+            tr:nth-child(even) {
+                background-color: #f0fdfa;
+            }
+            tr:hover {
+                background-color: #b7e4e5;
+            }
+            h1 {
+                text-align: center;
+                color: #04647a;
+            }
+            .container {
+                border-radius: 10px;
+                padding: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Top 5 Central Users in the Conversation Graph</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Comments</th>
+                        <th>Conversations</th>
+                    </tr>
+                </thead>
+                <tbody>
+    """
 
-    # Extract the node positions, names, and colors
-    x_nodes = [pos[node][0] for node in G.nodes()]
-    y_nodes = [pos[node][1] for node in G.nodes()]
-    node_text = [f"{node}" for node in G.nodes()]  # Show only username in node title
+    for user in top_5_central_nodes:
+        user_comment_list = "<br>".join(user_comments[user])
+        conversation_list = ", ".join(user_conversations[user])
 
-    edges_x = []
-    edges_y = []
+        html_content += f"""
+        <tr>
+            <td>{user}</td>
+            <td>{user_comment_list}</td>
+            <td>{conversation_list}</td>
+        </tr>
+        """
 
-    for edge in G.edges():
-        x0, y0 = pos[edge[0]]
-        x1, y1 = pos[edge[1]]
-        edges_x.append(x0)
-        edges_x.append(x1)
-        edges_x.append(None)
-        edges_y.append(y0)
-        edges_y.append(y1)
-        edges_y.append(None)
+    html_content += """
+                </tbody>
+            </table>
+        </div>
+    </body>
+    </html>
+    """
 
-    # Create edge traces
-    edge_trace = go.Scatter(
-        x=edges_x, y=edges_y,
-        line=dict(width=0.5, color='#888'),
-        hoverinfo='none',
-        mode='lines'
-    )
+    # Save the HTML file
+    with open(output_html_file, 'w', encoding='utf-8') as file:
+        file.write(html_content)
 
-    # Create node trace
-    node_trace = go.Scatter(
-        x=x_nodes, y=y_nodes,
-        mode='markers+text',
-        text=node_text,  # Username only in node title
-        hoverinfo='text',  # Show conversation details in hovertext
-        marker=dict(
-            showscale=True,
-            colorscale='YlGnBu',
-            size=15,
-            colorbar=None  # Remove the color bar
-        )
-    )
-
-    # Highlight the top 5 most central nodes
-    node_marker = node_trace.marker
-    node_marker['color'] = ['red' if node in top_5_central_nodes else 'blue' for node in G.nodes()]
-    node_marker['size'] = [20 if node in top_5_central_nodes else 10 for node in G.nodes()]
-
-    # Set up hover text to show conversations for each user
-    hovertext = [f"{node}: {', '.join(user_conversations.get(node, []))}" for node in G.nodes()]
-    node_trace.hovertext = hovertext
-
-    # Create the figure
-    fig = go.Figure(data=[edge_trace, node_trace])
-    fig.update_layout(showlegend=False, title="Interactive Network Graph with Conversations")
-
-    # Save the plot as an HTML file
-    fig.write_html(output_html_file)
-
-    print(f"Graph saved to {output_html_file}")
+    print(f"Table saved to {output_html_file}")
 
 def show_network():
     conversation_file = 'static/conversations.json'  # Input JSON file containing conversations data
     conversations_data = load_conversations(conversation_file)
     create_conversation_tree(conversations_data)
-    create_interactive_network_graph('static/conversations.json', 'static/post_graph.html')   
-    
+    create_top_users_table('conversations.json', 'static/top_users_table.html') 
+
+

@@ -57,6 +57,46 @@
         .back-btn:hover {
             background-color: #45a049;
         }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e6f7f9;
+            margin: 2em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            word-wrap: break-word;
+            max-width: 300px;
+        }
+        th {
+            background-color: #04647a;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f0fdfa;
+        }
+        tr:hover {
+            background-color: #b7e4e5;
+        }
+        h1 {
+            text-align: center;
+            color: #04647a;
+        }
+        .container {
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
     </style>
 {% endblock %}
 
@@ -86,9 +126,9 @@
             <img src="{{ url_for('static', filename='images/loading.gif') }}" alt="Loading...">
         </div>
 
-        <iframe id="hehe" src= "static/comment_tree.html" style="width: 100%; height: 600px; border: 1px solid #ccc; display:none;"></iframe>
+        <iframe id="hehe" src= "static/comment_tree.html" style="width: 100%; height: 600px; border: 0px solid #ccc; display:none;"></iframe>
 
-        <iframe id="centralityGraph" src= "static/post_graph.html"style="width: 100%; height: 600px; border: 1px solid #ccc; display:none;"></iframe>
+        <iframe id="centralityGraph" src= "static/top_users_table.html"style="width: 100%; height: 600px; border: 0px solid #ccc; display:none;"></iframe>
         
 
         <div id="conversationDetails" style="margin-top: 20px;"></div>
@@ -278,7 +318,7 @@ function nextPage() {
             console.error('Error checking file:', error);
         }
 
-        filePath = 'static/post_graph.html'; // Replace with actual file path
+        filePath = 'static/top_users_table.html'; // Replace with actual file path
         try {
             const response = await fetch('/check-file', {
                 method: 'POST',

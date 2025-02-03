@@ -196,7 +196,7 @@ def visualize_graph_3d_with_sentiment_legend(username_para):
     pio.write_html(fig, file="static/sentimentgraph.html", auto_open=False)
 
 # Load users from a file
-def load_users_from_file(filename="users_data.json"):
+def load_users_from_file(filename="data/users_data.json"):
     global users
     with open(filename, "r") as file:
         loaded_data = json.load(file)
@@ -214,7 +214,7 @@ def load_users_from_file(filename="users_data.json"):
             users[username] = user_obj
 
 # Save topic counts and keywords to files
-def save_topic_data(topic_model, comments_list, topic_filename="topic_counts.json", keywords_filename="topic_keywords.json"):
+def save_topic_data(topic_model, comments_list, topic_filename="data/topic_counts.json", keywords_filename="data/topic_keywords.json"):
     # Get topic counts
     topic_counts = topic_model.get_topic_info()
     topic_counts_dict = {
@@ -244,7 +244,7 @@ def save_topic_data(topic_model, comments_list, topic_filename="topic_counts.jso
         json.dump(topic_keywords_dict, file, indent=4)
 
 # Save users and related topic data
-def save_users_to_file(user_filename="users_data.json", topic_filename="topic_counts.json", keywords_filename="topic_keywords.json"):
+def save_users_to_file(user_filename="data/users_data.json", topic_filename="data/topic_counts.json", keywords_filename="data/topic_keywords.json"):
     data_to_save = {}
     for username, user in users.items():
         data_to_save[username] = {
@@ -297,7 +297,7 @@ import plotly.io as pio
     
 def visualize_topic_graph_2d(topic_graph, user_topics):
     
-    with open('topic_counts.json', 'r') as file:
+    with open('data/topic_counts.json', 'r') as file:
         topic_counts = json.load(file)
         
     # Generate 2D positions for the nodes
@@ -385,10 +385,10 @@ def visualize_topics():
 
 # Modify the main function
 def generateGraphs(username):
-    filename = "commentData.csv"
-    processed_user_file = "users_data.json"
-    topic_count_file = "topic_counts.json"
-    topic_keywords_file = "topic_keywords.json"
+    filename = "data/commentData.csv"
+    processed_user_file = "data/users_data.json"
+    topic_count_file = "data/topic_counts.json"
+    topic_keywords_file = "data/topic_keywords.json"
 
     readDataAndInitialise(filename)  # Process the raw data
     print(f"Saving processed data to {processed_user_file}...")
