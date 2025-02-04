@@ -32,6 +32,12 @@
                 <!-- <button onclick="searchUser()"><i class="fas fa-search"></i> Search</button> -->
             </div>
 
+            <!-- Filter Buttons -->
+            <div class="filter-buttons">
+                <button onclick="filterUsers('influencer')" data-filter="influencer" class="{% if currentFilter == 'influencer' %}active{% endif %}">Influencers</button>
+                <button onclick="filterUsers('admin')" data-filter="admin" class="{% if currentFilter == 'admin' %}active{% endif %}">Admins</button>
+            </div>
+
             <!-- Results Container -->
             <div id="resultsContainer" class="user-list">
                 <table>
@@ -52,7 +58,9 @@
                             <td>{{ 'Suspended' if user.is_suspended else 'Active' }}</td>
                             <td>
                                 <button class="action-button" id="view" onclick="viewUserDetails('{{ user.user_id }}')"><i class="fas fa-eye"></i> View</button>
+                                {% if user.account_type != "admin" %}
                                 <button class="suspend-button" id="suspend" onclick="suspendUser('{{ user.user_id }}')"><i class="fas fa-ban"></i> Suspend</button>
+                                {% endif %}
                             </td>
                         </tr>
                         {% endfor %}
@@ -69,8 +77,10 @@
                 <p><strong>UserID:</strong> <span id="modalUserID"></span></p>
                 <p><strong>Username:</strong> <span id="modalUsername"></span></p>
                 <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+                <p><strong>Gender:</strong> <span id="modalGender"></span></p>
+                <p><strong>Age:</strong> <span id="modalAge"></span></p>
+                <p id="modalNicheRow"><strong>Niche:</strong> <span id="modalNiche"></span></p>
                 <p><strong>Account Type:</strong> <span id="modalAccountType"></span></p>
-                <p><strong>Linked Social Account:</strong> <span id="modalLinkedSocial"></span></p>
                 <p><strong>Status:</strong> <span id="modalStatus"></span></p>
             </div>
         </div>
@@ -101,6 +111,36 @@
             }, 300); // Delay of 300ms before making the request
         }
     }
+
+    // Function to handle filtering by user type
+    function filterUsers(filter) {
+        currentFilter = filter; // Set the current filter to the selected value
+
+        // Log the filter change
+        console.log(`Filter changed to: ${currentFilter}`); // Log the new filter value
+        
+        // Update the active class on the filter buttons
+        const filterButtons = document.querySelectorAll('.filter-buttons button');
+        
+        // Remove 'active' class from all filter buttons
+        filterButtons.forEach(button => {
+            button.classList.remove('active');
+        });
+
+        // Add 'active' class to the clicked button
+        const activeButton = document.querySelector(`.filter-buttons button[data-filter="${filter}"]`);
+        if (activeButton) {
+            activeButton.classList.add('active');
+        }
+        
+        const query = document.getElementById('userSearchInput').value; // Get current search input
+        fetch(`/dashboard/admin/get_filtered_users?query=${encodeURIComponent(query)}&filter=${encodeURIComponent(currentFilter)}`)
+            .then(response => response.json())
+            .then(data => {
+                displaySearchResults(data); // Update the user list based on filter
+            })
+            .catch(error => console.error('Error fetching filtered users:', error));
+    }
     
     function searchUser() {
         const query = document.getElementById('userSearchInput').value;
@@ -129,7 +169,7 @@
                     <td>${user.is_suspended ? 'Suspended' : 'Active'}</td>
                     <td>
                         <button class="action-button" id="view" onclick="viewUserDetails('${user.user_id}')"><i class="fas fa-eye"></i> View</button>
-                        <button class="suspend-button" id="suspend" onclick="suspendUser('${user.user_id}')"><i class="fas fa-ban"></i> Suspend</button>
+                        ${user.account_type !== 'admin' ? `<button class="suspend-button" id="suspend" onclick="suspendUser('${user.user_id}')"><i class="fas fa-ban"></i> Suspend</button>` : ''}
                     </td>`;
                 userTableBody.appendChild(userRow);
             });
@@ -142,18 +182,28 @@
         fetch(`/dashboard/admin/get_user_details/${userId}`)
             .then(response => response.json())
             .then(data => {
-                document.getElementById('modalUserID').textContent = data.user_id;
-                document.getElementById('modalUsername').textContent = data.username;
-                document.getElementById('modalEmail').textContent = data.email;
-                document.getElementById('modalAccountType').textContent = data.account_type;
-                document.getElementById('modalLinkedSocial').textContent = data.linked_social_account;
+                // Function to handle missing values
+                function checkValue(value) {
+                    return value ? value : 'NIL';
+                }
+                document.getElementById('modalUserID').textContent = checkValue(data.user_id);
+                document.getElementById('modalUsername').textContent = checkValue(data.username);
+                document.getElementById('modalEmail').textContent = checkValue(data.email);
+                document.getElementById('modalGender').textContent = checkValue(data.gender);
+                document.getElementById('modalAge').textContent = checkValue(data.age);
+                document.getElementById('modalAccountType').textContent = checkValue(data.account_type);
 
-                if (data.account_type === 'influencer') {
-                    document.getElementById('modalStatus').textContent = data.is_suspended ? 'Suspended' : 'Active';
+                const nicheRow = document.getElementById('modalNicheRow');
+                if (data.account_type === 'admin') {
+                    nicheRow.style.display = 'none'; // Hide for admins
                 } else {
-                    document.getElementById('modalStatus').textContent = 'Active'; // Default for other account types
+                    nicheRow.style.display = 'block'; // Show for other users
+                    document.getElementById('modalNiche').textContent = checkValue(data.niche);
                 }
                 
+                document.getElementById('modalStatus').textContent = 
+                data.is_suspended !== undefined ? (data.is_suspended ? 'Suspended' : 'Active') : 'None';
+                      
                 document.getElementById('userDetailsModal').style.display = 'block';
             })
             .catch(error => console.error('Error fetching user details:', error));

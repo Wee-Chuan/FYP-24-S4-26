@@ -161,13 +161,15 @@ class User:
             update_data['gender'] = gender
         if age is not None:
             update_data['age'] = age
-        if niche is not None:
-            update_data['niche'] = niche
         if password:
             hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')  # Hash new password
             update_data['password'] = hashed_password
         if account_type is not None:
             update_data['account_type'] = account_type
+        
+        # Add niche only if account type is not admin
+        if account_type != "admin" and niche is not None:
+            update_data['niche'] = niche
 
         # Update only if there's any data to change
         if update_data:
