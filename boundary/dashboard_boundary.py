@@ -26,13 +26,10 @@ def dashboard():
     elif account_type == 'admin':
         all_users = Admin.get_all_users()
 
-        # Filter out admins
-        non_admin_users = [user for user in all_users if user['account_type'] != 'admin']
-
         # Calculate the counts
-        total_users = len(non_admin_users)
+        total_users = len(all_users)
         total_influencers = sum(1 for user in all_users if user['account_type'] == 'influencer')
-        total_business_accounts = sum(1 for user in all_users if user['account_type'] == 'business_analyst')
+        total_admin_accounts = sum(1 for user in all_users if user['account_type'] == 'admin')
 
         return render_template(
             'dashboard/system_admin_dashboard.html', 
@@ -41,7 +38,7 @@ def dashboard():
             all_users=all_users,
             total_users=total_users,
             total_influencers=total_influencers,
-            total_business_accounts=total_business_accounts
+            total_admin_accounts=total_admin_accounts
             )
     else:
         flash("Unauthorized access", "danger")

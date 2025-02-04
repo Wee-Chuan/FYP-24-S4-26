@@ -1,20 +1,16 @@
-import network as nw
-from flask import Blueprint, render_template, redirect, url_for, session, flash, request, jsonify
-from entity.user import User
-from entity.followers_hist_entity import FollowerHist
-import createUsers as cu
 import os
-
 import csv
 import pandas as pd
-import network as nw  
-from flask import (
-    Blueprint, render_template, jsonify, session, request, redirect, url_for, flash, current_app
-)
+from flask import Blueprint, render_template, redirect, url_for, session, flash, request, jsonify, current_app
 from werkzeug.utils import secure_filename
-from apify_client import ApifyClient  
+from apify_client import ApifyClient
+
+# Custom modules
+import network as nw
+import createUsers as cu
 from entity.user import User
-from entity.followers_hist_entity import FollowerHist  
+from entity.followers_hist_entity import FollowerHist
+
 
 
 # Define Flask Blueprint
