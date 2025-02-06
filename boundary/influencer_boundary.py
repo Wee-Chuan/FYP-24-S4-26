@@ -89,44 +89,31 @@ def get_visualization_data():
 def followers():
     """
     Route to display followers forecast for the user.
+    Handles file uploads, processes follower data, and calculates follower growth forecasts.
     """
     try:
+        # Retrieve user_id from the session
         user_id = session.get('user_id')
         print(f"User ID from session: {user_id}")
 
+        # Fetch user profile using user_id
         user = User.get_profile(user_id)
 
-        # Ensure session is valid
+        # Validate session and user existence
         if not user_id or not user:
             flash("Session expired or user not found. Please log in again.", "danger")
             print("Session expired or user_id not found") 
             return redirect(url_for('navbar.login'))  # Redirect to login if session is invalid
         
-        # Handle file upload if present
+        # Handle POST request (file upload)
         if request.method == 'POST' and 'folder_zip' in request.files:
             file = request.files['folder_zip']
+
+            # Check if the file is allowed and process it
             if file and FollowerHist.allowed_file(file.filename):
                 filename = secure_filename(file.filename)
-                # upload_folder = current_app.config['UPLOAD_FOLDER']
                 
-                # # Ensure the uploads folder exists
-                # if not os.path.exists(upload_folder):
-                #     os.makedirs(upload_folder) 
-
-                # file_path = os.path.join(upload_folder, filename)
-                # file.save(file_path)
-
-                # # Unzip the file
-                # folder_path = os.path.join(upload_folder, filename.rsplit('.', 1)[0])
-                # with zipfile.ZipFile(file_path, 'r') as zip_ref:
-                #     for member in zip_ref.namelist():
-                #         if 'connections/followers_and_following' in member:
-                #             zip_ref.extract(member, folder_path)
-
-                ## Process the extracted folder
-                #followers_data = FollowerHist.process_uploaded_folder(folder_path)
-                
-                # Upload to Firebase Storage
+                # Upload file to Firebase Storage
                 file_url = FollowerHist.upload_to_firebase(file, filename)
                 
                 if not file_url:
@@ -135,13 +122,14 @@ def followers():
                 
                 print("file url:", file_url)
                 
-                # Process from firebase
+                # Process the uploaded file from Firebase to extract follower data
                 followers_data = FollowerHist.process_uploaded_folder_from_firebase(file_url)
 
                 if not followers_data:
                     flash('No follower data found for this user.', 'danger')
                     return render_template('dashboard/influencer_menu/followers.html', user_id=user_id, user=user)
 
+                # Calculate follower growth forecast
                 forecast, error = FollowerHist.calculate_follower_growth(followers_data)
                 if error:
                     flash(error, 'warning')
@@ -149,15 +137,30 @@ def followers():
 
                 print(f"Forecast data: {forecast}") 
 
+                # Save forecast data and file URL to session for persistence
+                session['forecast'] = forecast
+                session['file_url'] = file_url
+
                 # Render the template with data
                 return render_template(
                     'dashboard/influencer_menu/followers.html',
                     user_id=user_id,
                     user=user,
                     forecast=forecast,
+                    file_url=file_url
                 )
-        # If no file is uploaded, return the followers page without any forecast
-        return render_template('dashboard/influencer_menu/followers.html', user_id=user_id, user=user)
+        # For GET requests or when no file is uploaded, check for existing data in the session
+        forecast = session.get('forecast')
+        file_url = session.get('file_url')
+
+        # Render the template with existing data (if any)
+        return render_template(
+            'dashboard/influencer_menu/followers.html', 
+            user_id=user_id, 
+            user=user, 
+            forecast=forecast,
+            file_url=file_url
+        )
     
     except Exception as e:
         # Handle unexpected errors
