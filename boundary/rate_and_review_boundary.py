@@ -15,7 +15,7 @@ def rate_and_review():
         review = request.form.get('review')
 
         # Save the review
-        if rating and review:
+        if rating and review and category:
             User.save_rate_and_review(user_id, rating, category, review, username)
             flash('Review Submitted', 'success')
             return redirect(url_for('dashboard_boundary.dashboard'))

@@ -2,6 +2,7 @@ import os
 from datetime import timedelta
 
 from flask import Flask, render_template, redirect, url_for, session, flash, jsonify, send_from_directory
+from flask_mail import Mail
 from dotenv import load_dotenv
 from boundary.navbar import navbar
 from boundary.dashboard_boundary import dashboard_boundary
@@ -18,6 +19,19 @@ app.secret_key = os.getenv('FLASK_SECRET_KEY')
 
 # Set session timeout to 30 minutes
 app.permanent_session_lifetime = timedelta(minutes=30)
+
+# Flask-Mail Configuration
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Example for Gmail
+app.config['MAIL_PORT'] = 465  # Secure SSL
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')  
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD') 
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_USERNAME')  
+app.config['MAIL_MAX_EMAILS'] = None
+app.config['MAIL_ASCII_ATTACHMENTS'] = False
+
+mail = Mail(app)
 
 # Register blueprints
 app.register_blueprint(navbar)

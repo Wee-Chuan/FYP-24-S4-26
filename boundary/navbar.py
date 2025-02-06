@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, session, flash, request
+from flask_mail import Message
 from entity.user import User
 from entity.admin import Admin
 import re
@@ -98,3 +99,39 @@ def customer_support():
     return render_template('navbar/customer_support.html',
                            faq_content=faq_content,
                            faqs=faqs)
+
+@navbar.route('/submit_contact_form', methods=['POST'])
+def submit_contact_form():
+    from app import mail
+
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        query = request.form.get('query')
+
+        # Validate form fields (add your validation logic)
+        if not name or not email or not query:
+            flash("Please fill in all the fields.", "danger")
+            return redirect(url_for('navbar.customer_support'))  # Redirect back to the contact page (or a confirmation page)
+
+        try:
+            # Create a new message
+            msg = Message('New Customer Support Query', 
+                          recipients=['fyp24s426@gmail.com'])  # Replace with your support email address
+            
+            # Set the email body
+            msg.html = f"""
+                <p><strong>Customer Name:</strong> {name}</p>
+                <p><strong>Customer Email:</strong> {email}</p>
+                <p><strong>Message:</strong><br>{query}</p>
+            """
+            
+            # Send the email using Flask-Mail
+            mail.send(msg)
+            
+            flash("Your message has been sent successfully.", "success")
+        except Exception as e:
+            flash("There was an error submitting your form. Please try again later.", "danger") 
+            print(f"Error occured: {e}")
+        
+        return redirect(url_for('navbar.customer_support'))  # Redirect to the index or customer support page with a success message

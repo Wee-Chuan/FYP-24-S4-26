@@ -35,6 +35,7 @@ pip install apify-client
 pip install bertopic
 pip install classes
 pip install pyvis
+pip install Flask-Mail
 
 
 # BOUNDARY #
