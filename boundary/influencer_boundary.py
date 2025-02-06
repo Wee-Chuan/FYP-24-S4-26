@@ -107,26 +107,17 @@ def followers():
         
         # Handle POST request (file upload)
         if request.method == 'POST' and 'folder_zip' in request.files:
+            session.pop('forecast', None)  
+
             file = request.files['folder_zip']
 
             # Check if the file is allowed and process it
             if file and FollowerHist.allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                
-                # Upload file to Firebase Storage
-                file_url = FollowerHist.upload_to_firebase(file, filename)
-                
-                if not file_url:
-                    flash("Error uploading file to Firebase.", "danger")
-                    return redirect(url_for('influencer_boundary.followers'))  # Redirect to avoid errors
-                
-                print("file url:", file_url)
-                
-                # Process the uploaded file from Firebase to extract follower data
-                followers_data = FollowerHist.process_uploaded_folder_from_firebase(file_url)
+
+                followers_data, error_message = FollowerHist.extract_files_from_zip(file)
 
                 if not followers_data:
-                    flash('No follower data found for this user.', 'danger')
+                    flash(f"Error processing file: {error_message}", "danger")
                     return render_template('dashboard/influencer_menu/followers.html', user_id=user_id, user=user)
 
                 # Calculate follower growth forecast
@@ -139,7 +130,6 @@ def followers():
 
                 # Save forecast data and file URL to session for persistence
                 session['forecast'] = forecast
-                session['file_url'] = file_url
 
                 # Render the template with data
                 return render_template(
@@ -147,11 +137,14 @@ def followers():
                     user_id=user_id,
                     user=user,
                     forecast=forecast,
-                    file_url=file_url
                 )
+            else:
+                # If the file extension is not allowed
+                flash("Invalid file format. Please upload a valid ZIP file.", "danger")
+                return redirect(url_for('influencer_boundary.followers'))
+            
         # For GET requests or when no file is uploaded, check for existing data in the session
         forecast = session.get('forecast')
-        file_url = session.get('file_url')
 
         # Render the template with existing data (if any)
         return render_template(
@@ -159,7 +152,6 @@ def followers():
             user_id=user_id, 
             user=user, 
             forecast=forecast,
-            file_url=file_url
         )
     
     except Exception as e:

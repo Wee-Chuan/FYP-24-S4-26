@@ -14,7 +14,7 @@ def update_account():
     current_user_data = User.get_profile(user_id)
 
     if current_user_data is None:
-        flash("User profile not found!", "danger")
+        flash("Error retrieving user profile", "danger")
         return redirect(url_for('dashboard_boundary.dashboard'))
     
     # Safely handle missing fields

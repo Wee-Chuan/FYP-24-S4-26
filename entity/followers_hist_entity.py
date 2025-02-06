@@ -3,6 +3,9 @@ from dateutil.relativedelta import relativedelta
 import os
 import zipfile
 import tempfile
+import shutil
+import time
+import io
 
 import numpy as np
 import pandas as pd
@@ -46,129 +49,113 @@ db = firestore.client()
 bucket = storage.bucket('fyp-24-s4-26.firebasestorage.app')
 
 class FollowerHist:
+    
     @staticmethod
     def allowed_file(filename):
         # This is a helper to check if the file is a zip file
         return filename.lower().endswith('.zip')
     
     @staticmethod
-    def upload_to_firebase(file, filename):
+    def extract_files_from_zip(file):
         """
-        Upload file to Firebase Storage.
+        Process the uploaded ZIP file and extract followers data.
         """
         try:
-            print(bucket.name)
-            blob = bucket.blob(f'uploads/{filename}')
-            blob.upload_from_file(file)
-
-            # Make the file publicly accessible
-            blob.make_public()
+            # Create a file-like object from the uploaded file
+            zip_file = io.BytesIO(file.read())
             
-            # Get the file's URL
-            file_url = blob.public_url
-            print(f"File uploaded and accessible at: {file_url}")
-
-            return blob.name
-        except Exception as e:
-            print(f"Error uploading file to Firebase: {e}")
-            return None
-        
-    @staticmethod
-    def process_uploaded_folder_from_firebase(file_path):
-        """
-        Process the uploaded folder from Firebase storage.
-        """
-        try:
-            # Download file from Firebase Storage
-            blob = bucket.blob(file_path)
-            file_bytes = blob.download_as_bytes()
-
-            # Save the file temporarily and unzip
-            temp_dir = tempfile.gettempdir()
-            temp_zip_path = os.path.join(temp_dir, "temp.zip")
-            folder_path = os.path.join(temp_dir, "unzipped_folder")
-
-            # Save the file temporarily and unzip
-            with open(temp_zip_path, 'wb') as f:
-                f.write(file_bytes)
-
-            # Now process the downloaded zip file as normal
-            with zipfile.ZipFile(temp_zip_path, 'r') as zip_ref:
-                zip_ref.extractall(folder_path)
+            # Extract files from the ZIP archive in memory
+            with zipfile.ZipFile(zip_file, 'r') as zip_ref:
+                # Process the extracted files in memory without saving to disk
+                extracted_data = {}
+                for file_name in zip_ref.namelist():
+                    # Read each file in the ZIP file
+                    with zip_ref.open(file_name) as file:
+                        content = file.read()
+                        # Here you can process the file content as needed (e.g., parse CSV, JSON, etc.)
+                        extracted_data[file_name] = content  # Store content in a dictionary
 
             # Process the extracted folder to retrieve follower data
-            followers_data = FollowerHist.process_uploaded_folder(folder_path)
+            followers_data, error_message = FollowerHist.process_followers_data(extracted_data)
 
-            return followers_data
+            if not followers_data:
+                return None, error_message
+
+            return followers_data, None
 
         except zipfile.BadZipFile:
             print("Error: The uploaded file is not a valid ZIP file.")
-            return None
+            return None, "The uploaded file is not a valid ZIP file."
         except Exception as e:
-            print(f"Error processing file from Firebase: {e}")
-            return None
-
+            print(f"Error processing file: {e}")
+            return None, f"Error processing file: {e}"
+    
     @staticmethod
-    def process_uploaded_folder(folder_path):
+    def process_followers_data(extracted_data):
         """
-        Process the uploaded folder and extract follower data.
+        Process the extracted files (already in memory) and extract follower data.
         """
         try:
             # Define path to followers HTML file (assuming the zip contains a specific structure)
-            folder = os.path.join(folder_path, "connections", "followers_and_following")
-            followers_file = os.path.join(folder, "followers_1.html")
-
-            # Extract followers data from the HTML file
-            if not os.path.exists(followers_file):
-                raise FileNotFoundError(f"{followers_file} not found.")
+            folder = "connections/followers_and_following/"
+            if folder not in extracted_data:
+                return None, "The uploaded zip file does not contain the expected folder structure."
             
+            # Extract the followers data file from the extracted data
+            followers_file = extracted_data[folder + "followers_1.html"]
             followers_data = FollowerHist.get_followers_data(followers_file)
 
+            # If no followers data, return an error message
+            if not followers_data:
+                raise ValueError("No valid follower data found in the file.")
+
             # Return the followers data
-            return followers_data
+            return followers_data, None
 
+        except FileNotFoundError as e:
+            print(f"Error: {e}")
+            return None, f"File not found: {e}"  
+        except ValueError as e:
+            print(f"Error: {e}")
+            return None, str(e)  
         except Exception as e:
-            print(f"Error processing uploaded folder: {e}")
-            return None
-        
+            print(f"Error processing extracted data: {e}")
+            return None, f"Error processing extracted data: {e}"
+    
     @staticmethod
-    def get_followers_data(followers_file):
-        if not os.path.exists(followers_file):
-            raise FileNotFoundError(f"{followers_file} not found.")
+    def get_followers_data(followers_file_content):
+        if not followers_file_content:
+            raise FileNotFoundError("Followers HTML content is empty.")
+        
+        def extract_followers(file_content):
+            soup = BeautifulSoup(file_content, "html.parser")
+            follower_divs = soup.find_all('div', class_="pam _3-95 _2ph- _a6-g uiBoxWhite noborder")
 
-        def extract_followers(file_path):
-            if not os.path.exists(file_path):
-                raise FileNotFoundError(f"{file_path} not found.")
+            # Check if we found any follower divs
+            if not follower_divs:
+                raise ValueError("No follower divs found in the content.")
+        
+            followers_data = []
+            for div in follower_divs:
+                username = div.find('a').text.strip()  # Extract username
+                follow_date = div.find_all('div')[-1].text.strip()  # Extract follow date
+                # Convert follow_date to datetime format
+                try:
+                    follow_date = datetime.strptime(follow_date, '%b %d, %Y %I:%M %p')  # Adjust format as needed
+                except ValueError:
+                    print(f"Skipping invalid date: {follow_date}")
+                    continue  # Skip invalid dates
+                followers_data.append({'username': username, 'follow_date': follow_date})
             
-            with open(file_path, "r", encoding="utf-8") as file:
-                soup = BeautifulSoup(file, "html.parser")
-                follower_divs = soup.find_all('div', class_="pam _3-95 _2ph- _a6-g uiBoxWhite noborder")
-
-                # Check if we found any follower divs
-                if not follower_divs:
-                    raise ValueError(f"No follower divs found in {file_path}.")
+            # Check if followers data is empty
+            if not followers_data:
+                raise ValueError("No valid follower data collected.")
             
-                followers_data = []
-                for div in follower_divs:
-                    username = div.find('a').text.strip()  # Extract username
-                    follow_date = div.find_all('div')[-1].text.strip()  # Extract follow date
-                    # Convert follow_date to datetime format
-                    try:
-                        follow_date = datetime.strptime(follow_date, '%b %d, %Y %I:%M %p')  # Adjust format as needed
-                    except ValueError:
-                        print(f"Skipping invalid date: {follow_date}")
-                        continue  # Skip invalid dates
-                    followers_data.append({'username': username, 'follow_date': follow_date})
-                
-                # Check if followers data is empty
-                if not followers_data:
-                    raise ValueError("No valid follower data collected.")
-                
-                return followers_data
+            return followers_data
 
         try:
             # Extract followers data
-            followers_data = extract_followers(followers_file)
+            followers_data = extract_followers(followers_file_content)
 
             # Check if data was collected properly
             if not followers_data:
