@@ -27,11 +27,6 @@ app.register_blueprint(influencer_boundary)
 app.register_blueprint(profile_boundary)
 app.register_blueprint(rate_and_review_boundary)
 
-@app.before_request
-def make_session_permanent():
-    """Make the session permanent to respect the lifetime configuration."""
-    session.permanent = True
-
 @app.route('/')
 def index():
     hero_content = Admin.get_hero_content()

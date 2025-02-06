@@ -52,6 +52,8 @@ def login():
         return redirect(url_for('dashboard_boundary.dashboard'))
     
     if request.method == 'POST':
+        session.permanent = True
+
         username = request.form['username']
         password = request.form['password']
 
