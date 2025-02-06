@@ -1,11 +1,13 @@
 class Comment:
-    def __init__(self, text, likes, replies):
+    def __init__(self, text, likes, replies, timestamp, username):
         self.text = text
         self.likes = likes
         self.replies = replies
         self.sentiment = None
         self.topic = None
         self.url = None
+        self.timestamp = timestamp
+        self.username = username
 
 class User:
     def __init__(self, username):

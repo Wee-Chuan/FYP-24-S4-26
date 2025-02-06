@@ -1,0 +1,135 @@
+
+    <html>
+        <head>
+            <style>
+                body {
+                    font-family: 'Arial', sans-serif;
+                    background-color: #f9f9f9;
+                    margin: 2em;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    background-color: #ffffff;
+                    border-radius: 10px;
+                    overflow: hidden;
+                    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                }
+                th, td {
+                    border: 1px solid #ddd;
+                    padding: 12px;
+                    text-align: left;
+                    word-wrap: break-word;
+                    max-width: 300px;
+                }
+                th {
+                    background-color: #808080; /* Neutral gray */
+                    color: white;
+                    text-transform: uppercase;
+                    font-weight: bold;
+                }
+                tr:nth-child(even) {
+                    background-color: #f0f0f0; /* Light gray for even rows */
+                }
+                tr:hover {
+                    background-color: #e0e0e0; /* Slight hover effect */
+                    cursor: pointer;
+                }
+                td {
+                    color: #333333; /* Dark gray for text */
+                }
+                .pagination {
+                    margin-top: 10px;
+                    text-align: center;
+                }
+                .pagination button {
+                    background-color: #808080;
+                    color: white;
+                    border: none;
+                    padding: 8px 16px;
+                    margin-right: 5px;
+                    cursor: pointer;
+                    border-radius: 5px;
+                    transition: background-color 0.2s ease;
+                }
+                .pagination button:hover {
+                    background-color: #A9A9A9; /* Light grayish for hover */
+                }
+                .pagination button:disabled {
+                    background-color: #cccccc;
+                    cursor: not-allowed;
+                }
+            </style>
+
+
+            <script>
+                let currentPage = 1;
+                const comments = [{"text": "AMERICA AND AMERICANS FIRST! \ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8ALWAYS", "likes": 114, "timestamp": "2025-02-02T19:45:30.000Z", "username": "monical.knight"}, {"text": "\ud83d\udc4e\ud83c\udffccome on Donald you\u2019re going to start a Great Depression with these tariffs! Its common sense", "likes": 227, "timestamp": "2025-02-02T17:08:59.000Z", "username": "young_rack77"}, {"text": "\ud83c\uddfa\ud83c\uddf8", "likes": 9, "timestamp": "2025-02-02T19:47:11.000Z", "username": "thesnowdonlilly"}, {"text": "If you're not better off personally in 2 years.....let us know", "likes": 14, "timestamp": "2025-02-02T19:44:12.000Z", "username": "hollykin08"}, {"text": "If you buy American there are no tariff", "likes": 19, "timestamp": "2025-02-02T19:49:28.000Z", "username": "jill.kohler"}, {"text": "I\u0111i\u00f4t!", "likes": 38, "timestamp": "2025-02-02T18:04:41.000Z", "username": "illuminalee"}, {"text": "Without distinction, tiodo somos SERES HUMANOS, Y NOS NECESITAMOS. PRESIDENTE TRUMP NO PIERDA SU NOBLEZZA.. NO HAY HIJOS EN EL MUNDO DE MALAS MADRES... TODOS HACEMOS PARTE DEL REBA\u00d1O, AUNQUE. ALGUNOS HAYAN TOMADO MALOS CAMINOS, SON OVEJAS NEGRAS, Y REQUIEREN ATENCI\u00d3N.  POR FAVOR. HAGA GRANDE A TODA AM\u00c9RICA \ud83c\udf0e Without distinction, tiodo somos SERES HUMANOS, Y NOS NECESITAMOS. PRESIDENTE TRUMP NO PIERDA SU NOBLEZZA.. NO HAY HIJOS EN EL MUNDO DE MALAS MADRES... TODOS HACEMOS PARTE DEL REBA\u00d1O, AUNQUE. ALGUNOS HAYAN TOMADO MALOS CAMINOS, SON OVEJAS NEGRAS, Y REQUIEREN ATENCI\u00d3N.  POR FAVOR. HAGA GRANDE A TODA AM\u00c9RICA \ud83c\udf0e Without distinction, we are all HUMAN BEINGS, AND WE NEED EACH OTHER. PRESIDENT TRUMP DON'T LOSE YOUR NOBILITY. THERE ARE NO CHILDREN IN THE WORLD OF BAD MOTHERS... WE ARE ALL PART OF THE FLOCK, THOUGH. SOME HAVE GONE ASTRAY, ARE BLACK SHEEP, AND REQUIRE ATTENTION.  PLEASE. MAKE ALL OF AMERICA \ud83c\udf0e GREAT", "likes": 1, "timestamp": "2025-02-02T22:39:14.000Z", "username": "lynda_vergel_jaime"}, {"text": "\ud83c\uddfa\ud83c\uddf8 Tomorrow. The. \ud83d\udcaa Fuerza #latina will strike 11 million #, migrants. Everyone is panicking and fearing deportation. Not all of them are bad, his. American Dream I take them to the United States of America \ud83c\udf0e, I pray for them, help them.", "likes": 12, "timestamp": "2025-02-02T22:47:26.000Z", "username": "lynda_vergel_jaime"}, {"text": "Without distinction, tiodo somos SERES HUMANOS, Y NOS NECESITAMOS. PRESIDENTE TRUMP NO PIERDA SU NOBLEZZA.. NO HAY HIJOS EN EL MUNDO DE MALAS MADRES... TODOS HACEMOS PARTE DEL REBA\u00d1O, AUNQUE. ALGUNOS HAYAN TOMADO MALOS CAMINOS, SON OVEJAS NEGRAS, Y REQUIEREN ATENCI\u00d3N.  POR FAVOR. HAGA GRANDE A TODA AM\u00c9RICA \ud83c\udf0e Without distinction, tiodo somos SERES HUMANOS, Y NOS NECESITAMOS. PRESIDENTE TRUMP NO PIERDA SU NOBLEZZA.. NO HAY HIJOS EN EL MUNDO DE MALAS MADRES... TODOS HACEMOS PARTE DEL REBA\u00d1O, AUNQUE. ALGUNOS HAYAN TOMADO MALOS CAMINOS, SON OVEJAS NEGRAS, Y REQUIEREN ATENCI\u00d3N.  POR FAVOR. HAGA GRANDE A TODA AM\u00c9RICA \ud83c\udf0e Without distinction, we are all HUMAN BEINGS, AND WE NEED EACH OTHER. PRESIDENT TRUMP DON'T LOSE YOUR NOBILITY. THERE ARE NO CHILDREN IN THE WORLD OF BAD MOTHERS... WE ARE ALL PART OF THE FLOCK, THOUGH. SOME HAVE GONE ASTRAY, ARE BLACK SHEEP, AND REQUIRE ATTENTION.  PLEASE. MAKE ALL OF AMERICA \ud83c\udf0e GREAT \ud83d\udd25", "likes": 2, "timestamp": "2025-02-02T22:38:46.000Z", "username": "lynda_vergel_jaime"}, {"text": "\ud83d\ude02\ud83d\ude02\ud83d\ude02\ud83d\ude02\ud83d\ude02", "likes": 24, "timestamp": "2025-02-02T17:12:43.000Z", "username": "mrgrim2dareapa"}, {"text": "REAL nice. The people of this country voted for you to help, not a 25% tariff on 2 huge ALLIES & shipping off tax paying undocumented immigrants- not have us in a trades war!", "likes": 410, "timestamp": "2025-02-02T16:52:46.000Z", "username": "stevenk1989"}, {"text": "Please put a tariff on the city of Dallas after this Luka Doncic trade", "likes": 52, "timestamp": "2025-02-02T16:46:46.000Z", "username": "yugoslav_posting"}, {"text": "His bio should just say \u201cYour President\u201d", "likes": 10, "timestamp": "2025-02-02T18:58:00.000Z", "username": "josephinetehrani"}, {"text": "\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\uddfa\ud83c\uddf2\ud83c\uddfa\ud83c\uddf2\ud83c\uddfa\ud83c\uddf2\ud83c\uddfa\ud83c\uddf2\ud83c\uddfa\ud83c\uddf2", "likes": 2, "timestamp": "2025-02-02T23:40:10.000Z", "username": "lucasd._.souza"}, {"text": "\ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8", "likes": 3, "timestamp": "2025-02-02T23:38:59.000Z", "username": "therezinhasb"}, {"text": "To everyone who regrets voting for this guy, as a Harris voter, I forgive you all.", "likes": 469, "timestamp": "2025-02-02T17:05:22.000Z", "username": "realnickspano"}, {"text": "\ud83c\uddfa\ud83c\uddf8", "likes": 2, "timestamp": "2025-02-02T23:08:31.000Z", "username": "mr.nic3guy257"}, {"text": "AMERICA FIRST; LEVELING THE PLAYING FIELD \ud83c\uddfa\ud83c\uddf8", "likes": 858, "timestamp": "2025-02-02T16:59:20.000Z", "username": "stevelodge_oc"}, {"text": "TRUMP FOR THE \ud83c\udf0e BUTTON \u2014>", "likes": 452, "timestamp": "2025-02-02T16:45:38.000Z", "username": "alenaxxi"}, {"text": "\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7\ud83c\udde7\ud83c\uddf7", "likes": 2, "timestamp": "2025-02-02T21:42:49.000Z", "username": "ci_gamos"}, {"text": "Also. Must ban Ghey \ud83c\udf08", "likes": 1, "timestamp": "2025-02-02T17:00:34.000Z", "username": "king.brian.eb"}, {"text": "Say it with me, \u201cTARIFF\u201d! \ud83e\udd23", "likes": 8, "timestamp": "2025-02-02T16:52:34.000Z", "username": "charlemagne_nyc"}, {"text": "Bring Trudeau to his knees!! Then again, it wouldn\u2019t be Justin\u2019s first time on them", "likes": 896, "timestamp": "2025-02-02T16:43:16.000Z", "username": "realgregaselbekian"}];  // Properly embedded JSON
+                const commentsPerPage = 5;
+
+                function renderTable() {
+                    if (comments.length === 0) {
+                        document.getElementById('tableContainer').innerHTML = '<p>No negative comments available.</p>';
+                        return;
+                    }
+
+                    const start = (currentPage - 1) * commentsPerPage;
+                    const end = start + commentsPerPage;
+                    const paginatedComments = comments.slice(start, end);
+
+                    let tableHtml = `
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Comment</th>
+                                    <th>Likes</th>
+                                    <th>Timestamp</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    paginatedComments.forEach(comment => {
+                        tableHtml += `
+                            <tr>
+                                <td>${comment.username}</td>
+                                <td>${comment.text}</td>
+                                <td>${comment.likes}</td>
+                                <td>${comment.timestamp}</td>
+                            </tr>
+                        `;
+                    });
+
+                    tableHtml += '</tbody></table>';
+
+                    document.getElementById('tableContainer').innerHTML = tableHtml;
+                    document.getElementById('prevButton').disabled = currentPage === 1;
+                    document.getElementById('nextButton').disabled = end >= comments.length;
+                }
+
+                function nextPage() {
+                    currentPage++;
+                    renderTable();
+                }
+
+                function previousPage() {
+                    currentPage--;
+                    renderTable();
+                }
+
+                window.onload = function () {
+                    renderTable();
+                }
+            </script>
+        </head>
+        <body>
+            <h1>Neutral Comments Table</h1>
+            <div id="tableContainer"></div>
+            <div class="pagination">
+                <button id="prevButton" onclick="previousPage()">Previous</button>
+                <button id="nextButton" onclick="nextPage()">Next</button>
+            </div>
+        </body>
+    </html>
+    

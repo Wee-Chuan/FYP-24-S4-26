@@ -4,13 +4,6 @@
 {% block styles %}
     <link rel="stylesheet" href="{{ url_for('static', filename='components/dashboard/influencer_dashboard.css') }}">
     <style>
-        /* Set dimensions for the network graph */
-        #networkGraph {
-            width: 100%;
-            height: 600px;
-            border: 1px solid #ccc;
-        }
-
         /* Hide the loading screen initially */
         #loadingScreen {
             display: none;
@@ -21,6 +14,25 @@
         #loadingScreen img {
             width: 50px;
             height: 50px;
+        }
+        iframe{
+            display: inline-block;
+        }
+        .content-row {
+            display: flex;
+            justify-content: space-between;
+            border: 0px;
+        }
+    
+        /* Each item in the row will take up 48% of the space */
+        .content-item {
+            width: 50%;
+            border: 0px solid #ccc;
+        }
+    
+        /* Make sure the pie chart and word cloud images are responsive */
+        .content-item img {
+            width: 100%;
         }
     </style>
 {% endblock %}
@@ -53,28 +65,49 @@
                 <img src="{{ url_for('static', filename='images/loading.gif') }}" alt="Loading...">
             </div>
             
-            <div id="analysisResults"></div>
-            <iframe 
-  id="sentimentGraph" 
-  src="static/sentimentgraph.html" 
-  style="width: 100%; height: 600px; border: 1px solid #ccc; display: none;">
-</iframe>
+            <!-- First row with pie chart and one word cloud -->
+            <div class="content-row">
+                <div class="content-item">
+                    <iframe 
+                        id="sentimentGraph" 
+                        src="static/sentiment_pie_chart.html" 
+                        style="width:100%; height: 600px; border: 1px solid #ccc; display: none;">
+                    </iframe>
+                </div>
+                <div class="content-item">
+                    <img 
+                        id="positiveWordCloud" 
+                        src="static/wordcloud_positive.png" 
+                        style="width:100%; height: 600px; border: 1px solid #ccc; display: none;">
+                </div>
+            </div>
 
-<iframe 
-  id="topicGraph" 
-  src="static/topicnetwork.html" 
-  style="width: 100%; height: 600px; border: 1px solid #ccc; display: none;">
-</iframe>
+            <!-- Second row with two word clouds -->
+            <div class="content-row">
+                <div class="content-item">
+                    <img 
+                        id="neutralWordCloud" 
+                        src="static/wordcloud_neutral.png" 
+                        style="width:100%; height: 600px; border: 1px solid #ccc; display: none;">
+                </div>
+                <div class="content-item">
+                    <img 
+                        id="negativeWordCloud" 
+                        src="static/wordcloud_negative.png" 
+                        style="width:100%; height: 600px; border: 1px solid #ccc; display: none;">
+                </div>
+            </div>
 
-            
+            <iframe id="positiveTable" src="static/positive_comments_table.html" style="width:100%; height: 600px; border: 1px solid #ccc; display: none;"></iframe>
+            <iframe id="neutralTable" src="static/neutral_comments_table.html" style="width:100%; height: 600px; border: 1px solid #ccc; display: none;"></iframe>
+            <iframe id="negativeTable" src="static/negative_comments_table.html" style="width:100%; height: 600px; border: 1px solid #ccc; display: none;"></iframe>
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-
-        (async function checkFileExistence() {
-            filePath = 'static/sentimentgraph.html'; // Replace with actual file path
+        // Check the file existence and display them accordingly
+        async function checkFileExistence(filePath, elementId) {
             try {
                 const response = await fetch('/check-file', {
                     method: 'POST',
@@ -86,42 +119,31 @@
                 
                 const data = await response.json();
                 if (data.exists) {
-                    console.log("tre have")
-                    commenttree = document.getElementById("sentimentGraph");
-                    commenttree.style.display = "block";
+                    const element = document.getElementById(elementId);
+                    element.style.display = "block";
                 } else {
-                    console.log(data.message);
-                    console.log("HELLO");
-                    console.log(filePath);
+                    console.log(data.message, filePath);
                 }
             } catch (error) {
                 console.error('Error checking file:', error);
             }
-    
-            filePath = 'static/topicnetwork.html'; // Replace with actual file path
-            try {
-                const response = await fetch('/check-file', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ file_path: filePath })
-                });
-    
-                const data = await response.json();
-                if (data.exists) {
-                    centralityGraph = document.getElementById('topicGraph');
-                    centralityGraph.style.display = "block";
-                    
-                } else {
-                    console.log(data.message);
-                    console.log("HELLO");
-                    console.log(filePath);
-                }
-            } catch (error) {
-                console.error('Error checking file:', error);
+        }
+
+        (async function loadData() {
+            // List of files to check with corresponding element IDs
+            const files = [
+                { path: 'static/sentiment_pie_chart.html', id: 'sentimentGraph' },
+                { path: 'static/wordcloud_positive.png', id: 'positiveWordCloud' },
+                { path: 'static/wordcloud_neutral.png', id: 'neutralWordCloud' },
+                { path: 'static/wordcloud_negative.png', id: 'negativeWordCloud' },
+                { path: 'static/positive_comments_table.html', id: 'positiveTable' },
+                { path: 'static/neutral_comments_table.html', id: 'neutralTable' },
+                { path: 'static/negative_comments_table.html', id: 'negativeTable' }
+            ];
+
+            for (let file of files) {
+                await checkFileExistence(file.path, file.id);
             }
-    
         })();
 
         function submitForm(event) {
@@ -137,7 +159,6 @@
                 method: 'POST',  // Ensure method is POST
                 body: formData
             })            
-
             .then(response => response.json())
             .then(data => {
                 // Hide loading and show the result
@@ -148,18 +169,19 @@
                 const analysisResultsDiv = document.getElementById("analysisResults");
                 analysisResultsDiv.innerHTML = `<p>Network analysis completed for <strong>${username}</strong></p>`;
 
-                const sentimentGraph = document.getElementById("sentimentGraph");
-                sentimentGraph.display = "block";
+                // Display the relevant charts and tables
+                const elementsToDisplay = [
+                    'sentimentGraph', 'positiveWordCloud', 'neutralWordCloud',
+                    'negativeWordCloud', 'positiveTable', 'neutralTable', 'negativeTable'
+                ];
 
-                const topicGraph = document.getElementById("topicGraph");
-                topicGraph.display = "block";
-                location.reload();
-
+                elementsToDisplay.forEach(id => {
+                    document.getElementById(id).style.display = "block";
+                });
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
                 document.getElementById("loadingScreen").style.display = "none";
-                location.reload();
             });
         }
     </script>        

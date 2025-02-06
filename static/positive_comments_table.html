@@ -1,0 +1,134 @@
+
+    <html>
+        <head>
+            <style>
+                body {
+                    font-family: 'Arial', sans-serif;
+                    background-color: #f9f9f9;
+                    margin: 2em;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    background-color: #ffffff;
+                    border-radius: 10px;
+                    overflow: hidden;
+                    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                }
+                th, td {
+                    border: 1px solid #ddd;
+                    padding: 12px;
+                    text-align: left;
+                    word-wrap: break-word;
+                    max-width: 300px;
+                }
+                th {
+                    background-color: #006400; /* Dark Green for positive tone */
+                    color: white;
+                    text-transform: uppercase;
+                    font-weight: bold;
+                }
+                tr:nth-child(even) {
+                    background-color: #f2f2f2; /* Light gray for even rows */
+                }
+                tr:hover {
+                    background-color: #e6f7e6; /* Light green hover effect */
+                    cursor: pointer;
+                }
+                td {
+                    color: #004d00; /* Darker green for text */
+                }
+                .pagination {
+                    margin-top: 10px;
+                    text-align: center;
+                }
+                .pagination button {
+                    background-color: #006400;
+                    color: white;
+                    border: none;
+                    padding: 8px 16px;
+                    margin-right: 5px;
+                    cursor: pointer;
+                    border-radius: 5px;
+                    transition: background-color 0.2s ease;
+                }
+                .pagination button:hover {
+                    background-color: #004d00; /* Darker green for hover */
+                }
+                .pagination button:disabled {
+                    background-color: #cccccc;
+                    cursor: not-allowed;
+                }
+            </style>
+
+            <script>
+                let currentPage = 1;
+                const comments = [{"text": "Best President Button \u2014\u2014\u2014\u2014\u2014>", "likes": 875, "timestamp": "2025-02-02T16:52:47.000Z", "username": "trumpetplaya7"}, {"text": "ALOT of the comments here make me so proud to be Canadian. \ud83c\udde8\ud83c\udde6", "likes": 230, "timestamp": "2025-02-02T20:44:25.000Z", "username": "megan_newbury1977"}, {"text": "\ud83c\udde8\ud83c\udde6\ud83c\udde8\ud83c\udde6\ud83c\udde8\ud83c\udde6\u2764\ufe0f\u2764\ufe0f", "likes": 93, "timestamp": "2025-02-02T20:44:29.000Z", "username": "sh_pure2018"}, {"text": "Thank you for waking up, Canada \ud83c\udde8\ud83c\udde6 We Canadians are going to stand strong \ud83c\udde8\ud83c\udde6 You have a much bigger problem than drugs", "likes": 132, "timestamp": "2025-02-02T20:52:11.000Z", "username": "lisa_bd71"}, {"text": "That\u2019s why I stood my ground & registered & voted since 2016 love MrPresidentDonaldJTrump MAGA \u2665\ufe0f\ud83d\ude4f\ud83c\udffb\ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8\ud83d\udcaa\ud83c\udffb\ud83d\udcaa\ud83c\udffb BX TRUMP RALLY WAS AMAZING \u2665\ufe0f\u2665\ufe0f\u2665\ufe0f\ud83c\uddfa\ud83c\uddf8\ud83d\udcaa\ud83c\udffb\ud83d\udcaa\ud83c\udffb", "likes": 60, "timestamp": "2025-02-02T19:38:24.000Z", "username": "bianca_iuliano_dabruzzo"}, {"text": "\ud83d\udd25\ud83c\uddfa\ud83c\uddf8", "likes": 6, "timestamp": "2025-02-02T19:43:34.000Z", "username": "sunmlln"}, {"text": "\ud83d\udc4fRaise All Tariffs \ud83c\uddfa\ud83c\uddf8 Let em Rise!!", "likes": 8, "timestamp": "2025-02-02T18:40:02.000Z", "username": "auto_enthusiast_13"}, {"text": "The best president ever seen before \ud83d\ude0d\ud83d\udd25\ud83d\udd25\ud83d\udd25\ud83d\udd25", "likes": 856, "timestamp": "2025-02-02T16:44:02.000Z", "username": "miss__reeny"}, {"text": "THAT\u2019S MY PRESIDENT!", "likes": 419, "timestamp": "2025-02-02T16:44:07.000Z", "username": "d.o.g.e._official"}, {"text": "BEST PRESIDENT BUTTON  \u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014-> \u2764\ufe0f", "likes": 1696, "timestamp": "2025-02-02T16:56:01.000Z", "username": "jhoarlyy"}, {"text": "\ud83d\udc4f\ud83d\udc4f\ud83d\udc4f\ud83d\udc4f\ud83d\udc4f\ud83d\udc4f\ud83d\udc4f\ud83d\udc4f\ud83d\udc4f", "likes": 1, "timestamp": "2025-02-02T23:22:35.000Z", "username": "christopher_herrington_"}, {"text": "Make America proud and great again", "likes": 3, "timestamp": "2025-02-02T23:21:34.000Z", "username": "sickbarber38"}, {"text": "You will have the highest Inflation in US history within the next 4 years. Can\u2018t wait for the memes.", "likes": 462, "timestamp": "2025-02-02T17:03:40.000Z", "username": "chrisdopher"}, {"text": "America \ud83c\uddfa\ud83c\uddf8 must be great again \u2708\ufe0f", "likes": 3, "timestamp": "2025-02-02T22:55:57.000Z", "username": "lucas_potts247_"}, {"text": "\ud83d\udc4f\ud83d\udc4f", "likes": 2, "timestamp": "2025-02-02T22:27:46.000Z", "username": "benjaminantigua1"}, {"text": "\ud83c\uddfa\ud83c\uddf8\u2764\ufe0f\u2764\ufe0f", "likes": 1, "timestamp": "2025-02-02T21:49:41.000Z", "username": "maiflorencio.oliv"}, {"text": "The best president of the United States of America \ud83c\uddfa\ud83c\uddf8\u2764\ufe0f", "likes": 1133, "timestamp": "2025-02-02T17:12:36.000Z", "username": "imbeautiful97"}, {"text": "\ud83c\uddfa\ud83c\uddf8\u2764\ufe0f\ud83d\udc4f", "likes": 5, "timestamp": "2025-02-02T21:23:36.000Z", "username": "studstilllisa"}, {"text": "PRESIDENT TRUMP \u2764\ufe0f\u2764\ufe0f\u2764\ufe0f\u2764\ufe0f\u2764\ufe0f\u2764\ufe0f\u2764\ufe0f\u2764\ufe0f\u2764\ufe0f\ud83c\uddfa\ud83c\uddf8", "likes": 5, "timestamp": "2025-02-02T21:20:38.000Z", "username": "queenlove.hearts"}, {"text": "\ud83c\uddfa\ud83c\uddf8\u2764\ufe0f\ud83c\uddfa\ud83c\uddf8\u2764\ufe0f\ud83c\uddfa\ud83c\uddf8", "likes": 5, "timestamp": "2025-02-02T20:44:56.000Z", "username": "angelamirza_96"}, {"text": "Thank you president Trump \ud83c\uddfa\ud83c\uddf8\ud83d\udd25\u2764\ufe0f\ud83c\uddfa\ud83c\uddf8", "likes": 7, "timestamp": "2025-02-02T20:45:22.000Z", "username": "angelamirza_96"}, {"text": "You guys are gonna being a lot more for our Maple Syrup!!!", "likes": 2, "timestamp": "2025-02-02T22:32:08.000Z", "username": "gordmalladio"}, {"text": "\u2764\ufe0f\ud83d\udc4f", "likes": 2, "timestamp": "2025-02-02T21:36:20.000Z", "username": "dollydaliafierro"}, {"text": "Great \ud83d\udc4d", "likes": 2, "timestamp": "2025-02-02T21:30:33.000Z", "username": "mvjazz14"}, {"text": "Finally a President that does what he says he will do. \ud83c\uddfa\ud83c\uddf8", "likes": 2, "timestamp": "2025-02-02T21:21:58.000Z", "username": "utredmom12"}, {"text": "\ud83c\uddfa\ud83c\uddf8\ud83c\uddfa\ud83c\uddf8God bless my President", "likes": 0, "timestamp": "2025-02-02T23:04:41.000Z", "username": "nathanielalohan"}];  // Properly embedded JSON
+                const commentsPerPage = 5;
+
+                function renderTable() {
+                    if (comments.length === 0) {
+                        document.getElementById('tableContainer').innerHTML = '<p>No positive comments available.</p>';
+                        return;
+                    }
+
+                    const start = (currentPage - 1) * commentsPerPage;
+                    const end = start + commentsPerPage;
+                    const paginatedComments = comments.slice(start, end);
+
+                    let tableHtml = `
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Comment</th>
+                                    <th>Likes</th>
+                                    <th>Timestamp</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    paginatedComments.forEach(comment => {
+                        tableHtml += `
+                            <tr>
+                                <td>${comment.username}</td>
+                                <td>${comment.text}</td>
+                                <td>${comment.likes}</td>
+                                <td>${comment.timestamp}</td>
+                            </tr>
+                        `;
+                    });
+
+                    tableHtml += '</tbody></table>';
+
+                    document.getElementById('tableContainer').innerHTML = tableHtml;
+                    document.getElementById('prevButton').disabled = currentPage === 1;
+                    document.getElementById('nextButton').disabled = end >= comments.length;
+                }
+
+                function nextPage() {
+                    currentPage++;
+                    renderTable();
+                }
+
+                function previousPage() {
+                    currentPage--;
+                    renderTable();
+                }
+
+                window.onload = function () {
+                    renderTable();
+                }
+            </script>
+        </head>
+        <body>
+            <h1>Positive Comments</h1>
+            <div id="tableContainer"></div>
+            <div class="pagination">
+                <button id="prevButton" onclick="previousPage()">Previous</button>
+                <button id="nextButton" onclick="nextPage()">Next</button>
+            </div>
+        </body>
+    </html>
+    
