@@ -71,6 +71,11 @@ def login():
         authenticated, user_id, account_type, is_suspended = User.authenticate(username, password)
         
         try:
+            # Check if the account is suspended
+            if is_suspended:
+                flash("Your account has been suspended. Please contact support.", "danger")
+                return render_template('navbar/login.html')
+            
             # Fetch email associated with the username from Firestore
             users_ref = db.collection('users').where('username', '==', username).stream()
             user_email = None

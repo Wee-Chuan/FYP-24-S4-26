@@ -42,10 +42,6 @@
                             <li class="{{ 'active' if request.path == url_for('dashboard_boundary.dashboard') else '' }}">
                                 <a href="{{ url_for('dashboard_boundary.dashboard') }}">Dashboard</a>
                             </li>
-                            <li class="{{ 'active' if request.path == url_for('profile_boundary.update_account') else '' }}">
-                                <a href="{{ url_for('profile_boundary.update_account') }}">Profile</a>
-                                <!--profile_boundary.update_account endpoint-->
-                            </li>
                             <li><a href="{{ url_for('logout') }}">Logout</a></li>
                         {% else %}
                             <!-- Non-admin user links -->
