@@ -2,6 +2,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from dotenv import load_dotenv
 import os
+from datetime import datetime
 
 # Load environment variables
 load_dotenv()
@@ -566,7 +567,9 @@ class Admin:
                         'is_selected': review_data.get('is_selected')
                     })
 
-            return all_reviews
+            # Sort reviews by date in descending order (most recent first)
+            sorted_reviews = sorted(all_reviews, key=lambda x: x['date'] or datetime.min, reverse=True)
+            return sorted_reviews
         except Exception as e:
             print(f"Error retrieving reviews: {e}")
             return []

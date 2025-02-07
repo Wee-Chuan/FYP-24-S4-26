@@ -208,6 +208,8 @@ def manage_landing_page():
 def manage_about_us_page():
     # Get the section from query parameters (default to 'overview' if not provided) 
     current_section = request.args.get('section', 'overview') 
+    filter_value = request.args.get('filter', 'all')
+    rating_filter_value = request.args.get('rating_filter', 'all')
 
     # Fetch content for each section from the Admin model
     overview_content = Admin.get_overview_content() 
@@ -223,7 +225,9 @@ def manage_about_us_page():
             overview_content=overview_content,
             goals_heading=goals_heading,
             our_goals=our_goals,
-            testimonials=testimonials
+            testimonials=testimonials,
+            filter_value=filter_value,
+            rating_filter_value=rating_filter_value
         )
     
     # Handle POST requests for form submissions

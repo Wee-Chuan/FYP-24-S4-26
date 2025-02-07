@@ -102,6 +102,25 @@
         {% if current_section == 'testimonials' %}
         <section class="testimonials">
             <form action="{{ url_for('admin_boundary.manage_about_us_page', section=current_section) }}" method="POST">
+                <!-- Filter Section -->
+                <div class="filter-options">
+                    <label for="filter">Filter Testimonials:</label>
+                    <select id="filter" name="filter" class="filter-dropdown" onchange="filterTestimonials()">
+                        <option value="all">All</option>
+                        <option value="selected" {% if filter_value == 'selected' %}selected{% endif %}>Selected</option>
+                        <option value="non-selected" {% if filter_value == 'non-selected' %}selected{% endif %}>Non-Selected</option>
+                    </select>
+
+                    <label for="rating_filter">Filter by Rating:</label>
+                    <select id="rating_filter" name="rating_filter" class="filter-dropdown" onchange="filterTestimonials()">
+                        <option value="all" {% if rating_filter_value == 'all' %}selected{% endif %}>All Ratings</option>
+                        <option value="1" {% if rating_filter_value == '1' %}selected{% endif %}>1 Star</option>
+                        <option value="2" {% if rating_filter_value == '2' %}selected{% endif %}>2 Stars</option>
+                        <option value="3" {% if rating_filter_value == '3' %}selected{% endif %}>3 Stars</option>
+                        <option value="4" {% if rating_filter_value == '4' %}selected{% endif %}>4 Stars</option>
+                        <option value="5" {% if rating_filter_value == '5' %}selected{% endif %}>5 Stars</option>
+                    </select>
+                </div>
                 <table class="table">
                     <thead>
                         <tr>
@@ -109,11 +128,15 @@
                             <th>Content</th>
                             <th>Rating</th>
                             <th>Category</th>
+                            <th>Date</th>
                             <th>Author</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for testimonial in testimonials %}
+                        {% if (filter_value == 'all' or (filter_value == 'selected' and testimonial.is_selected) 
+                            or (filter_value == 'non-selected' and not testimonial.is_selected)) 
+                            and (rating_filter_value == 'all' or testimonial.rating == rating_filter_value) %}
                         <tr>
                             <td>
                                 <!-- Checkbox for selecting a testimonial -->
@@ -124,8 +147,10 @@
                             <td>{{ testimonial.review }}</td>
                             <td> {{ testimonial.rating }} </td>
                             <td> {{ testimonial.category }} </td>
+                            <td> {{ testimonial.date.strftime('%y/%m/%d %H:%M:%S')  }} </td>
                             <td>{{ testimonial.username }}</td>
                         </tr>
+                        {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>
@@ -159,6 +184,15 @@
         });
     });
 });
+
+    function filterTestimonials() {
+        const filterValue = document.getElementById('filter').value;
+        const ratingFilterValue = document.getElementById('rating_filter').value;
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('filter', filterValue);
+        urlParams.set('rating_filter', ratingFilterValue);
+        window.location.search = urlParams.toString();
+    }
 
 </script>
 {% endblock %}
