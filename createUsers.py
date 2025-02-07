@@ -371,5 +371,4 @@ def show_network():
     create_conversation_tree(conversations_data)
     create_top_users_table('data/conversations.json', 'static/top_users_table.html') 
 
-create_top_users_table('data/conversations.json', 'static/top_users_table.html') 
 

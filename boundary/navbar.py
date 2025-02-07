@@ -2,7 +2,8 @@ from flask import Blueprint, render_template, redirect, url_for, session, flash,
 from flask_mail import Message
 from entity.user import User
 from entity.admin import Admin
-import re
+import re, os, requests
+from firebase_admin import auth, firestore
 
 navbar = Blueprint('navbar', __name__)
 
@@ -21,7 +22,7 @@ def register():
         password = request.form['password']
         confirm_password = request.form['confirm_password']
         username = request.form['username']
-
+        
         # Check if the email format is valid
         email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
         if not re.match(email_regex, email):
@@ -38,20 +39,28 @@ def register():
             flash("Username or email already exists. Please use a different username or email.", "danger")
             return render_template('navbar/register.html')
         
-        User.create_user(username, email, gender, age, niche, password, account_type)
-        #    
-        flash("User registered successfully!", "success")
-        return redirect(url_for('navbar.login')) # navbar/login endpoint
+        try:
+            # Create user account
+            user = auth.create_user(email=email, password=password)
+            User.create_user(username, email, gender, age, niche, password, account_type)
+            flash("User registered successfully!", "success")
+            return redirect(url_for('navbar.login'))
+        except Exception as e:
+            print("Error occurred during registration: ", e)
+            return redirect(url_for('navbar.login'))    
 
-    
     # navigates to registration page if not logged in
     return render_template('navbar/register.html')
+
+# Assuming Firebase and Firestore are already initialized
+db = firestore.client()
+FIREBASE_AUTH_URL = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + os.getenv("FIREBASE_API_KEY")
 
 @navbar.route('/login', methods=['GET', 'POST'])
 def login():
     if 'user_id' in session:
         return redirect(url_for('dashboard_boundary.dashboard'))
-    
+
     if request.method == 'POST':
         session.permanent = True
 
@@ -60,25 +69,46 @@ def login():
 
         # Authenticate and retrieve account_type
         authenticated, user_id, account_type, is_suspended = User.authenticate(username, password)
+        
+        try:
+            # Fetch email associated with the username from Firestore
+            users_ref = db.collection('users').where('username', '==', username).stream()
+            user_email = None
+            account_type = None
 
-        # Authenticate using Firebase Authentication
-        if authenticated:
-            # Check if user is suspended
-            if is_suspended:
-                flash("Account suspended. Please contact support for assistance.", "danger")
+            for doc in users_ref:
+                user_data = doc.to_dict()
+                user_email = user_data.get('email')
+                account_type = user_data.get('account_type')
+                break
+
+            if not user_email:
+                flash("Username not found", "danger")
                 return render_template('navbar/login.html')
-            
-            # Set user ID in session after successful authentication
-            session['user_id'] = user_id
-            session['account_type'] = account_type
-            flash("Login successful", "success")
-            return redirect(url_for('dashboard_boundary.dashboard')) # Access this endpoint WHEN LOGIN SUCCEEDS
-        else:
-            flash("Failed to log in: Invalid username or password", "danger")
 
+            # Authenticate using Firebase REST API
+            response = requests.post(FIREBASE_AUTH_URL, json={
+                "email": user_email,
+                "password": password,
+                "returnSecureToken": True
+            })
 
-    # if not logging in yet, just display the login page
+            if response.status_code == 200:
+                session['user_id'] = user_id
+                session['account_type'] = account_type
+                flash("Login successful!", "success")
+                return redirect(url_for('dashboard_boundary.dashboard'))
+            else:
+                error_message = response.json().get('error', {}).get('message', 'Login failed')
+                flash(f"Authentication error: {error_message}", "danger")
+
+        except Exception as e:
+            flash(f"Unexpected error: {str(e)}", "danger")
+
     return render_template('navbar/login.html')
+
+
+
 
 @navbar.route('/about', methods=['GET'])
 def about():

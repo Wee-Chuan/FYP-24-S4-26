@@ -1,7 +1,7 @@
 import os
 from datetime import timedelta
 
-from flask import Flask, render_template, redirect, url_for, session, flash, jsonify, send_from_directory
+from flask import Flask, render_template, redirect, url_for, session, flash, send_from_directory
 from flask_mail import Mail
 from dotenv import load_dotenv
 from boundary.navbar import navbar
