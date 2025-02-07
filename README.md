@@ -35,7 +35,7 @@ fyp_env\Scripts\activate
 
 This command will create a virtual environment called fyp_env and activate it. You’ll see (fyp_env) in your terminal prompt.
 
-### **3. Intall Required Dependencies**
+### **3. Install Required Dependencies**
 ```bash
 pip install -r requirements.txt
 ```
@@ -57,6 +57,7 @@ GOOGLE_CLOUD_CLIENT_X509_CERT_URL="your_google_cloud_client_x509_cert_url_here"
 GOOGLE_CLOUD_UNIVERSE_DOMAIN="your_google_cloud_universe_domain_here"
 MAIL_USERNAME="your_email_username_here"
 MAIL_PASSWORD="your_email_password_here"
+FIREBASE_API_KEY="your_firebase_api_key"
 ```
 > **Important:**  
 > - Ensure that the `.env` file is **not** committed to version control (e.g., Git).  
