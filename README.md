@@ -1,73 +1,97 @@
-# FYP-24-S4-26 #
-Run 'python app.py' 
+# **Project Title: FYP-24-S4-26**
 
-# CREATE VIRTUAL ENVIRONTMENT #
+---
+
+Before running the app, ensure that you have the following installed:
+- **Python 3.x**
+- **pip** (Python package manager)
+- **Virtual environment** (recommended for isolating dependencies)
+
+---
+
+## **Setting Up the Project**
+### **1. Clone the Repository**
+
+First, clone the repository to your local machine:
+
+```bash
+git clone https://github.com/Wee-Chuan/FYP-24-S4-26.git
+cd FYP-24-S4-26
+```
+
+### **2. Create Virtual Environment**
+#### For MacOS:
+```bash
+python3 -m venv fyp_env
+source fyp_env/bin/activate
+```
+
+#### FOR Windows:
+```bash
 python -m venv fyp_env
-
-For MacOS:
-source fyp_env/bin/activate # Activate the environment
-
-FOR Windows:
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-fyp_env\Scripts\activate  # Activate the environment
+fyp_env\Scripts\activate
+```
 
-# LIBRARIES #:
+This command will create a virtual environment called fyp_env and activate it. You’ll see (fyp_env) in your terminal prompt.
 
-# REQUIREMENTS #:
-pip install flask
-pip install python-dotenv
-pip install matplotlib
-pip install networkx
-pip install mpld3
-pip install faker
-pip install firebase-admin
-pip install bcrypt
-pip install requests
-pip install python-louvain
+### **3. Intall Required Dependencies**
+```bash
+pip install -r requirements.txt
+```
 
-pip install scikit-learn 
-pip install pandas
-pip install plotly
-pip install python-louvain
-pip install seaborn
-pip install bs4
-pip install apify-client
-pip install bertopic
-pip install classes
-pip install pyvis
-pip install Flask-Mail
+### **4. Set up environment variables**
+#### To interact with Firebase and configure the app, create a .env file in the root directory of your project.
+```bash
+FLASK_SECRET_KEY="your_secret_key_here"
+GOOGLE_CLOUD_TYPE="your_google_cloud_type_here"
+GOOGLE_CLOUD_PROJECT_ID="your_project_id_here"
+GOOGLE_CLOUD_PRIVATE_KEY_ID="your_google_cloud_private_key_id_here"
+GOOGLE_CLOUD_PRIVATE_KEY="your_google_cloud_private_key_here"
+GOOGLE_CLOUD_CLIENT_EMAIL="your_google_cloud_client_email_here"
+GOOGLE_CLOUD_CLIENT_ID="your_google_cloud_client_id_here"
+GOOGLE_CLOUD_AUTH_URI="your_google_cloud_auth_uri_here"
+GOOGLE_CLOUD_TOKEN_URI="your_google_cloud_token_uri_here"
+GOOGLE_CLOUD_AUTH_PROVIDER_X509_CERT_URL="your_google_cloud_auth_provider_x509_cert_url_here"
+GOOGLE_CLOUD_CLIENT_X509_CERT_URL="your_google_cloud_client_x509_cert_url_here"
+GOOGLE_CLOUD_UNIVERSE_DOMAIN="your_google_cloud_universe_domain_here"
+MAIL_USERNAME="your_email_username_here"
+MAIL_PASSWORD="your_email_password_here"
+```
+> **Important:**  
+> - Ensure that the `.env` file is **not** committed to version control (e.g., Git).  
+> - Add `.env` to your `.gitignore` file to prevent exposing sensitive information.  
+> - This file contains critical credentials (e.g., private keys, email passwords). Keep it **private** and **secure**.
 
+> **Important**
+> - Ensure that the `MAIL_PASSWORD` value in the .env file is correct. For Gmail users, if you have 2-step verification enabled, you may need to generate an App Password instead of using your regular Gmail password.
 
-# BOUNDARY #
-- All the different routes of the website
-    ## dashboard_boundary.py:  
-        Routes for user dashboards.
-        Functionality for different types of users (Business, Inlfuencer, Admin) to access and interact with their respective dashboards.
-    
-    ## navbar.py:
-        Routes for User registration, login, and other general pages such as About and Customer support page
+### **5. Run the Flask Application**
+#### Once the dependencies are installed and the environment variables are set, you can start the Flask server:
+```bash
+python app.py
+```
+#### This will start the Flask development server, and you should see output like:
+* Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
 
-    ## profile_boundary.py:
-        Routes for User Profile management
+### **6. Access the Application**
+#### Open your web browser and go to:
+```bash
+http://127.0.0.1:5000/
+```
 
-# ENTITY #
-- The linkage to firebase and its functions to upload/get data to/from firebase
-    ## admin.py
-        Admin user management functions to manage accounts stored in firebase
-        These functions interact with the Firestore database to retrieve and manipulate user data.
+This will load the homepage of the Flask app.
 
-    ## followers_hist_entity.py
-        Retrieving follower history data and calculating follower growth
-        The data is pulled from a Firestore collection, processed, and then used for growth analysis and prediction.
+### **7. Stop the Flask Server**
+To stop the Flask server, you can press CTRL+C in your terminal.
 
-    ## user.py
-        Handles user-related actions within a system, particularly focused on Firebase Firestore.
+### Troubleshooting
+* If you encounter issues with dependencies, ensure that all packages are installed in your virtual environment.
+* If the app doesn't run, check for errors in the terminal output and verify that your environment variables are properly set.
+* Ensure you have the correct Firebase credentials and keys for integration.
 
-# STATIC #
-- All the CSS 
-
-# TEMPLATES #
-- All the html design for the pages
-
-# GENERATE_FAKE_DATAS #
-- All the files that is used to generate fake datas
+### How to Get the .env File Credentials
+- For Firebase:
+  - If the app uses Firebase, the credentials can be accessed from your Firebase Console (under **Project Settings > Service Accounts > Firebase Admin SDK**).
+  - Download the JSON file containing your Firebase credentials.
+  - Copy the credentials into the `.env` file as shown above. You may need to fill in values like `GOOGLE_CLOUD_PROJECT_ID`, `GOOGLE_CLOUD_PRIVATE_KEY_ID`, etc., based on the contents of the JSON file.
