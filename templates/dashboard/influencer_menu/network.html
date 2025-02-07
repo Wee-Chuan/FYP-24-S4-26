@@ -106,45 +106,97 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        // Check the file existence and display them accordingly
-        async function checkFileExistence(filePath, elementId) {
-            try {
-                const response = await fetch('/check-file', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ file_path: filePath })
-                });
-                
-                const data = await response.json();
-                if (data.exists) {
-                    const element = document.getElementById(elementId);
-                    element.style.display = "block";
-                } else {
-                    console.log(data.message, filePath);
-                }
-            } catch (error) {
-                console.error('Error checking file:', error);
+        // Check the file existence and retrieve them accordingly
+async function checkFileExistence(filePath) {
+    try {
+        // Send the POST request with the file path in the body
+        const response = await fetch('/check_file', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ file_path: filePath })  // Send the file path as JSON
+        });
+
+        const data = await response.json();  // Parse the JSON response
+
+        if (data.exists) {
+            // Prepare the static path by replacing the username with 'static/'
+            const staticPath = filePath.replace(/^.*?\//, 'static/');
+            // Trigger file retrieval
+            return await retrieveFile(filePath, staticPath);
+        } else {
+            console.log(data.message, filePath);  // Log the message if file doesn't exist
+            return false;
+        }
+    } catch (error) {
+        console.error('Error checking file:', error);
+        return false;
+    }
+}
+
+async function retrieveFile(filePath, staticPath) {
+    try {
+        // Send request to retrieve the file
+        const response = await fetch(`/retrieve?destination_blob_name=${encodeURIComponent(filePath)}&local_file_path=${encodeURIComponent(staticPath)}`, {
+            method: 'GET',
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            console.log(data.message);  // Success message
+            return true;
+        } else {
+            console.error(data.message);  // Error message
+            return false;
+        }
+    } catch (error) {
+        console.error('Error retrieving file:', error);
+        return false;
+    }
+}
+
+// Load data for multiple files and update UI
+(async function loadData() {
+    // List of files to check with corresponding element IDs
+    const files = [
+        { path: 'sentiment_pie_chart.html', id: 'sentimentGraph' },
+        { path: 'wordcloud_positive.png', id: 'positiveWordCloud' },
+        { path: 'wordcloud_neutral.png', id: 'neutralWordCloud' },
+        { path: 'wordcloud_negative.png', id: 'negativeWordCloud' },
+        { path: 'positive_comments_table.html', id: 'positiveTable' },
+        { path: 'neutral_comments_table.html', id: 'neutralTable' },
+        { path: 'negative_comments_table.html', id: 'negativeTable' }
+    ];
+
+    const retrievalResults = [];
+
+    // Check existence and retrieve files in sequence
+    for (let file of files) {
+        const path = `{{user['username']}}/${file.path}`;  // Dynamically generate the path
+        console.log(path);  // Check the generated path
+        const result = await checkFileExistence(path);
+        retrievalResults.push({ id: file.id, retrieved: result });
+        console.log("here");
+    }
+
+    // Update the UI after all retrievals
+    retrievalResults.forEach(file => {
+        if (file.retrieved) {
+            console.log("here2");
+            const element = document.getElementById(file.id);
+            if (element) {
+                element.style.display = "block";  // Show the element if retrieval succeeded
+                var src = element.src;
+                element.src = src;
             }
         }
+    });
+})();
 
-        (async function loadData() {
-            // List of files to check with corresponding element IDs
-            const files = [
-                { path: 'static/sentiment_pie_chart.html', id: 'sentimentGraph' },
-                { path: 'static/wordcloud_positive.png', id: 'positiveWordCloud' },
-                { path: 'static/wordcloud_neutral.png', id: 'neutralWordCloud' },
-                { path: 'static/wordcloud_negative.png', id: 'negativeWordCloud' },
-                { path: 'static/positive_comments_table.html', id: 'positiveTable' },
-                { path: 'static/neutral_comments_table.html', id: 'neutralTable' },
-                { path: 'static/negative_comments_table.html', id: 'negativeTable' }
-            ];
-
-            for (let file of files) {
-                await checkFileExistence(file.path, file.id);
-            }
-        })();
+        
+             
 
         function submitForm(event) {
             event.preventDefault(); // Prevent the form from reloading the page

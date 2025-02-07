@@ -3,6 +3,7 @@ from collections import defaultdict
 from postclasses import Comment, User
 import networkx as nx
 from pyvis.network import Network
+import entity.admin as st
 
 def extract_parent_id_from_url(url):
     """Extract the parent ID from the URL."""
@@ -152,7 +153,7 @@ def generate_random_color():
 def generate_random_color():
     return f"#{random.randint(0, 0xFFFFFF):06x}"
 
-def create_conversation_tree(conversations_data):
+def create_conversation_tree(conversations_data, username):
     # Create a PyVis network
     net = Network(notebook=True)
 
@@ -230,8 +231,9 @@ def create_conversation_tree(conversations_data):
         file.write(html_content)
 
     print(f"The comment tree has been saved to {output_path}")
+    st.upload_to_firebase(file_path = output_path, destination_blob_name = username+"/comment_tree.html")
 
-def create_top_users_table(conversations_file, output_html_file):
+def create_top_users_table(conversations_file, output_html_file, username1):
     # Load the JSON data
     with open(conversations_file, 'r', encoding='utf-8') as file:
         data = json.load(file)
@@ -364,11 +366,10 @@ def create_top_users_table(conversations_file, output_html_file):
         file.write(html_content)
 
     print(f"Table saved to {output_html_file}")
+    st.upload_to_firebase(file_path = output_html_file, destination_blob_name = username1+"/top_users_table.html")
 
-def show_network():
+def show_network(username):
     conversation_file = 'data/conversations.json'  # Input JSON file containing conversations data
     conversations_data = load_conversations(conversation_file)
-    create_conversation_tree(conversations_data)
-    create_top_users_table('data/conversations.json', 'static/top_users_table.html') 
-
-
+    create_conversation_tree(conversations_data, username)
+    create_top_users_table('data/conversations.json', 'static/top_users_table.html', username) 

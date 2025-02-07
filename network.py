@@ -6,6 +6,7 @@ import plotly.io as pio
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from scipy.special import softmax
 from classes import Comment, User
+import entity.admin as st
 
 # Global variables
 users = {}
@@ -89,28 +90,12 @@ def visualize_sentiment_pie_chart():
     fig.update_layout(
     title="Sentiment Distribution",
     showlegend=True,
-    width=400,  # Set the width of the chart
-    height=400  # Set the height of the chart
+    # width=400,  # Set the width of the chart
+    # height=400  # Set the height of the chart
     )
 
     # Save the figure as an HTML file
     pio.write_html(fig, file="static/sentiment_pie_chart.html", auto_open=False)  # Save as HTML file
-
-# Main function to generate graphs
-def generateGraphs(username):
-    filename = "data/commentData.csv"
-    processed_user_file = "data/users_data.json"
-
-    readDataAndInitialise(filename)  # Process the raw data
-    print(f"Saving processed data to {processed_user_file}...")
-    # Optionally save data to a file here if needed
-
-    # Generate the pie chart
-    visualize_sentiment_pie_chart()  # Visualize sentiment distribution in pie chart
-    generate_word_clouds()
-    generate_negative_comments_html()
-    generate_neutral_comments_html()
-    generate_positive_comments_html()
 
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
@@ -627,5 +612,27 @@ def generate_positive_comments_html():
     print("HTML file 'static/positive_comments_table.html' generated.")
 
 
+# Main function to generate graphs
+def generateGraphs(username):
+    filename = "data/commentData.csv"
+    processed_user_file = "data/users_data.json"
 
+    readDataAndInitialise(filename)  # Process the raw data
+    print(f"Saving processed data to {processed_user_file}...")
+    # Optionally save data to a file here if needed
+
+    # Generate the pie chart
+    visualize_sentiment_pie_chart()  # Visualize sentiment distribution in pie chart
+    generate_word_clouds()
+    generate_negative_comments_html()
+    generate_neutral_comments_html()
+    generate_positive_comments_html()
+    
+    st.upload_to_firebase(file_path = "static/negative_comments_table.html", destination_blob_name = username+"/negative_comments_table.html")
+    st.upload_to_firebase(file_path = "static/neutral_comments_table.html", destination_blob_name = username+"/neutral_comments_table.html")
+    st.upload_to_firebase(file_path = "static/positive_comments_table.html", destination_blob_name = username+"/positive_comments_table.html")
+    st.upload_to_firebase(file_path = "static/sentiment_pie_chart.html", destination_blob_name = username+"/sentiment_pie_chart.html")
+    st.upload_to_firebase(file_path = "static/wordcloud_negative.png", destination_blob_name = username+"/wordcloud_negative.png")
+    st.upload_to_firebase(file_path = "static/wordcloud_positive.png", destination_blob_name = username+"/wordcloud_positive.png")
+    st.upload_to_firebase(file_path = "static/wordcloud_neutral.png", destination_blob_name = username+"/wordcloud_neutral.png")
 

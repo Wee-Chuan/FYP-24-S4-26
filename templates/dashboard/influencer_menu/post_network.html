@@ -141,114 +141,110 @@
 <script>
 
     function iframeLoaded() {
-        var iFrameID = document.getElementById('centralityGraph');
-        if(iFrameID) {
-              // here you can make the height, I delete it first, then I make it again
-              height = iFrameID.contentWindow.document.body.scrollHeight + 100;
-              iFrameID.style.height = height + "px";
-              
-
-
-        }   
+        const iFrameID = document.getElementById('centralityGraph');
+        if (iFrameID) {
+            const height = iFrameID.contentWindow.document.body.scrollHeight + 100;
+            iFrameID.style.height = height + "px";
+        }
     }
-
+    
     function submitForm(event) {
         event.preventDefault();
         document.getElementById("loadingScreen").style.display = "block";
-
-        var formData = new FormData(document.getElementById("usernameForm"));
-
+    
+        const formData = new FormData(document.getElementById("usernameForm"));
+    
         fetch('/post_analysis', {
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById("loadingScreen").style.display = "none";
-
-            if (data.error) {
-                alert(data.error);
-                return;
-            }
-
-            loadConversationTable();
-            location.reload();
-        })
-        .catch(error => {
-            console.error("Error fetching data:", error);
-            document.getElementById("loadingScreen").style.display = "none";
-        });
-
-        
-    }
-
-let currentPage = 1; // Default to the first page
-const resultsPerPage = 10; // Limit results per page
-
-function loadConversationTable() {
-    fetch('/static/conversations.json')
-        .then(response => response.json())
-        .then(conversations => {
-            const conversationTableDiv = document.getElementById('conversationDetails');
-            let tableHtml = '<h3>Conversation List</h3><table>';
-            tableHtml += '<thead><tr><th>Conversation ID</th><th>Number of Comments</th></tr></thead><tbody>';
-
-            // Get the conversation entries and slice to the current page
-            const conversationList = Object.values(conversations);
-            const startIndex = (currentPage - 1) * resultsPerPage;
-            const endIndex = startIndex + resultsPerPage;
-            const paginatedConversations = conversationList.slice(startIndex, endIndex);
-
-            // Loop through the conversations for the current page and add rows
-            paginatedConversations.forEach(convo => {
-                tableHtml += `
-                    <tr onclick="showConversationDetails('${convo.conversation_id}')">
-                        <td>${convo.conversation_id}</td>
-                        <td>${convo.comments.length}</td>
-                    </tr>
-                `;
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("loadingScreen").style.display = "none";
+    
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+    
+                loadConversationTable();
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+                document.getElementById("loadingScreen").style.display = "none";
             });
-
-            tableHtml += '</tbody></table>';
-
-            // Add pagination buttons
-            tableHtml += `
-                <div class="pagination">
-                    <button onclick="previousPage()">Previous</button>
-                    <button onclick="nextPage()">Next</button>
-                </div>
-            `;
-            
-            conversationTableDiv.innerHTML = tableHtml;
-            document.getElementById("conversationDetails").style.display = "block";
-        })
-        .catch(error => {
-            console.error("Error loading conversation data:", error);
-        });
-}
-
-// Function to go to the previous page
-function previousPage() {
-    if (currentPage > 1) {
-        currentPage--;
-        loadConversationTable(); // Reload table with new page
     }
-}
-
-// Function to go to the next page
-function nextPage() {
-    currentPage++;
-    loadConversationTable(); // Reload table with new page
-}
-
-
+    
+    let currentPage = 1; // Default to the first page
+    const resultsPerPage = 10;
+    
+    function loadConversationTable() {
+        fetch('/static/conversations.json')
+            .then(response => response.json())
+            .then(conversations => {
+                const conversationTableDiv = document.getElementById('conversationDetails');
+                let tableHtml = '<h3>Conversation List</h3><table>';
+                tableHtml += '<thead><tr><th>Conversation ID</th><th>Number of Comments</th></tr></thead><tbody>';
+    
+                const conversationList = Object.values(conversations);
+                if (conversationList.length === 0) {
+                    conversationTableDiv.innerHTML = "<p>No conversations available.</p>";
+                    return;
+                }
+    
+                const startIndex = (currentPage - 1) * resultsPerPage;
+                const endIndex = startIndex + resultsPerPage;
+                const paginatedConversations = conversationList.slice(startIndex, endIndex);
+    
+                paginatedConversations.forEach(convo => {
+                    tableHtml += `
+                        <tr onclick="showConversationDetails('${convo.conversation_id}')">
+                            <td>${convo.conversation_id}</td>
+                            <td>${convo.comments.length}</td>
+                        </tr>
+                    `;
+                });
+    
+                tableHtml += '</tbody></table>';
+                tableHtml += `
+                    <div class="pagination">
+                        <button onclick="previousPage()" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>
+                        <button onclick="nextPage()" ${endIndex >= conversationList.length ? 'disabled' : ''}>Next</button>
+                    </div>
+                `;
+    
+                conversationTableDiv.innerHTML = tableHtml;
+                document.getElementById("conversationDetails").style.display = "block";
+            })
+            .catch(error => {
+                console.error("Error loading conversation data:", error);
+            });
+    }
+    
+    function previousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            loadConversationTable();
+        }
+    }
+    
+    function nextPage() {
+        currentPage++;
+        loadConversationTable();
+    }
+    
     function showConversationDetails(convoId) {
         fetch('/static/conversations.json')
             .then(response => response.json())
             .then(conversations => {
                 const convo = conversations[convoId];
+                if (!convo) {
+                    alert("Conversation not found.");
+                    return;
+                }
+    
                 const sortedComments = convo.comments.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-
+    
                 let conversationHtml = `
                     <h3>Conversation: ${convoId}</h3>
                     <button class="back-btn" onclick="loadConversationTable()">Back to Conversation List</button>
@@ -264,7 +260,7 @@ function nextPage() {
                         </thead>
                         <tbody>
                 `;
-
+    
                 sortedComments.forEach(comment => {
                     conversationHtml += `
                         <tr>
@@ -276,7 +272,7 @@ function nextPage() {
                         </tr>
                     `;
                 });
-
+    
                 conversationHtml += '</tbody></table>';
                 document.getElementById('conversationDetails').innerHTML = conversationHtml;
             })
@@ -284,82 +280,74 @@ function nextPage() {
                 console.error("Error loading conversation details:", error);
             });
     }
-
-    (async function checkFileExistence() {
-        filePath = 'static/conversations.json'; // Replace with actual file path
+    
+    async function checkFileExistence(filePath) {
         try {
-            const response = await fetch('/check-file', {
+            const response = await fetch('/check_file', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ file_path: filePath })
             });
-
+    
             const data = await response.json();
             if (data.exists) {
-                loadConversationTable();
-                // Perform your custom logic here
+                const staticPath = filePath.replace(/^.*?\//, 'static/');
+                return await retrieveFile(filePath, staticPath);
             } else {
-                console.log(data.message);
-                console.log("HELLO");
-                console.log(filePath);
+                console.log(data.message, filePath);
+                return false;
             }
         } catch (error) {
             console.error('Error checking file:', error);
+            return false;
         }
-
-        filePath = 'static/comment_tree.html'; // Replace with actual file path
+    }
+    
+    async function retrieveFile(filePath, staticPath) {
         try {
-            const response = await fetch('/check-file', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ file_path: filePath })
-            });
-
+            const response = await fetch(`/retrieve?destination_blob_name=${encodeURIComponent(filePath)}&local_file_path=${encodeURIComponent(staticPath)}`);
             const data = await response.json();
-            if (data.exists) {
-                console.log("tre have")
-                commenttree = document.getElementById("hehe");
-                commenttree.style.display = "block";
-            } else {
+    
+            if (response.ok) {
                 console.log(data.message);
-                console.log("HELLO");
-                console.log(filePath);
+                return true;
+            } else {
+                console.error(data.message);
+                return false;
             }
         } catch (error) {
-            console.error('Error checking file:', error);
+            console.error('Error retrieving file:', error);
+            return false;
         }
-
-        filePath = 'static/top_users_table.html'; // Replace with actual file path
-        try {
-            const response = await fetch('/check-file', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ file_path: filePath })
-            });
-
-            const data = await response.json();
-            if (data.exists) {
-                centralityGraph = document.getElementById('centralityGraph');
-                centralityGraph.style.display = "block";
-                iframeLoaded();
-            } else {
-                console.log(data.message);
-                console.log("HELLO");
-                console.log(filePath);
+    }
+    
+    (async function loadData() {
+        const files = [
+            { path: 'comment_tree.html', id: 'hehe' },
+            { path: 'top_users_table.html', id: 'centralityGraph' }
+        ];
+    
+        const retrievalResults = [];
+    
+        for (let file of files) {
+            const path = `{{user['username']}}/${file.path}`;
+            console.log(path);
+            const result = await checkFileExistence(path);
+            retrievalResults.push({ id: file.id, retrieved: result });
+        }
+    
+        retrievalResults.forEach(file => {
+            if (file.retrieved) {
+                const element = document.getElementById(file.id);
+                if (element) {
+                    element.style.display = "block";
+                    element.src = element.src;
+                }
             }
-        } catch (error) {
-            console.error('Error checking file:', error);
-        }
-
+        });
+    
+        loadConversationTable();
     })();
-    
-
-    
+        
 </script>
 {% endblock %}

@@ -1,7 +1,8 @@
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import credentials, firestore, storage
 from dotenv import load_dotenv
 import os
+from entity.user import bucket
 
 # Load environment variables
 load_dotenv()
@@ -22,11 +23,45 @@ if not firebase_admin._apps:
         "client_x509_cert_url": os.getenv("GOOGLE_CLOUD_CLIENT_X509_CERT_URL"),
         "universe_domain": os.getenv("GOOGLE_CLOUD_UNIVERSE_DOMAIN")
     }
-    print("firebase initialised")
+    print("admin initialised")
     cred = credentials.Certificate(firebase_credentials) 
-    firebase_admin.initialize_app(cred)
+    firebase_admin.initialize_app(cred, {'storageBucket': 'fyp-24-s4-26.firebasestorage.app' })
+    bucket = storage.bucket()
 
 db = firestore.client()
+
+# file storage functions
+def upload_to_firebase(file_path, destination_blob_name):
+    """
+    Upload a file to Firebase Storage.
+    :param file_path: Path to the file you want to upload
+    :param destination_blob_name: The name of the file in Firebase Storage
+    :return: URL of the uploaded file
+    """
+    blob = bucket.blob(destination_blob_name)
+    blob.upload_from_filename(file_path)
+    blob.make_public()  # Make the file publicly accessible
+    return blob.public_url
+
+def file_exists_in_firebase(destination_blob_name):
+    """
+    Check if a file exists in Firebase Storage.
+    :param destination_blob_name: The name of the file to check
+    :return: Boolean indicating whether the file exists
+    """
+    print("HEHEHEHEHEHE")
+    print(destination_blob_name)
+    blob = bucket.blob(destination_blob_name)
+    return blob.exists()
+
+def retrieve_from_firebase(destination_blob_name, local_file_path):
+    """
+    Retrieve a file from Firebase Storage and save it locally.
+    :param destination_blob_name: The name of the file in Firebase Storage
+    :param local_file_path: Path where the file will be saved locally
+    """
+    blob = bucket.blob(destination_blob_name)
+    blob.download_to_filename(local_file_path)
 
 class Admin:
     @staticmethod
@@ -738,7 +773,6 @@ class Admin:
         except Exception as e:
             print(f"Error FAQ feature: {e}")
             return False  # Indicate failure
-
 
 
 

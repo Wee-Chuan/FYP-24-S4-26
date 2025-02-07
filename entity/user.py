@@ -29,6 +29,8 @@ from sklearn.decomposition import NMF
 import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
 
+from firebase_admin import credentials, firestore, auth, storage
+
 # Ensure NLTK Vader Lexicon is available
 nltk.download('vader_lexicon', quiet=True)
 
@@ -62,9 +64,10 @@ if not firebase_admin._apps:
         "client_x509_cert_url": os.getenv("GOOGLE_CLOUD_CLIENT_X509_CERT_URL"),
         "universe_domain": os.getenv("GOOGLE_CLOUD_UNIVERSE_DOMAIN")
     }
-
+    print("user initialised")
     cred = credentials.Certificate(firebase_credentials) 
-    firebase_admin.initialize_app(cred)
+    firebase_admin.initialize_app(cred, {'storageBucket': 'fyp-24-s4-26.firebasestorage.app' })
+    bucket = storage.bucket()
 
 db = firestore.client()
 
@@ -91,6 +94,24 @@ class User:
 
         print(f"User {username} with account type {account_type} created successfully.")
 
+    @staticmethod
+    def get_username_by_user_id(user_id):
+        """Retrieves the username for a given user_id from Firestore."""
+        try:
+            user_ref = db.collection('users').document(user_id)
+            user_doc = user_ref.get()
+
+            if user_doc.exists:
+                user_data = user_doc.to_dict()
+                return user_data.get('username', None)
+            else:
+                print(f"User with user_id {user_id} not found.")
+                return None
+        except Exception as e:
+            print(f"Error retrieving username: {str(e)}")
+            return None
+
+    
     @staticmethod
     def user_exists(username, email):
         """Checks if a user with the given user_id or email already exists in Firestore."""

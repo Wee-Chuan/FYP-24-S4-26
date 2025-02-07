@@ -4,14 +4,13 @@ import pandas as pd
 from flask import Blueprint, render_template, redirect, url_for, session, flash, request, jsonify, current_app
 from werkzeug.utils import secure_filename
 from apify_client import ApifyClient
+import entity.admin as adm
 
 # Custom modules
 import network as nw
 import createUsers as cu
 from entity.user import User
 from entity.followers_hist_entity import FollowerHist
-
-
 
 # Define Flask Blueprint
 influencer_boundary = Blueprint('influencer_boundary', __name__)
@@ -162,7 +161,10 @@ def followers():
 
 @influencer_boundary.route('/post_page')  # when 'Network Visualization' is clicked in the sidebar from influencer's side
 def post_page():
-    return render_template('dashboard/influencer_menu/post_network.html')
+    account_type = session.get('account_type')
+    user_id = session.get('user_id') 
+    user = User.get_profile(user_id) 
+    return render_template('dashboard/influencer_menu/post_network.html', user_id=user_id, user=user)
 
 @influencer_boundary.route('/commenttree')  
 def commenttree():
@@ -219,9 +221,10 @@ def post_analysis():
     print(f"All comments saved to {csv_file_path}")
 
     # Generate the network graph
+    user_id = session.get('user_id')
     cu.create_user_json()
     cu.make_convo_file()
-    cu.show_network()
+    cu.show_network(User.get_username_by_user_id(user_id))
 
     # Return success in JSON response
     return jsonify({
@@ -231,10 +234,15 @@ def post_analysis():
 
 @influencer_boundary.route('/network')  # when 'Network Visualization' is clicked in the sidebar from influencer's side
 def network():
-    return render_template('dashboard/influencer_menu/network.html')
+    account_type = session.get('account_type')
+    user_id = session.get('user_id') 
+    user = User.get_profile(user_id) 
+    return render_template('dashboard/influencer_menu/network.html', user_id=user_id, user=user)
 
 @influencer_boundary.route('/display_network', methods=['POST'])
 def display_network():
+    user_id = session.get('user_id') 
+    
     # Get the username from the POST request
     username = request.form.get('username')
 
@@ -265,7 +273,7 @@ def display_network():
     # Prepare the Actor input for the Instagram Comments scraper
     run_input = {
         "directUrls": postURLs,
-        "resultsLimit": 100,  # Modify this number as needed to capture more comments
+        "resultsLimit": 10,  # Modify this number as needed to capture more comments
     }
 
     # Run the Actor and wait for it to finish
@@ -296,20 +304,13 @@ def display_network():
 
     print("All comments saved to data/commentData.csv")
     
-    nw.generateGraphs(username)
+    print(User.get_username_by_user_id(user_id))
+    nw.generateGraphs(User.get_username_by_user_id(user_id))
     
     # Return the username in a JSON response (no need for full page render)
     return jsonify({
         'username': username,
     })
-
-@influencer_boundary.route('/check-file', methods=['POST'])
-def check_file():
-    data = request.json
-    file_path = data.get('file_path')
-    if file_path and os.path.exists(file_path):
-        return jsonify({"exists": True, "message": "File exists."})
-    return jsonify({"exists": False, "message": "File does not exist."})
 
 @influencer_boundary.route('/display_sentiment_graph')
 def display_sentiment_graph():
@@ -318,3 +319,47 @@ def display_sentiment_graph():
 @influencer_boundary.route('/display_topic_graph')
 def display_topic_graph():
     return render_template('dashboard/influencer_menu/topicnetwork.html')
+
+# Flask routes
+@influencer_boundary.route('/upload', methods=['POST'])
+def upload():
+    file = request.files['file']
+    destination_blob_name = request.form['destination_blob_name']
+    file_path = f"temp_{file.filename}"
+    file.save(file_path)
+    
+    try:
+        file_url = adm.upload_to_firebase(file_path, destination_blob_name)
+        os.remove(file_path)  # Clean up the temporary file
+        return jsonify({"message": "File uploaded successfully", "url": file_url}), 200
+    except Exception as e:
+        return jsonify({"message": f"Error uploading file: {str(e)}"}), 500
+
+@influencer_boundary.route('/check_file', methods=['POST'])  # Use POST instead of GET to match JS request method
+def check_file():
+    # Get the JSON body from the request
+    file_data = request.get_json()  
+    destination_blob_name = file_data['file_path']  # Extract the file path
+
+    # Check if the file exists in Firebase Storage
+    file_exists = adm.file_exists_in_firebase(destination_blob_name)
+    
+    # Return the response based on whether the file exists or not
+    if file_exists:
+        print("hello")
+        return jsonify({"exists": True, "message": "File exists in Firebase Storage."}), 200
+    else:
+        print("hellono")
+        return jsonify({"exists": False, "message": "File does not exist in Firebase Storage."}), 404
+
+@influencer_boundary.route('/retrieve', methods=['GET'])
+def retrieve():
+    destination_blob_name = request.args.get('destination_blob_name')
+    local_file_path = request.args.get('local_file_path')
+    
+    try:
+        adm.retrieve_from_firebase(destination_blob_name, local_file_path)
+        return jsonify({"message": f"File downloaded successfully to {local_file_path}."}), 200
+    except Exception as e:
+        return jsonify({"message": f"Error retrieving file: {str(e)}"}), 500
+

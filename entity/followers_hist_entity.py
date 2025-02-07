@@ -37,12 +37,10 @@ if not firebase_admin._apps:
         "client_x509_cert_url": os.getenv("GOOGLE_CLOUD_CLIENT_X509_CERT_URL"),
         "universe_domain": os.getenv("GOOGLE_CLOUD_UNIVERSE_DOMAIN")
     }
-
+    print("history initialised")
     cred = credentials.Certificate(firebase_credentials) 
-
-    # firebase_admin.initialize_app(cred)
-
-    firebase_admin.initialize_app(cred)
+    firebase_admin.initialize_app(cred, {'storageBucket': 'fyp-24-s4-26.firebasestorage.app' })
+    bucket = storage.bucket()
 
 db = firestore.client()
 
