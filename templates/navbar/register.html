@@ -16,52 +16,54 @@
 
                 <!-- Account Type  -->
                 <label for="account_type" style="display: none;">Account Type</label>
-                <select id="account_type" name="account_type" required onchange="toggleFields()" style="display: none;">
+                <select id="account_type" name="account_type" style="display: none;">
                     <option value="influencer">Influencer</option>
                 </select>
 
                 <!-- Username -->
                 <div id="username_field">
                     <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
+                    <input type="text" id="username" name="username" 
+                    class="{% if 'username' in error_fields %}is-invalid{% endif %}" value="{{ request.form.username }}" required>
                 </div>
 
                 <!-- Email -->
                 <label for="email">Email</label>
-                <input type="text" id="email" name="email" required>
+                <input type="text" id="email" name="email" 
+                class="{% if 'email' in error_fields %}is-invalid{% endif %}" value="{{ request.form.email }}" required>
 
                 <!-- Gender -->
                 <label for="gender">Gender</label>
                 <select id="gender" name="gender" required>
                     <option value="" selected disabled>Select an option</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
+                    <option value="male" {% if request.form.gender == 'male' %}selected{% endif %}>Male</option>
+                    <option value="female" {% if request.form.gender == 'female' %}selected{% endif %}>Female</option>
                 </select>
 
                 <!-- Age -->
                 <label for="age">Age</label>
-                <input type="number" id="age" name="age" min="16" max="99" required>
+                <input type="number" id="age" name="age" min="16" max="99" value="{{ request.form.age }}" required>
 
                 <!-- Niche -->
                 <label for="niche">Niche</label>
                 <select id="niche" name="niche" required>
                     <option value="" selected disabled>Select an option</option>
-                    <option value="fashion&lifestyle">Fashion & Lifestyle</option>
-                    <option value="health&fitness">Health & Fitness</option>
-                    <option value="travel&adventure">Travel & Adventure</option>
-                    <option value="tech&gadgets">Tech & Gadgets</option>
-                    <option value="beauty&skincare">Beauty & Skincare</option>
+                    <option value="fashion&lifestyle" {% if request.form.niche == 'fashion&lifestyle' %}selected{% endif %}>Fashion & Lifestyle</option>
+                    <option value="health&fitness" {% if request.form.niche == 'health&fitness' %}selected{% endif %}>Health & Fitness</option>
+                    <option value="travel&adventure" {% if request.form.niche == 'travel&adventure' %}selected{% endif %}>Travel & Adventure</option>
+                    <option value="tech&gadgets" {% if request.form.niche == 'tech&gadgets' %}selected{% endif %}>Tech & Gadgets</option>
+                    <option value="beauty&skincare" {% if request.form.niche == 'beauty&skincare' %}selected{% endif %}>Beauty & Skincare</option>
                 </select>
 
                 <!-- Password -->
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" 
+                class="{% if 'password' in error_fields %}is-invalid{% endif %}" required>
 
                 <!-- Confirm Password -->
                 <label for="password">Confirm Password</label>
-                <input type="password" id="confirm_password" name="confirm_password" required>
-
-                
+                <input type="password" id="confirm_password" name="confirm_password" 
+                class="{% if 'confirm_password' in error_fields %}is-invalid{% endif %}" required>
 
                 <button type="submit">Register</button>
 
@@ -73,23 +75,5 @@
         </div>
     </section>
 
-    <!-- <script>
-        function toggleFields() {
-            const accountType = document.getElementById("account_type").value;
-            const businessNameField = document.getElementById("business_name_field");
-            const businessNumberField = document.getElementById("business_number_field");
-    
-            if (accountType === "business_analyst") {
-                businessNameField.style.display = "block";
-                businessNumberField.style.display = "block";
-            } else {
-                businessNameField.style.display = "none";
-                businessNumberField.style.display = "none";
-            }
-        }
-    
-        // Initialize the fields based on default selection
-        document.addEventListener("DOMContentLoaded", toggleFields);
-    </script> -->
 
 {% endblock %}

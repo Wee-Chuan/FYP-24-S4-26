@@ -22,22 +22,37 @@ def register():
         password = request.form['password']
         confirm_password = request.form['confirm_password']
         username = request.form['username']
+
+        error_fields = []
         
         # Check if the email format is valid
         email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
         if not re.match(email_regex, email):
+            error_fields.append('email')
             flash("Invalid email format. Please provide a valid email address.", "danger")
-            return render_template('navbar/register.html')
+            # return render_template('navbar/register.html')
 
         # Check if password and confirm password match
         if password != confirm_password:
+            error_fields.append('password')
+            error_fields.append('confirm_password')
             flash("Passwords do not match!", "danger")
-            return render_template('navbar/register.html')
+            #return render_template('navbar/register.html')
+
+        # Check if password more than 6 characters
+        if len(password) < 6:
+            error_fields.append('password')
+            flash("Password must be at least 6 characters!", "danger")
+            #return render_template('navbar/register.html')
 
         # Check if user with the same user_id or email already exists
         if User.user_exists(username, email):
+            error_fields.append('username')
             flash("Username or email already exists. Please use a different username or email.", "danger")
-            return render_template('navbar/register.html')
+            #return render_template('navbar/register.html')
+        
+        if error_fields:
+            return render_template('navbar/register.html', error_fields=error_fields)
         
         try:
             # Create user account
@@ -47,7 +62,7 @@ def register():
             return redirect(url_for('navbar.login'))
         except Exception as e:
             print("Error occurred during registration: ", e)
-            return redirect(url_for('navbar.login'))    
+            return redirect(url_for('navbar.register'))    
 
     # navigates to registration page if not logged in
     return render_template('navbar/register.html')

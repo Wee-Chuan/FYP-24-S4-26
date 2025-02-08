@@ -115,14 +115,16 @@ class User:
     @staticmethod
     def user_exists(username, email):
         """Checks if a user with the given user_id or email already exists in Firestore."""
-        # Check if user_id exists
-        username_exists = db.collection('users').document(username).get().exists
+        # Check if username exists
+        username_query = db.collection('users').where('username', '==', username).limit(1).stream()
+        username_exists = any(username_query)
 
         # Check if email exists
-        email_exists = db.collection('users').where(field_path='email', op_string='==', value=email).limit(1).stream()
+        email_query = db.collection('users').where('email', '==', email).limit(1).stream()
+        email_exists = any(email_query)
         
         # Return True if either user_id or email already exists
-        return username_exists or any(email_exists)
+        return username_exists or email_exists
 
     @staticmethod
     def authenticate(username, password):
