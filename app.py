@@ -42,6 +42,7 @@ app.register_blueprint(profile_boundary)
 app.register_blueprint(rate_and_review_boundary)
 
 @app.route('/')
+
 def index():
     hero_content = Admin.get_hero_content()
     about_content = Admin.get_about_content()
@@ -71,7 +72,6 @@ def serve_graphs(filename):
         filename
     )
 
-# if __name__ == "__main__":
-#     port = os.environ.get("PORT", 5000)  # Default to 5000 if PORT not found
-#     app.run(host="0.0.0.0", port=int(port))
+if __name__ == "__main__":
+    app.run(debug=False, host='0.0.0.0')
     
