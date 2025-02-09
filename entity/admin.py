@@ -227,19 +227,19 @@ class Admin:
                     user_ref.update({'is_suspended': True})
                     # message = f"User {user_data['username']} has been suspended successfully."
                     # return True, message
-                    return {'success': True, 'message': f'User {user_data['username']} has been suspended successfully.'}
+                    return {'success': True, 'message': f"User {user_data['username']} has been suspended successfully."}
                     
                 
             else:
                 # message = f"User {user_data['username']} does not exist."
                 # return False, message
-                return {'success': False, 'message': f'User {user_data['username']} does not exist.'}
+                return {'success': False, 'message': f"User {user_data['username']} does not exist."}
 
         except Exception as e:
             # message = f"Error suspending user: {e}"
             # return False, message
         
-            return {'success': False, 'message': f'Error suspending user: {e}'}
+            return {'success': False, 'message': f"Error suspending user: {e}"}
     
     # ============================== Manage landing page ==================================#
     @staticmethod
