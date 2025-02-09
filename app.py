@@ -71,7 +71,7 @@ def serve_graphs(filename):
         filename
     )
 
-if __name__ == "__main__":
-    port = os.environ.get("PORT", 5000)  # Default to 5000 if PORT not found
-    app.run(host="0.0.0.0", port=int(port))
+# if __name__ == "__main__":
+#     port = os.environ.get("PORT", 5000)  # Default to 5000 if PORT not found
+#     app.run(host="0.0.0.0", port=int(port))
     
