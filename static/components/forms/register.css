@@ -5,8 +5,11 @@
 
 /* ============================= Auth Form Section ============================= */
 .register-form {
+    flex-grow: 1;
     display: flex;
-    height: 100vh; /* Full height for centering */
+    flex-direction: row;
+    justify-content: space-between; /* Center the form vertically */
+    align-items: center;
 }
 
 /* ============================= Info Container ============================= */
@@ -14,6 +17,7 @@
     flex: 2; /* Allow the image container to take full width of the left side */
     background: url('../../images/main_page_wallpaper.jpg') no-repeat center center;
     background-size: cover;
+    height: 100%;
 }
 
 /* ============================= Form Container ============================= */
@@ -27,7 +31,6 @@
     display: flex;
     flex-direction: column;
     justify-content: center; 
-    height: 100%;
 }
 
 /* Form Heading */

@@ -7,13 +7,7 @@ html, body {
     height: 100%; 
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; 
+    /* overflow-x: hidden; */
 }
 
 /* ============================= Logo Styling ============================= */
@@ -99,9 +93,12 @@ header .navbar {
     border-bottom: 2px solid #78e6ff;
 }
 
+/* ============================= Main Content Styling ============================= */
 .main-content {
-    flex: 1;
+    flex-grow: 1;
     padding-top: 130px;
+    display: flex;
+    flex-direction: column;
 }
 
 * {
@@ -114,9 +111,8 @@ footer {
     color: #fff;
     padding: 20px 20px; /* Add padding for spacing */
     text-align: center; /* Center-align text */
-    position: relative; /* For positioning in case of any absolute elements */
-    margin-top: auto;
-   
+    position: relative; /* For positioning in case of any absolute elements */  
+    bottom: 0; 
 }
 
 .footer-content {
@@ -238,6 +234,8 @@ a:hover {
     }
 }
 
+/* ============================= Responsive Styling for Smaller Screens ============================= */
+
 @media (max-width: 768px) {
     .navbar {
         flex-direction: column;
@@ -251,5 +249,25 @@ a:hover {
 
     .footer-links {
         flex-direction: column;
+    }
+
+    /* Make sure main content is still accessible */
+    .main-content {
+        padding-top: 120px; /* Ensure there's space for fixed header */
+        padding-bottom: 50px; /* Add more bottom padding for small screens */
+    }
+
+    /* Adjust body and container height for small screens */
+    body {
+        height: auto;
+        min-height: 100vh; /* Ensure the height of the body stretches */
+    }
+
+    .footer {
+        margin-top: 30px; /* Space between content and footer */
+    }
+
+    .flash-messages {
+        width: 90%; /* Smaller width for flash messages on mobile */
     }
 }
