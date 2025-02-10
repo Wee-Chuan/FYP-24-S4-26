@@ -80,8 +80,6 @@ def get_visualization_data():
         print(f"❌ Error fetching visualization data: {e}")
         return jsonify({"error": str(e)}), 500
 
-
-
 ###################################################################################################################
 
 @influencer_boundary.route('/followers', methods=['GET', 'POST'])
@@ -189,7 +187,7 @@ def post_analysis():
         "directUrls": [post_url],
         "includeNestedComments": True,
         "isNewestComments": False,
-        "resultsLimit": 50
+        "resultsLimit": 300
     }
 
     # Run the Actor and wait for it to finish
@@ -258,7 +256,7 @@ def display_network():
     # Prepare the Actor input for the Instagram Post scraper using the username entered in the form
     run_input = {
         "username": [username],  # Dynamically pass the username from the form
-        "resultsLimit": 1,  # Get 1 post to fetch comments from
+        "resultsLimit": 10,  # Get 1 post to fetch comments from
     }
 
     # Run the Actor and wait for it to finish
@@ -273,7 +271,7 @@ def display_network():
     # Prepare the Actor input for the Instagram Comments scraper
     run_input = {
         "directUrls": postURLs,
-        "resultsLimit": 10,  # Modify this number as needed to capture more comments
+        "resultsLimit": 15,  # Modify this number as needed to capture more comments
     }
 
     # Run the Actor and wait for it to finish
