@@ -57,7 +57,8 @@
                 <input type="text" id="username" name="username" required placeholder="e.g., john_doe">
                 <button type="submit">Analyze</button>
             </form>
-
+            
+            <div id = "analysisResults"></div>
             <!-- Loading screen (initially hidden) -->
             <div id="loadingScreen">
                 <p>Loading...</p>
@@ -232,7 +233,7 @@ function submitForm(event) {
         
         // Optionally show an error message to the user
         const analysisResultsDiv = document.getElementById("analysisResults");
-        analysisResultsDiv.innerHTML = `<p style="color: red;">An error occurred while processing the request. Please try again.</p>`;
+        analysisResultsDiv.innerHTML = `<p style="color: red;">User does not exist or is a private account.</p>`;
     });
 }
 

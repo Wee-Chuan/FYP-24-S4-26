@@ -253,63 +253,73 @@ def display_network():
     # Initialize the ApifyClient with your API token
     client = ApifyClient(APIFY_API_TOKEN)
 
-    # Prepare the Actor input for the Instagram Post scraper using the username entered in the form
-    run_input = {
-        "username": [username],  # Dynamically pass the username from the form
-        "resultsLimit": 5,  # Get 1 post to fetch comments from
-    }
+    try:
+        # Prepare the Actor input for the Instagram Post scraper using the username entered in the form
+        run_input = {
+            "username": [username],  # Dynamically pass the username from the form
+            "resultsLimit": 10,  # Get 1 post to fetch comments from
+        }
 
-    # Run the Actor and wait for it to finish
-    run = client.actor("nH2AHrwxeTRJoN5hX").call(run_input=run_input)
+        # Run the Actor and wait for it to finish
+        run = client.actor("nH2AHrwxeTRJoN5hX").call(run_input=run_input)
 
-    # Collect the post URLs from the results
-    postURLs = []
-    for item in client.dataset(run["defaultDatasetId"]).iterate_items():
-        post_url = item.get("url")  # Access the post URL
-        postURLs.append(post_url)
-
-    # Prepare the Actor input for the Instagram Comments scraper
-    run_input = {
-        "directUrls": postURLs,
-        "resultsLimit": 5,# Modify this number as needed to capture more comments
-        "includeReplies": False,
-    }
-
-    # Run the Actor and wait for it to finish
-    run = client.actor("SbK00X0JYCPblD2wp").call(run_input=run_input)
-
-    # Open a CSV file to save the comments data
-    with open('data/commentData.csv', 'w', newline='', encoding='utf-8') as csvfile:
-        # Fetch all the unique keys across all items
-        all_fieldnames = set()
-
-        # Fetch all items and find all the keys
+        # Collect the post URLs from the results
+        postURLs = []
         for item in client.dataset(run["defaultDatasetId"]).iterate_items():
-            all_fieldnames.update(item.keys())
+            post_url = item.get("url")  # Access the post URL
+            postURLs.append(post_url)
 
-        # Convert the set to a sorted list for consistent column order
-        all_fieldnames = sorted(list(all_fieldnames))
+        # Prepare the Actor input for the Instagram Comments scraper
+        run_input = {
+            "directUrls": postURLs,
+            "resultsLimit": 10,  # Modify this number as needed to capture more comments
+            "includeReplies": False,
+        }
 
-        # Initialize the CSV writer
-        writer = csv.DictWriter(csvfile, fieldnames=all_fieldnames)
-        
-        # Write the header row with dynamic fields
-        writer.writeheader()
+        # Run the Actor and wait for it to finish
+        run = client.actor("SbK00X0JYCPblD2wp").call(run_input=run_input)
 
-        # Fetch and save Actor results from the run's dataset (all comments)
-        for item in client.dataset(run["defaultDatasetId"]).iterate_items():
-            # Write each comment as a new row in the CSV file
-            writer.writerow(item)
+        # Open a CSV file to save the comments data
+        with open('data/commentData.csv', 'w', newline='', encoding='utf-8') as csvfile:
+            # Fetch all the unique keys across all items
+            all_fieldnames = set()
 
-    print("All comments saved to data/commentData.csv")
+            # Fetch all items and find all the keys
+            for item in client.dataset(run["defaultDatasetId"]).iterate_items():
+                all_fieldnames.update(item.keys())
+
+            # Convert the set to a sorted list for consistent column order
+            all_fieldnames = sorted(list(all_fieldnames))
+
+            # Initialize the CSV writer
+            writer = csv.DictWriter(csvfile, fieldnames=all_fieldnames)
+
+            # Write the header row with dynamic fields
+            writer.writeheader()
+
+            # Fetch and save Actor results from the run's dataset (all comments)
+            for item in client.dataset(run["defaultDatasetId"]).iterate_items():
+                # Write each comment as a new row in the CSV file
+                writer.writerow(item)
+
+        print("All comments saved to data/commentData.csv")
+
+        # Generate graphs using the username from the user_id
+        print(User.get_username_by_user_id(user_id))
+        nw.generateGraphs(User.get_username_by_user_id(user_id))
+
+        # Return the username in a JSON response
+        return jsonify({
+            'username': username,
+        })
     
-    print(User.get_username_by_user_id(user_id))
-    nw.generateGraphs(User.get_username_by_user_id(user_id))
-    
-    # Return the username in a JSON response (no need for full page render)
-    return jsonify({
-        'username': username,
-    })
+    except Exception as e:
+        # Catch any error that occurs during the process and return an error message
+        print(f"Error during Instagram scraping: {e}")
+        flash("Username does not exist or user is private")
+        return jsonify({
+            'error': 'Failed to retrieve comments or process data. Please try again later.'
+        }), 500
 
 @influencer_boundary.route('/display_sentiment_graph')
 def display_sentiment_graph():
