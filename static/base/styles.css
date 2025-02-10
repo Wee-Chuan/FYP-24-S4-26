@@ -10,6 +10,12 @@ html, body {
     overflow-x: hidden;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; 
+}
+
 /* ============================= Logo Styling ============================= */
 .logo {
     font-family: Georgia, 'Times New Roman', Times, serif;
@@ -44,6 +50,7 @@ header {
     align-items: center;
     z-index: 100;
     width: 100%;
+    top: 0; 
 }
 
 /* Navbar Styles */
