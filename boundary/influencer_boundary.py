@@ -187,7 +187,7 @@ def post_analysis():
         "directUrls": [post_url],
         "includeNestedComments": True,
         "isNewestComments": False,
-        "resultsLimit": 300
+        "resultsLimit": 15
     }
 
     # Run the Actor and wait for it to finish
@@ -256,7 +256,7 @@ def display_network():
     # Prepare the Actor input for the Instagram Post scraper using the username entered in the form
     run_input = {
         "username": [username],  # Dynamically pass the username from the form
-        "resultsLimit": 10,  # Get 1 post to fetch comments from
+        "resultsLimit": 5,  # Get 1 post to fetch comments from
     }
 
     # Run the Actor and wait for it to finish
@@ -271,7 +271,8 @@ def display_network():
     # Prepare the Actor input for the Instagram Comments scraper
     run_input = {
         "directUrls": postURLs,
-        "resultsLimit": 15,  # Modify this number as needed to capture more comments
+        "resultsLimit": 5,# Modify this number as needed to capture more comments
+        "includeReplies": False,
     }
 
     # Run the Actor and wait for it to finish

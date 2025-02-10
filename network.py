@@ -71,7 +71,7 @@ def readDataAndInitialise(filename):
                 users[username] = User(username=username)
             users[username].comments.append(comment)
 
-# Function to generate the pie chart visualization
+# Function to generate the pie chart as an image
 def visualize_sentiment_pie_chart():
     # Count the number of sentiments
     sentiment_counts = {"Negative": 0, "Neutral": 0, "Positive": 0}
@@ -83,19 +83,18 @@ def visualize_sentiment_pie_chart():
     labels = list(sentiment_counts.keys())
     values = list(sentiment_counts.values())
 
-    # Create the pie chart using Plotly
-    fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=0.3)])
+    # Create the pie chart using Matplotlib
+    fig, ax = plt.subplots()
+    ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90, wedgeprops={'edgecolor': 'black'})
 
-    # Update layout for better presentation
-    fig.update_layout(
-    title="Sentiment Distribution",
-    showlegend=True,
-    # width=400,  # Set the width of the chart
-    # height=400  # Set the height of the chart
-    )
+    # Equal aspect ratio ensures that pie chart is drawn as a circle
+    ax.axis('equal')
 
-    # Save the figure as an HTML file
-    pio.write_html(fig, file="static/sentiment_pie_chart.html", auto_open=False)  # Save as HTML file
+    # Save the figure as an image
+    plt.title("Sentiment Distribution")
+    plt.savefig('static/sentiment_pie_chart.png')  # Save as PNG image
+    plt.close()
+ 
 
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
@@ -631,7 +630,7 @@ def generateGraphs(username):
     st.upload_to_firebase(file_path = "static/negative_comments_table.html", destination_blob_name = username+"/negative_comments_table.html")
     st.upload_to_firebase(file_path = "static/neutral_comments_table.html", destination_blob_name = username+"/neutral_comments_table.html")
     st.upload_to_firebase(file_path = "static/positive_comments_table.html", destination_blob_name = username+"/positive_comments_table.html")
-    st.upload_to_firebase(file_path = "static/sentiment_pie_chart.html", destination_blob_name = username+"/sentiment_pie_chart.html")
+    st.upload_to_firebase(file_path = "static/sentiment_pie_chart.png", destination_blob_name = username+"/sentiment_pie_chart.png")
     st.upload_to_firebase(file_path = "static/wordcloud_negative.png", destination_blob_name = username+"/wordcloud_negative.png")
     st.upload_to_firebase(file_path = "static/wordcloud_positive.png", destination_blob_name = username+"/wordcloud_positive.png")
     st.upload_to_firebase(file_path = "static/wordcloud_neutral.png", destination_blob_name = username+"/wordcloud_neutral.png")

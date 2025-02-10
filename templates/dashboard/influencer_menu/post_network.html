@@ -159,14 +159,15 @@
         })
             .then(response => response.json())
             .then(data => {
-                document.getElementById("loadingScreen").style.display = "none";
-    
                 if (data.error) {
                     alert(data.error);
                     return;
                 }
-    
-                loadConversationTable();
+                else{
+                    document.getElementById("loadingScreen").style.display = "none";
+                    loadConversationTable();
+                    location.reload();
+                }
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
@@ -321,6 +322,7 @@
     }
     
     (async function loadData() {
+        var have = false;
         const files = [
             { path: 'comment_tree.html', id: 'hehe' },
             { path: 'top_users_table.html', id: 'centralityGraph' }
@@ -337,6 +339,7 @@
     
         retrievalResults.forEach(file => {
             if (file.retrieved) {
+                have = true;
                 const element = document.getElementById(file.id);
                 if (element) {
                     element.style.display = "block";
@@ -344,8 +347,9 @@
                 }
             }
         });
+        if (have == true)
+            loadConversationTable();
     
-        loadConversationTable();
     })();
         
 </script>

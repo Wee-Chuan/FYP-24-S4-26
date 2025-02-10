@@ -67,11 +67,10 @@
             <!-- First row with pie chart and one word cloud -->
             <div class="content-row">
                 <div class="content-item">
-                    <iframe 
+                    <img 
                         id="sentimentGraph" 
-                        src="static/sentiment_pie_chart.html" 
+                        src="static/sentiment_pie_chart.png" 
                         style="width:100%; height: 600px; border: 1px solid #ccc; display: none;">
-                    </iframe>
                 </div>
                 <div class="content-item">
                     <img 
@@ -158,9 +157,9 @@ async function retrieveFile(filePath, staticPath) {
 
 // Load data for multiple files and update UI
 (async function loadData() {
-    // List of files to check with corresponding element IDs
+    console.log("loading...");
     const files = [
-        { path: 'sentiment_pie_chart.html', id: 'sentimentGraph' },
+        { path: 'sentiment_pie_chart.png', id: 'sentimentGraph' },
         { path: 'wordcloud_positive.png', id: 'positiveWordCloud' },
         { path: 'wordcloud_neutral.png', id: 'neutralWordCloud' },
         { path: 'wordcloud_negative.png', id: 'negativeWordCloud' },
@@ -169,71 +168,73 @@ async function retrieveFile(filePath, staticPath) {
         { path: 'negative_comments_table.html', id: 'negativeTable' }
     ];
 
-    const retrievalResults = [];
-
-    // Check existence and retrieve files in sequence
-    for (let file of files) {
+    const retrievalResults = await Promise.all(files.map(async (file) => {
         const path = `{{user['username']}}/${file.path}`;  // Dynamically generate the path
         console.log(path);  // Check the generated path
         const result = await checkFileExistence(path);
-        retrievalResults.push({ id: file.id, retrieved: result });
         console.log("here");
-    }
+        return { id: file.id, retrieved: result };
+    }));
 
-    // Update the UI after all retrievals
+    console.log("here 2");
     retrievalResults.forEach(file => {
+        console.log("here 3");
         if (file.retrieved) {
-            console.log("here2");
             const element = document.getElementById(file.id);
             if (element) {
-                element.style.display = "block";  // Show the element if retrieval succeeded
+                element.style.display = "block";
                 var src = element.src;
-                element.src = src;
+                element.src = src.split('?')[0] + '?timestamp=' + new Date().getTime();  // Reload content
             }
         }
     });
-})();
+})();             
 
+function submitForm(event) {
+    event.preventDefault(); // Prevent the form from reloading the page
+
+    // Show loading
+    document.getElementById("loadingScreen").style.display = "block";
+    
+    // Create a FormData object and send a POST request to the backend
+    var formData = new FormData(document.getElementById("usernameForm"));
+    
+    fetch('/display_network', {
+        method: 'POST',  // Ensure method is POST
+        body: formData
+    })            
+    .then(response => response.json())
+    .then(data => {
+        // Dynamically update the page with the returned username
+        const username = data.username;
+        const analysisResultsDiv = document.getElementById("analysisResults");
+
+        // Display the relevant charts and tables
+        const elementsToDisplay = [
+            'sentimentGraph', 'positiveWordCloud', 'neutralWordCloud',
+            'negativeWordCloud', 'positiveTable', 'neutralTable', 'negativeTable'
+        ];
+
+        elementsToDisplay.forEach(id => {
+            element = document.getElementById(id);
+            if (element) {
+                element.style.display = "block";
+            }
+        });
+
+        loadData();
+        document.getElementById("loadingScreen").style.display = "none";
+        // If you want to refresh certain parts, you can call specific functions
+    })
+    .catch(error => {
+        console.error("Error fetching data:", error);
+        document.getElementById("loadingScreen").style.display = "none";
         
-             
+        // Optionally show an error message to the user
+        const analysisResultsDiv = document.getElementById("analysisResults");
+        analysisResultsDiv.innerHTML = `<p style="color: red;">An error occurred while processing the request. Please try again.</p>`;
+    });
+}
 
-        function submitForm(event) {
-            event.preventDefault(); // Prevent the form from reloading the page
-
-            // Show loading
-            document.getElementById("loadingScreen").style.display = "block";
-            
-            // Create a FormData object and send a POST request to the backend
-            var formData = new FormData(document.getElementById("usernameForm"));
-            
-            fetch('/display_network', {
-                method: 'POST',  // Ensure method is POST
-                body: formData
-            })            
-            .then(response => response.json())
-            .then(data => {
-                // Hide loading and show the result
-                document.getElementById("loadingScreen").style.display = "none";
-                
-                // Dynamically update the page with the returned username
-                const username = data.username;
-                const analysisResultsDiv = document.getElementById("analysisResults");
-                analysisResultsDiv.innerHTML = `<p>Network analysis completed for <strong>${username}</strong></p>`;
-
-                // Display the relevant charts and tables
-                const elementsToDisplay = [
-                    'sentimentGraph', 'positiveWordCloud', 'neutralWordCloud',
-                    'negativeWordCloud', 'positiveTable', 'neutralTable', 'negativeTable'
-                ];
-
-                elementsToDisplay.forEach(id => {
-                    document.getElementById(id).style.display = "block";
-                });
-            })
-            .catch(error => {
-                console.error("Error fetching data:", error);
-                document.getElementById("loadingScreen").style.display = "none";
-            });
-        }
     </script>        
 {% endblock %}
