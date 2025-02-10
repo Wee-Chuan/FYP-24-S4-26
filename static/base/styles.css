@@ -94,8 +94,7 @@ header .navbar {
 
 .main-content {
     flex: 1;
-    padding-top: 120px;
-    max-width: 1200px;
+    padding-top: 130px;
 }
 
 * {
