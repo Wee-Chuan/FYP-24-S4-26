@@ -39,10 +39,11 @@ def register():
             flash("Passwords do not match!", "danger")
             #return render_template('navbar/register.html')
 
-        # Check if password more than 6 characters
-        if len(password) < 6:
+        # Password validation regex pattern
+        password_pattern = r"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$"
+        if not re.match(password_pattern, password):
             error_fields.append('password')
-            flash("Password must be at least 6 characters!", "danger")
+            flash("Password must be at least 6 characters, include an uppercase letter, a lowercase letter, a number, and a special character!", "danger")
             #return render_template('navbar/register.html')
 
         # Check if user with the same user_id or email already exists
