@@ -7,78 +7,13 @@ from apify_client import ApifyClient
 import entity.admin as adm
 
 # Custom modules
-import network as nw
-import createUsers as cu
+import entity.network as nw
+import entity.createUsers as cu
 from entity.user import User
 from entity.followers_hist_entity import FollowerHist
 
 # Define Flask Blueprint
 influencer_boundary = Blueprint('influencer_boundary', __name__)
-
-# Path for Engagement Metrics CSV
-ENGAGEMENT_CSV_PATH = "engagement_metrics.csv"
-
-
-@influencer_boundary.route("/dashboard/engagement_metrics", methods=["GET"])
-def engagement_metrics():
-    """
-    Renders the engagement dashboard. Users can select a post to analyze.
-    """
-    try:
-        if not os.path.exists(ENGAGEMENT_CSV_PATH):
-            return "⚠️ Error: engagement_metrics.csv file not found!", 400
-
-        # Process CSV and get post URLs
-        post_urls, engagement_data = User.process_engagement_data(ENGAGEMENT_CSV_PATH)
-
-        if not engagement_data:
-            return render_template("dashboard/influencer_menu/engagement.html", post_urls=[], engagement_data=[])
-
-        # Store engagement CSV path in session
-        session["engagement_csv"] = ENGAGEMENT_CSV_PATH
-
-        return render_template(
-            "dashboard/influencer_menu/engagement.html",
-            post_urls=post_urls,
-            engagement_data=engagement_data
-        )
-
-    except Exception as e:
-        print(f"❌ Error loading engagement dashboard: {e}")
-        return f"An error occurred: {e}", 500
-
-
-@influencer_boundary.route("/api/get_visualization_data", methods=["GET"])
-def get_visualization_data():
-    """
-    API endpoint to retrieve engagement data for a selected post.
-    """
-    try:
-        # Ensure engagement_metrics.csv exists
-        csv_file = session.get("engagement_csv", ENGAGEMENT_CSV_PATH)
-
-        if not os.path.exists(csv_file):
-            return jsonify({"error": "⚠️ No CSV file found. Please generate engagement data first."}), 404
-
-        post_url = request.args.get("post_url")
-        if not post_url:
-            return jsonify({"error": "⚠️ Missing post URL parameter."}), 400
-
-        post_data = User.get_post_engagement(csv_file, post_url)
-        if not post_data:
-            return jsonify({"error": "⚠️ No data found for the selected post."}), 404
-
-        # Generate AI Summary
-        ai_summary = User.generate_ai_summary(post_data[0])
-
-        return jsonify({
-            "post_data": post_data,
-            "ai_summary": ai_summary
-        })
-
-    except Exception as e:
-        print(f"❌ Error fetching visualization data: {e}")
-        return jsonify({"error": str(e)}), 500
 
 ###################################################################################################################
 
@@ -168,6 +103,8 @@ def post_page():
 def commenttree():
     return render_template('templates/comment_tree.html')
 
+import shutil
+
 @influencer_boundary.route('/post_analysis', methods=['POST'])
 def post_analysis():
     # Get the post URL from the form input
@@ -193,9 +130,12 @@ def post_analysis():
     # Run the Actor and wait for it to finish
     comments_run = client.actor("SbK00X0JYCPblD2wp").call(run_input=comments_scraper_input)
 
-    # Open a CSV file to save the comments data
-    csv_file_path = 'data/postCommentData.csv'  # Save in the static folder
-    with open(csv_file_path, 'w', newline='', encoding='utf-8') as csvfile:
+    # Temporary file to save the comments data
+    temp_csv_file_path = 'data/temp_postCommentData.csv'
+    final_csv_file_path = 'data/postCommentData.csv'
+    comment_count = 0
+
+    with open(temp_csv_file_path, 'w', newline='', encoding='utf-8') as csvfile:
         # Fetch all the unique keys across all items
         all_fieldnames = set()
 
@@ -215,8 +155,21 @@ def post_analysis():
         # Fetch and save Actor results from the run's dataset (all comments)
         for item in client.dataset(comments_run["defaultDatasetId"]).iterate_items():
             writer.writerow(item)
+            comment_count += 1
 
-    print(f"All comments saved to {csv_file_path}")
+    print(f"Comments temporarily saved to {temp_csv_file_path}. Total comments: {comment_count}")
+
+    # Handle file logic based on comment count
+    if comment_count < 50:
+        # Cleanup the temporary file
+        os.remove(temp_csv_file_path)
+        return jsonify({
+            'message': f'Post analysis completed. Only {comment_count} comments found, which is less than the required threshold.'
+        })
+    else:
+        # Move the temp file to the final location
+        shutil.move(temp_csv_file_path, final_csv_file_path)
+        print(f"Data moved to {final_csv_file_path}")
 
     # Generate the network graph
     user_id = session.get('user_id')
@@ -305,7 +258,6 @@ def display_network():
         print("All comments saved to data/commentData.csv")
 
         # Generate graphs using the username from the user_id
-        print(User.get_username_by_user_id(user_id))
         nw.generateGraphs(User.get_username_by_user_id(user_id))
 
         # Return the username in a JSON response
@@ -368,7 +320,24 @@ def retrieve():
     
     try:
         adm.retrieve_from_firebase(destination_blob_name, local_file_path)
+        print ("{local_file_path} saved")
         return jsonify({"message": f"File downloaded successfully to {local_file_path}."}), 200
     except Exception as e:
         return jsonify({"message": f"Error retrieving file: {str(e)}"}), 500
 
+
+import json
+from flask import jsonify
+
+@influencer_boundary.route('/data/conversations', methods=['GET'])
+def get_conversations():
+    file_path = 'data/conversations.json'  # Define the file path
+
+    try:
+        with open(file_path, 'r') as file:
+            data = json.load(file)
+        return jsonify(data)
+    except FileNotFoundError:
+        return jsonify({"error": "File not found"}), 404
+    except json.JSONDecodeError:
+        return jsonify({"error": "Invalid JSON format in the file"}), 500

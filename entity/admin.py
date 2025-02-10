@@ -49,7 +49,6 @@ def file_exists_in_firebase(destination_blob_name):
     :param destination_blob_name: The name of the file to check
     :return: Boolean indicating whether the file exists
     """
-    print("HEHEHEHEHEHE")
     print(destination_blob_name)
     blob = bucket.blob(destination_blob_name)
     return blob.exists()

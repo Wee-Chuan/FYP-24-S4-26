@@ -97,6 +97,11 @@
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+        #errorMessage {
+            color: red;
+            display: none;
+            margin-top: 10px;
+        }        
     </style>
 {% endblock %}
 
@@ -118,6 +123,7 @@
             <p>Enter Instagram Post URL to Analyze:</p>
             <input type="url" id="URL" name="URL" required placeholder="https://www.instagram.com/p/xyz123/">
             <button type="submit">Analyze</button>
+            <div id="errorMessage"></div>
         </form>
 
         <div id="loadingScreen">
@@ -157,29 +163,36 @@
             method: 'POST',
             body: formData
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error);
-                    return;
-                }
-                else{
-                    document.getElementById("loadingScreen").style.display = "none";
-                    loadConversationTable();
-                    location.reload();
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching data:", error);
-                document.getElementById("loadingScreen").style.display = "none";
-            });
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("loadingScreen").style.display = "none";
+            const errorMessageDiv = document.getElementById("errorMessage");
+    
+            if (data.error) {
+                errorMessageDiv.textContent = data.error;
+                errorMessageDiv.style.display = "block";
+            } else {
+                errorMessageDiv.style.display = "none";
+                loadConversationTable();
+                window.location.reload();
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+            document.getElementById("loadingScreen").style.display = "none";
+    
+            const errorMessageDiv = document.getElementById("errorMessage");
+            errorMessageDiv.textContent = "An unexpected error occurred. Please try again.";
+            errorMessageDiv.style.display = "block";
+        });
     }
+    
     
     let currentPage = 1; // Default to the first page
     const resultsPerPage = 10;
     
     function loadConversationTable() {
-        fetch('/static/conversations.json')
+        fetch('/data/conversations')
             .then(response => response.json())
             .then(conversations => {
                 const conversationTableDiv = document.getElementById('conversationDetails');
@@ -234,7 +247,7 @@
     }
     
     function showConversationDetails(convoId) {
-        fetch('/static/conversations.json')
+        fetch('/data/conversations')
             .then(response => response.json())
             .then(conversations => {
                 const convo = conversations[convoId];

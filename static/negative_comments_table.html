@@ -23,27 +23,27 @@
                     max-width: 300px;
                 }
                 th {
-                    background-color: #B22222; /* Dark Red */
+                    background-color: #808080; /* Neutral gray */
                     color: white;
                     text-transform: uppercase;
                     font-weight: bold;
                 }
                 tr:nth-child(even) {
-                    background-color: #FDEDEC; /* Light red tint for even rows */
+                    background-color: #f0f0f0; /* Light gray for even rows */
                 }
                 tr:hover {
-                    background-color: #FFCCCC; /* Slight hover effect */
+                    background-color: #e0e0e0; /* Slight hover effect */
                     cursor: pointer;
                 }
                 td {
-                    color: #7D0000; /* Deep red for text */
+                    color: #333333; /* Dark gray for text */
                 }
                 .pagination {
                     margin-top: 10px;
                     text-align: center;
                 }
                 .pagination button {
-                    background-color: #B22222;
+                    background-color: #808080;
                     color: white;
                     border: none;
                     padding: 8px 16px;
@@ -53,7 +53,7 @@
                     transition: background-color 0.2s ease;
                 }
                 .pagination button:hover {
-                    background-color: #FF4C4C;
+                    background-color: #A9A9A9; /* Light grayish for hover */
                 }
                 .pagination button:disabled {
                     background-color: #cccccc;
@@ -63,17 +63,17 @@
 
             <script>
                 let currentPage = 1;
-                const comments = [{"text": "Sir stop, I can\u2019t handle all this winning", "likes": 2144, "timestamp": "2025-02-08T04:48:44.000Z", "username": "ruvimks"}, {"text": "Sir stop, I can\u2019t handle all this winning", "likes": 2144, "timestamp": "2025-02-08T04:48:44.000Z", "username": "ruvimks"}, {"text": "Sir please stop, I can\u2019t handle all this winning", "likes": 15011, "timestamp": "2025-02-07T22:50:32.000Z", "username": "taytothejay"}, {"text": "Sir please stop, I can\u2019t handle all this winning", "likes": 15011, "timestamp": "2025-02-07T22:50:32.000Z", "username": "taytothejay"}, {"text": "No more drag shows for kids", "likes": 3613, "timestamp": "2025-02-07T23:52:45.000Z", "username": "itsmike_daze"}, {"text": "No more drag shows for kids", "likes": 3613, "timestamp": "2025-02-07T23:52:45.000Z", "username": "itsmike_daze"}];  // Properly embedded JSON
+                const comments = [{"text": "Tears roll down my leg", "likes": 0, "timestamp": "2024-11-23T19:51:10.000Z", "username": "ouvaries"}, {"text": "why is marzia's arm so long??\ud83d\ude2d\ud83d\ude2d", "likes": 37, "timestamp": "2024-11-01T15:19:04.000Z", "username": "touchyfeelymess"}, {"text": "That's not a dabod, sir", "likes": 9, "timestamp": "2025-02-02T10:07:00.000Z", "username": "kaiflesh"}, {"text": "yikes!", "likes": 1, "timestamp": "2025-01-31T20:29:23.000Z", "username": "felipe.7zip"}, {"text": "Turd picture", "likes": 1, "timestamp": "2025-01-24T05:23:55.000Z", "username": "trevorwoodrum"}, {"text": "Dogs cool , your a Turd", "likes": 0, "timestamp": "2025-01-24T05:23:41.000Z", "username": "trevorwoodrum"}, {"text": "wait pewds has a kid ?? what did i miss \ud83d\ude2d", "likes": 85, "timestamp": "2024-06-04T13:10:21.000Z", "username": "3starrsadie"}, {"text": "Bro ages backwards", "likes": 752, "timestamp": "2025-02-01T00:21:10.000Z", "username": "julius_alea_iacta_est"}];  // Properly embedded JSON
                 const commentsPerPage = 5;
 
                 function renderTable() {
                     if (comments.length === 0) {
-                        document.getElementById('tableContainer').innerHTML = '<p>No negative comments available.</p>';
+                        document.getElementById('tableContainer').innerHTML = '<p>No neutral comments available.</p>';
                         return;
                     }
 
                     const start = (currentPage - 1) * commentsPerPage;
-                    const end = start + commentsPerPage;
+                    const end = Math.min(start + commentsPerPage, comments.length); // Ensure 'end' does not go beyond array length
                     const paginatedComments = comments.slice(start, end);
 
                     let tableHtml = `

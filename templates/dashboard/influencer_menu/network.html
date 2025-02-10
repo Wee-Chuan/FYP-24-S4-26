@@ -217,15 +217,14 @@ function submitForm(event) {
         ];
 
         elementsToDisplay.forEach(id => {
-            element = document.getElementById(id);
+            const element = document.getElementById(id);
             if (element) {
                 element.style.display = "block";
             }
         });
 
-        loadData();
         document.getElementById("loadingScreen").style.display = "none";
-        // If you want to refresh certain parts, you can call specific functions
+        window.location.reload();
     })
     .catch(error => {
         console.error("Error fetching data:", error);
@@ -236,6 +235,7 @@ function submitForm(event) {
         analysisResultsDiv.innerHTML = `<p style="color: red;">User does not exist or is a private account.</p>`;
     });
 }
+
 
     </script>        
 {% endblock %}
