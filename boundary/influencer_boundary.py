@@ -5,6 +5,7 @@ from flask import Blueprint, render_template, redirect, url_for, session, flash,
 from werkzeug.utils import secure_filename
 from apify_client import ApifyClient
 import entity.admin as adm
+from firebase_admin import credentials, storage
 
 # Custom modules
 import entity.network as nw
@@ -16,6 +17,13 @@ from entity.followers_hist_entity import FollowerHist
 influencer_boundary = Blueprint('influencer_boundary', __name__)
 
 ###################################################################################################################
+
+@influencer_boundary.after_request
+def add_no_cache_headers(response):
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 @influencer_boundary.route('/followers', methods=['GET', 'POST'])
 def followers():
@@ -210,7 +218,7 @@ def display_network():
         # Prepare the Actor input for the Instagram Post scraper using the username entered in the form
         run_input = {
             "username": [username],  # Dynamically pass the username from the form
-            "resultsLimit": 10,  # Get 1 post to fetch comments from
+            "resultsLimit": 1,  # Get 1 post to fetch comments from
         }
 
         # Run the Actor and wait for it to finish
@@ -294,30 +302,31 @@ def upload():
         os.remove(file_path)  # Clean up the temporary file
         return jsonify({"message": "File uploaded successfully", "url": file_url}), 200
     except Exception as e:
+        print("\n\n\n\n\\nERRORRRRRRRRR UPLOADINGGGGGGG\n\n\n\n\n\n")
         return jsonify({"message": f"Error uploading file: {str(e)}"}), 500
 
-@influencer_boundary.route('/check_file', methods=['POST'])  # Use POST instead of GET to match JS request method
-def check_file():
-    # Get the JSON body from the request
-    file_data = request.get_json()  
-    destination_blob_name = file_data['file_path']  # Extract the file path
+# @influencer_boundary.route('/check_file', methods=['POST'])  # Use POST instead of GET to match JS request method
+# def check_file():
+#     # Get the JSON body from the request
+#     file_data = request.get_json()  
+#     destination_blob_name = file_data['file_path']  # Extract the file path
 
-    # Check if the file exists in Firebase Storage
-    file_exists = adm.file_exists_in_firebase(destination_blob_name)
+#     # Check if the file exists in Firebase Storage
+#     file_exists = adm.file_exists_in_firebase(destination_blob_name)
     
-    # Return the response based on whether the file exists or not
-    if file_exists:
-        print("hello")
-        return jsonify({"exists": True, "message": "File exists in Firebase Storage."}), 200
-    else:
-        print("hellono")
-        return jsonify({"exists": False, "message": "File does not exist in Firebase Storage."}), 404
+#     # Return the response based on whether the file exists or not
+#     if file_exists:
+#         print("hello")
+#         return jsonify({"exists": True, "message": "File exists in Firebase Storage."}), 200
+#     else:
+#         print("hellono")
+#         return jsonify({"exists": False, "message": "File does not exist in Firebase Storage."}), 404
 
 @influencer_boundary.route('/retrieve', methods=['GET'])
 def retrieve():
     destination_blob_name = request.args.get('destination_blob_name')
     local_file_path = request.args.get('local_file_path')
-    
+    print(destination_blob_name)
     try:
         adm.retrieve_from_firebase(destination_blob_name, local_file_path)
         print ("{local_file_path} saved")
@@ -341,3 +350,47 @@ def get_conversations():
         return jsonify({"error": "File not found"}), 404
     except json.JSONDecodeError:
         return jsonify({"error": "Invalid JSON format in the file"}), 500
+
+@influencer_boundary.route('/check_file', methods=['POST'])
+def check_file():
+    print("newbiee")
+    data = request.get_json()
+    file_path = data.get('file_path')
+    
+    if not file_path:
+        return jsonify({"exists": False, "message": "No file path provided"}), 400
+
+    # Extract username and filename (without extension) from the provided file path
+    username, filename_with_extension = file_path.split('/', 1)  # Split only once to get the username and filename
+    filename = filename_with_extension.split('.')[0]  # Get the filename without the extension
+
+    # Set the path prefix to search for all files under the username (excluding the filename)
+    path_prefix = f"{username}/"  # This will match all files under 'username/'
+
+    # List all files in Firebase Cloud Storage with the prefix
+    bucket = storage.bucket()  # Assuming you're using the default bucket
+    blobs = bucket.list_blobs(prefix=path_prefix)
+
+    # Variables to store the latest blob and its timestamp
+    latest_blob = None
+    latest_time = None
+    
+    # Iterate over the blobs and find the latest file based on the timestamp
+    for blob in blobs:
+        # Check if the current blob's name contains the requested filename without extension
+        if filename in blob.name and blob.name.endswith(('png', 'html')):  # Check if it has the correct extension
+            if not latest_time or blob.updated > latest_time:
+                latest_blob = blob
+                latest_time = blob.updated
+
+    if latest_blob:
+    # Extract the file URL starting from the username onward
+        file_url = latest_blob.public_url.split('fyp-24-s4-26.firebasestorage.app/')[1]
+        print(file_url)
+        return jsonify({
+            "exists": True,
+            "message": f"Latest file for {file_path}: {file_url}",
+            "file_url": file_url
+        })
+    else:
+        return jsonify({"exists": False, "message": "No files found for the specified path"}), 404

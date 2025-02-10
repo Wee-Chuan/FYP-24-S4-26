@@ -10,8 +10,6 @@ import entity.admin as st
 
 # Global variables
 users = {}
-comments_list = []  # To store all comments for topic modeling
-comment_mapping = []  # To track comment-to-user mapping for topic assignment
 
 # Load the model and tokenizer for sentiment analysis
 model_name = "cardiffnlp/twitter-roberta-base-sentiment"
@@ -41,6 +39,7 @@ def preprocess_text(text):
 
 # Function to read data and initialize users
 def readDataAndInitialise(filename):
+    users.clear()
     global comments_list, comment_mapping
 
     with open(filename, 'r') as file:
@@ -92,13 +91,16 @@ def visualize_sentiment_pie_chart():
 
     # Save the figure as an image
     plt.title("Sentiment Distribution")
-    plt.savefig('static/sentiment_pie_chart.png')  # Save as PNG image
+    plt.savefig('data/sentiment_pie_chart.png')  # Save as PNG image
     plt.close()
 
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 
 # Function to generate a word cloud for each sentiment
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+
 def generate_word_clouds():
     sentiment_texts = {"Negative": "", "Neutral": "", "Positive": ""}
 
@@ -109,9 +111,29 @@ def generate_word_clouds():
 
     # Generate and save word clouds for each sentiment
     for sentiment, text in sentiment_texts.items():
-        # Generate the word cloud
-        wordcloud = WordCloud(width=800, height=400, background_color="white").generate(text)
+        if not text.strip():  # Check if text is empty or whitespace
+            print(f"No text available for {sentiment} sentiment. Generating 'NO WORDS' image.")
+            
+            # Generate "NO WORDS" image for empty sentiment
+            wordcloud = WordCloud(width=800, height=400, background_color="white").generate("NO WORDS")
+            
+            # Display the word cloud with "NO WORDS"
+            plt.figure(figsize=(8, 4))
+            plt.imshow(wordcloud, interpolation="bilinear")
+            plt.axis("off")
+            plt.title(f"Word Cloud for {sentiment} Sentiment - NO WORDS")
+            
+            # Save the "NO WORDS" word cloud image
+            wordcloud_file = f"data/wordcloud_{sentiment.lower()}.png"
+            plt.savefig(wordcloud_file)
+            plt.close()
+            
+            print(f"Saved 'NO WORDS' image for {sentiment} sentiment at {wordcloud_file}")
+            continue
 
+        # Generate the word cloud for non-empty sentiment text
+        wordcloud = WordCloud(width=800, height=400, background_color="white").generate(text)
+        
         # Display the word cloud
         plt.figure(figsize=(8, 4))
         plt.imshow(wordcloud, interpolation="bilinear")
@@ -119,7 +141,7 @@ def generate_word_clouds():
         plt.title(f"Word Cloud for {sentiment} Sentiment")
         
         # Save the word cloud as an image
-        wordcloud_file = f"static/wordcloud_{sentiment.lower()}.png"
+        wordcloud_file = f"data/wordcloud_{sentiment.lower()}.png"
         plt.savefig(wordcloud_file)
         plt.close()
 
@@ -128,24 +150,20 @@ def generate_word_clouds():
 def generate_negative_comments_html():
     comments_per_page = 5
 
-    # Extract neutral comments from users
-    neutral_comments = []
+    # Extract negative comments from users
+    negative_comments = []
     seen_comments = set()  # To track unique comments
 
     for username, user in users.items():
         for comment in user.comments:
             if comment.sentiment == "Negative" and comment.text not in seen_comments:
-                neutral_comments.append({
+                negative_comments.append({
                     "text": comment.text.replace("\n", " ").replace('"', '\\"'),  # Clean newlines and escape quotes
                     "likes": comment.likes,
                     "timestamp": comment.timestamp,
                     "username": comment.username
                 })
                 seen_comments.add(comment.text)
-
-    if not neutral_comments:
-        print("No negative comments found.")
-        return
 
     # HTML content structure
     html_content = f"""
@@ -154,76 +172,68 @@ def generate_negative_comments_html():
             <style>
                 body {{
                     font-family: 'Arial', sans-serif;
-                    background-color: #f9f9f9;
+                    background-color: #ffebee;
                     margin: 2em;
+                    color: #333;
+                }}
+                h1 {{
+                    text-align: center;
+                    color: #d32f2f;
+                }}
+                #noCommentsMessage {{
+                    text-align: center;
+                    font-size: 1.5em;
+                    color: #d32f2f;
                 }}
                 table {{
-                    width: 100%;
+                    width: 80%;
                     border-collapse: collapse;
-                    background-color: #ffffff;
-                    border-radius: 10px;
-                    overflow: hidden;
-                    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                    margin: 0 auto;
+                    background-color: white;
                 }}
                 th, td {{
-                    border: 1px solid #ddd;
-                    padding: 12px;
+                    padding: 10px;
                     text-align: left;
-                    word-wrap: break-word;
-                    max-width: 300px;
+                    border-bottom: 1px solid #ddd;
                 }}
                 th {{
-                    background-color: #808080; /* Neutral gray */
+                    background-color: #e57373;
                     color: white;
-                    text-transform: uppercase;
-                    font-weight: bold;
                 }}
                 tr:nth-child(even) {{
-                    background-color: #f0f0f0; /* Light gray for even rows */
+                    background-color: #ffcdd2;
                 }}
                 tr:hover {{
-                    background-color: #e0e0e0; /* Slight hover effect */
-                    cursor: pointer;
-                }}
-                td {{
-                    color: #333333; /* Dark gray for text */
+                    background-color: #f8bbd0;
                 }}
                 .pagination {{
-                    margin-top: 10px;
                     text-align: center;
+                    margin-top: 20px;
                 }}
                 .pagination button {{
-                    background-color: #808080;
+                    background-color: #d32f2f;
                     color: white;
+                    padding: 10px 15px;
                     border: none;
-                    padding: 8px 16px;
-                    margin-right: 5px;
                     cursor: pointer;
                     border-radius: 5px;
-                    transition: background-color 0.2s ease;
-                }}
-                .pagination button:hover {{
-                    background-color: #A9A9A9; /* Light grayish for hover */
-                }}
-                .pagination button:disabled {{
-                    background-color: #cccccc;
-                    cursor: not-allowed;
                 }}
             </style>
 
             <script>
+                const comments = {json.dumps(negative_comments)};
                 let currentPage = 1;
-                const comments = {json.dumps(neutral_comments)};  // Properly embedded JSON
                 const commentsPerPage = 5;
 
                 function renderTable() {{
                     if (comments.length === 0) {{
-                        document.getElementById('tableContainer').innerHTML = '<p>No neutral comments available.</p>';
+                        document.getElementById('tableContainer').innerHTML = '<p id="noCommentsMessage">No negative comments available.</p>';
+                        document.getElementById('paginationControls').style.display = 'none';
                         return;
                     }}
 
                     const start = (currentPage - 1) * commentsPerPage;
-                    const end = Math.min(start + commentsPerPage, comments.length); // Ensure 'end' does not go beyond array length
+                    const end = Math.min(start + commentsPerPage, comments.length);
                     const paginatedComments = comments.slice(start, end);
 
                     let tableHtml = `
@@ -275,7 +285,7 @@ def generate_negative_comments_html():
         <body>
             <h1>Negative Comments Table</h1>
             <div id="tableContainer"></div>
-            <div class="pagination">
+            <div id="paginationControls" class="pagination">
                 <button id="prevButton" onclick="previousPage()">Previous</button>
                 <button id="nextButton" onclick="nextPage()">Next</button>
             </div>
@@ -284,10 +294,10 @@ def generate_negative_comments_html():
     """
 
     # Write the HTML content to a file
-    with open("static/negative_comments_table.html", "w") as file:
+    with open("data/negative_comments_table.html", "w") as file:
         file.write(html_content)
 
-    print("HTML file 'static/negative_comments_table.html' generated.")
+    print("HTML file 'data/negative_comments_table.html' generated.")
 
 def generate_neutral_comments_html():
     comments_per_page = 5
@@ -306,10 +316,6 @@ def generate_neutral_comments_html():
                     "username": comment.username
                 })
                 seen_comments.add(comment.text)
-
-    if not neutral_comments:
-        print("No neutral comments found.")
-        return
 
     # HTML content structure
     html_content = f"""
@@ -382,7 +388,8 @@ def generate_neutral_comments_html():
 
                 function renderTable() {{
                     if (comments.length === 0) {{
-                        document.getElementById('tableContainer').innerHTML = '<p>No neutral comments available.</p>';
+                        document.getElementById('tableContainer').innerHTML = '<p id="noCommentsMessage">No neutral comments available.</p>';
+                        document.getElementById('paginationControls').style.display = 'none';
                         return;
                     }}
 
@@ -439,7 +446,7 @@ def generate_neutral_comments_html():
         <body>
             <h1>Neutral Comments Table</h1>
             <div id="tableContainer"></div>
-            <div class="pagination">
+            <div id="paginationControls" class="pagination">
                 <button id="prevButton" onclick="previousPage()">Previous</button>
                 <button id="nextButton" onclick="nextPage()">Next</button>
             </div>
@@ -448,22 +455,22 @@ def generate_neutral_comments_html():
     """
 
     # Write the HTML content to a file
-    with open("static/neutral_comments_table.html", "w") as file:
+    with open("data/neutral_comments_table.html", "w") as file:
         file.write(html_content)
 
-    print("HTML file 'static/neutral_comments_table.html' generated.")
+    print("HTML file 'data/neutral_comments_table.html' generated.")
 
 def generate_positive_comments_html():
     comments_per_page = 5
 
-    # Extract neutral comments from users
-    neutral_comments = []
+    # Extract positive comments from users
+    positive_comments = []
     seen_comments = set()  # To track unique comments
 
     for username, user in users.items():
         for comment in user.comments:
             if comment.sentiment == "Positive" and comment.text not in seen_comments:
-                neutral_comments.append({
+                positive_comments.append({
                     "text": comment.text.replace("\n", " ").replace('"', '\\"'),  # Clean newlines and escape quotes
                     "likes": comment.likes,
                     "timestamp": comment.timestamp,
@@ -471,82 +478,91 @@ def generate_positive_comments_html():
                 })
                 seen_comments.add(comment.text)
 
-    if not neutral_comments:
-        print("No positive comments found.")
-        return
-
-    # HTML content structure
+    # HTML content structure with improved style
     html_content = f"""
     <html>
         <head>
             <style>
                 body {{
                     font-family: 'Arial', sans-serif;
-                    background-color: #f9f9f9;
+                    background-color: #e8f5e9;  /* Light green background */
                     margin: 2em;
+                    color: #333;
+                }}
+                h1 {{
+                    text-align: center;
+                    color: #388e3c; /* Green */
+                    font-size: 2.5em;
+                    margin-bottom: 20px;
                 }}
                 table {{
-                    width: 100%;
+                    width: 80%;
                     border-collapse: collapse;
                     background-color: #ffffff;
-                    border-radius: 10px;
+                    border-radius: 8px;
+                    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+                    margin: 0 auto;
                     overflow: hidden;
-                    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
                 }}
                 th, td {{
-                    border: 1px solid #ddd;
-                    padding: 12px;
+                    padding: 14px;
                     text-align: left;
+                    border-bottom: 1px solid #ddd;
                     word-wrap: break-word;
-                    max-width: 300px;
                 }}
                 th {{
-                    background-color: #808080; /* Neutral gray */
+                    background-color: #81c784;  /* Light green */
                     color: white;
-                    text-transform: uppercase;
                     font-weight: bold;
+                    text-transform: uppercase;
                 }}
                 tr:nth-child(even) {{
-                    background-color: #f0f0f0; /* Light gray for even rows */
+                    background-color: #f1f8e9;  /* Slightly lighter green */
                 }}
                 tr:hover {{
-                    background-color: #e0e0e0; /* Slight hover effect */
+                    background-color: #c8e6c9; /* Light hover effect */
                     cursor: pointer;
                 }}
                 td {{
-                    color: #333333; /* Dark gray for text */
+                    color: #388e3c;  /* Green text */
                 }}
                 .pagination {{
-                    margin-top: 10px;
                     text-align: center;
+                    margin-top: 20px;
                 }}
                 .pagination button {{
-                    background-color: #808080;
+                    background-color: #388e3c;
                     color: white;
                     border: none;
-                    padding: 8px 16px;
+                    padding: 10px 20px;
                     margin-right: 5px;
                     cursor: pointer;
                     border-radius: 5px;
-                    transition: background-color 0.2s ease;
+                    transition: background-color 0.3s ease;
+                    font-size: 1em;
                 }}
                 .pagination button:hover {{
-                    background-color: #A9A9A9; /* Light grayish for hover */
+                    background-color: #66bb6a;  /* Darker green for hover */
                 }}
                 .pagination button:disabled {{
-                    background-color: #cccccc;
+                    background-color: #bdbdbd;
                     cursor: not-allowed;
+                }}
+                .pagination button:active {{
+                    background-color: #388e3c;
+                    transform: scale(0.98);
                 }}
             </style>
 
             <script>
                 let currentPage = 1;
-                const comments = {json.dumps(neutral_comments)};  // Properly embedded JSON
+                const comments = {json.dumps(positive_comments)};  // Properly embedded JSON
                 const commentsPerPage = 5;
 
                 function renderTable() {{
                     if (comments.length === 0) {{
-                        document.getElementById('tableContainer').innerHTML = '<p>No neutral comments available.</p>';
+                        document.getElementById('tableContainer').innerHTML = '<p id="noCommentsMessage">No positive comments available.</p>';
+                        document.getElementById('paginationControls').style.display = 'none';
                         return;
                     }}
 
@@ -603,7 +619,7 @@ def generate_positive_comments_html():
         <body>
             <h1>Positive Comments Table</h1>
             <div id="tableContainer"></div>
-            <div class="pagination">
+            <div id="paginationControls" class="pagination">
                 <button id="prevButton" onclick="previousPage()">Previous</button>
                 <button id="nextButton" onclick="nextPage()">Next</button>
             </div>
@@ -612,14 +628,17 @@ def generate_positive_comments_html():
     """
 
     # Write the HTML content to a file
-    with open("static/positive_comments_table.html", "w") as file:
+    with open("data/positive_comments_table.html", "w") as file:
         file.write(html_content)
 
-    print("HTML file 'static/positive_comments_table.html' generated.")
+    print("HTML file 'data/positive_comments_table.html' generated.")
 
 
-# Main function to generate graphs
+import time
+
 def generateGraphs(username):
+    global users
+    users.clear()
     filename = "data/commentData.csv"
 
     readDataAndInitialise(filename)  # Process the raw data
@@ -630,12 +649,37 @@ def generateGraphs(username):
     generate_negative_comments_html()
     generate_neutral_comments_html()
     generate_positive_comments_html()
-    
-    st.upload_to_firebase(file_path = "static/negative_comments_table.html", destination_blob_name = username+"/negative_comments_table.html")
-    st.upload_to_firebase(file_path = "static/neutral_comments_table.html", destination_blob_name = username+"/neutral_comments_table.html")
-    st.upload_to_firebase(file_path = "static/positive_comments_table.html", destination_blob_name = username+"/positive_comments_table.html")
-    st.upload_to_firebase(file_path = "static/sentiment_pie_chart.png", destination_blob_name = username+"/sentiment_pie_chart.png")
-    st.upload_to_firebase(file_path = "static/wordcloud_negative.png", destination_blob_name = username+"/wordcloud_negative.png")
-    st.upload_to_firebase(file_path = "static/wordcloud_positive.png", destination_blob_name = username+"/wordcloud_positive.png")
-    st.upload_to_firebase(file_path = "static/wordcloud_neutral.png", destination_blob_name = username+"/wordcloud_neutral.png")
 
+    # Get the current timestamp for unique file names (in milliseconds)
+    timestamp = int(time.time() * 1000)  # Milliseconds for more precision
+
+    # List of files to be uploaded with timestamps added to the filenames
+    files_to_upload = [
+        ("data/negative_comments_table.html", f"{username}/negative_comments_table_{timestamp}.html"),
+        ("data/neutral_comments_table.html", f"{username}/neutral_comments_table_{timestamp}.html"),
+        ("data/positive_comments_table.html", f"{username}/positive_comments_table_{timestamp}.html"),
+        ("data/sentiment_pie_chart.png", f"{username}/sentiment_pie_chart_{timestamp}.png"),
+        ("data/wordcloud_negative.png", f"{username}/wordcloud_negative_{timestamp}.png"),
+        ("data/wordcloud_positive.png", f"{username}/wordcloud_positive_{timestamp}.png"),
+        ("data/wordcloud_neutral.png", f"{username}/wordcloud_neutral_{timestamp}.png")
+    ]
+    
+    # Upload the new files without deletion
+    for local_file, remote_file in files_to_upload:
+        try:
+            # Upload the new file with a unique timestamped name
+            success = st.upload_to_firebase(file_path=local_file, destination_blob_name=remote_file)
+            
+            if success:
+                print(f"Successfully uploaded {remote_file}")
+            else:
+                print(f"Failed to upload {remote_file}")
+        except Exception as e:
+            print(f"Error uploading {remote_file}: {e}")
+            
+    print (comments_list)
+    print("users is cleared")
+    print(f"All files uploaded for user {username}.")
+    print(users)
+
+    

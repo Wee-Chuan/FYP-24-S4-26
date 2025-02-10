@@ -123,6 +123,8 @@ async function checkFileExistence(filePath) {
             // Prepare the static path by replacing the username with 'static/'
             const staticPath = filePath.replace(/^.*?\//, 'static/');
             // Trigger file retrieval
+            filePath = data.file_url;
+            console.log(filePath);
             return await retrieveFile(filePath, staticPath);
         } else {
             console.log(data.message, filePath);  // Log the message if file doesn't exist

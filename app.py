@@ -41,6 +41,13 @@ app.register_blueprint(influencer_boundary)
 app.register_blueprint(profile_boundary)
 app.register_blueprint(rate_and_review_boundary)
 
+@app.after_request
+def add_no_cache_headers(response):
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
+
 @app.route('/')
 def index():
     hero_content = Admin.get_hero_content()
