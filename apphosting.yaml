@@ -1,0 +1,35 @@
+# Settings for Cloud Run
+runConfig:
+  minInstances: 2
+  maxInstances: 100
+  concurrency: 100
+  cpu: 2
+  memoryMiB: 1024
+
+runtime: python39  # Specify your runtime (for Python)
+
+env_variables:
+  FLASK_SECRET_KEY: "my$uper$ecretK3y@12345678901234567890"
+  GOOGLE_CLOUD_TYPE: "service_account"
+  GOOGLE_CLOUD_PROJECT_ID: "fyp-24-s4-26"
+  GOOGLE_CLOUD_PRIVATE_KEY_ID: "6950a01efff5c0e566468c591170fa42b1a10196"
+  GOOGLE_CLOUD_PRIVATE_KEY: -----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCe253RjBxn0uwQ\nV/KsQMJANfL4H1pj15B4asdi3mPzO1DNgvC5YdeFEkpl9BAZQWKICMyzZ1p36AF9\nLhzBjPD+emUBQQy/rOpikZdohAwsiEEVlVunUbZpYla1gXKbiFzHq7NC/szzITqm\nFn12es3rjTKOTqlwfTMMSpebsqB007GLrsVFhYnhC4CUC9jyQeOVcmJskpuXFx1z\nPeIk0IrgoaMUcqKHWIGo4WppMAbtg+AiJQLOF/azaehz6pXAkZt+tQa2HPouYosz\nyEOyAtEXs0AMTCRdtvSLS5vtTErPn8miC869QDIbsZZxnaVwiZFSWkpq2hUNdXew\nbaUTWwP1AgMBAAECggEAGN7IqTEOlGmW6CMgvLuBveREVvivodByj4umDhJDoyWe\n66HLlrZc87oumCIa8B1GtAXuqEquxPV3YDX7LgknBKw8SnM47/w+ELL6+ZOsxT8K\ns3qX6AzYqkyJRy7ONs/lOKRmsv8prom+ARklyMoGmZFYQCPMDq6nMo4uCKPxT4DC\ns2CK1T2sPU0N1w8mYtx//m4LbMj9l7BD+semlnpbNo+SWWRwv/sAw250LbJGE05a\nmt9ItIlcaUAPuA9ecfHxXE651UI7w/IjnZTuIpPrOfGrRpbvBuBWNCEYzvpL2XSv\nJ+mVzWyiisfWkpvoYPz7O2IxbvsEOg+fjr5fHCCogQKBgQDXf7f2vLMUA69Fxz2L\noi82AvszlVJUtQR27badQlpgUAPwTTL2XRdkZJQiWgy5ZYH6IpMSrF//UlkspqOK\nsyoKX4gP6uiFCSw7NF1CYjBhPB1OlGNMoyDZz4mnTELLTo6PwNMKcxbMxp4K4kSF\nhDqgmDDm01THjj0DLBHO9mZHdQKBgQC8truZkDngCWDd8xYvq86Q+v04tor52YZJ\nTgdU5lSQwJ0tN+TK3NHlnBkLZnwwZKXZ92n6RCLrK1W14Rk/ARgdyY/ArrJ2zNOr\nJKl1G4yOFsJBoN+QexJU7oMjOpGAjuuZA6Qy7UppodcMuX8cxPiMp0nSviOr/uJi\nh+p9O466gQKBgFdVq3iTgP/bfm0JEihE0l1RV/zPx04NDoIkVJ3nBjmCNBZvMvgl\nQhWtrVs+o2l/ee2llXU75qvS89Dkt+K+OYt6q+nHifRgg0x7LFB6+qBtfHMcMCIe\n+nFLar4iae97JsubmeviOJtE40gF6z8xF5F+HFNv0iwNuSxP7+ewdEMBAoGBAKlN\nl0jR59pjD5CQAZuLG6teQcebnVtCGAO0CUfVzJCA/YIP3ydQrM6+GIntzATuhwzh\ntyZb8qfhHOgrpqarqKMwrdND58BFSrEEFzOFH7hqGqUeWvQYNf4UbXoxlVAs6JlC\ndxFpaZUTKQe1c6Cv5fzqKIT1KLOp3Bhhr7HiuM4BAoGAKPKx63F7jhusKcrmCj+p\naqaRjNcwlVaO2FD6+6lXJ+IeXXgFMzrlMTug9jjsif1eN/7NPOrqpxbxpFK2ixon\nQKp7dPiPfT/90pxDzjP84z2NdXLP05mHAtICRZe0mIbBxASZ765PsxGE/e+m1xt/\n+BBugVv1QNrIjLFs1OpoM/8=\n-----END PRIVATE KEY-----\n"
+  GOOGLE_CLOUD_CLIENT_EMAIL: "firebase-adminsdk-d5hug@fyp-24-s4-26.iam.gserviceaccount.com"
+  GOOGLE_CLOUD_CLIENT_ID: "110800722987421217204"
+  GOOGLE_CLOUD_AUTH_URI: "https://accounts.google.com/o/oauth2/auth"
+  GOOGLE_CLOUD_TOKEN_URI: "https://oauth2.googleapis.com/token"
+  GOOGLE_CLOUD_AUTH_PROVIDER_X509_CERT_URL: "https://www.googleapis.com/oauth2/v1/certs"
+  GOOGLE_CLOUD_CLIENT_X509_CERT_URL: "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-d5hug%40fyp-24-s4-26.iam.gserviceaccount.com"
+  GOOGLE_CLOUD_UNIVERSE_DOMAIN: "googleapis.com"
+  MAIL_USERNAME: "fyp24s426@gmail.com"
+  MAIL_PASSWORD: "xwip wyfw qyne axah"
+  FIREBASE_API_KEY: "AIzaSyD21JH8vQSO_9Q601UwgwwqnsCZ_6XkvFE"
+
+env_variables_for_cloud_run:
+  STORAGE_BUCKET: "mybucket.firebasestorage.app"
+  API_KEY: "myApiKeySecret"
+  PINNED_API_KEY: "myApiKeySecret@5"
+  VERBOSE_API_KEY: "projects/test-project/secrets/secretID"
+  PINNED_VERBOSE_API_KEY: "projects/test-project/secrets/secretID/versions/5"
+
+instance_class: F2  # Optional: set your instance class (F1, F2, etc.)
