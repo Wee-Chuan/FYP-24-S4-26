@@ -14,10 +14,14 @@
             <h2>Account Details</h2>
             <form method="post" action="{{ url_for('profile_boundary.update_account') }}">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" value="{{ user['username'] }}"required>
+                <input type="text" id="username" name="username"
+                    class="{% if 'username' in error_fields %}is-invalid{% endif %}" 
+                    value="{{ user['username'] }}" required>
 
                 <label for="email">Email</label>
-                <input type="text" id="email" name="email" value="{{ user['email'] }}" required>
+                <input type="text" id="email" name="email" 
+                    class="{% if 'email' in error_fields %}is-invalid{% endif %}" 
+                    value="{{ user['email'] }}" required>
 
                 <label for="gender">Gender</label>
                 <select id="gender" name="gender" required>
@@ -42,10 +46,12 @@
                 {% endif %}
 
                 <label for="password">New Password (leave blank if not changing)</label>
-                <input type="password" id="password" name="password">
+                <input type="password" id="password" name="password"
+                    class="{% if 'password' in error_fields %}is-invalid{% endif %}">
 
                 <label for="password">Confirm New Password (leave blank if not changing)</label>
-                <input type="password" id="confirm_password" name="confirm_password">
+                <input type="password" id="confirm_password" name="confirm_password"
+                    class="{% if 'confirm_password' in error_fields %}is-invalid{% endif %}">
 
                 <label for="account_type">Account Type</label>
                 <input type="text" id="account_type" name="account_type" value="{{ user['account_type'] }}" readonly>

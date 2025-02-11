@@ -17,6 +17,7 @@
     flex: 2; /* Allow the image container to take full width of the left side */
     background: url('../../images/main_page_wallpaper.jpg') no-repeat center center;
     background-size: cover;
+    height: 100%;
 }
 
 
@@ -110,6 +111,11 @@ input[type="number"],
 .button-container button.delete-button:hover {
     background-color: #cc0000; 
     transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.is-invalid {
+    border: 2px solid #e74c3c;
+    background-color: #fce4e4;
 }
 
 /* Responsive Design */

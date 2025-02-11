@@ -157,7 +157,7 @@ class User:
             return None
         
     @staticmethod
-    def update_user(user_id, username, email=None, gender=None, age=None, niche=None, password=None, account_type=None):
+    def update_user(user_id, username, email=None, gender=None, age=None, niche=None, password=None):
         """Updates user details in Firestore."""
         user_ref = db.collection('users').document(user_id)
 
@@ -177,11 +177,7 @@ class User:
         if password:
             hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')  # Hash new password
             update_data['password'] = hashed_password
-        if account_type is not None:
-            update_data['account_type'] = account_type
-        
-        # Add niche only if account type is not admin
-        if account_type != "admin" and niche is not None:
+        if niche is not None:
             update_data['niche'] = niche
 
         # Update only if there's any data to change
