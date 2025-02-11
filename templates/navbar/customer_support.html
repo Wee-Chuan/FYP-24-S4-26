@@ -17,11 +17,18 @@
         <div class="contact-option">
             <h2>{{ faq_content.title1 }}</h2>
             <p>{{ faq_content.paragraph1 }}</p>
-            <ul>
+            <div class="faq-list">
                 {% for faq in faqs %}
-                <li><strong>Q:</strong> {{ faq.question }} <br><strong>A:</strong> {{ faq.answer }}</li>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <strong>Q:</strong> {{ faq.question }}
+                        </div>
+                        <div class="faq-answer">
+                            <strong>A:</strong> {{ faq.answer }}
+                        </div>
+                    </div>
                 {% endfor %}
-            </ul>
+            </div>
         </div>
 
         <div class="contact-option">
@@ -53,19 +60,6 @@
     </section>
 </div>
 
-<!-- FAQ Modal -->
-<div id="faq-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <h2>Frequently Asked Questions</h2>
-        <ul>
-            <li><strong>Q:</strong> How do I inquire general information? <br><strong>A:</strong> You can refer to our 'about us' page or view our features available to learn more.</li>
-            <li><strong>Q:</strong> How do I contact customer support? <br><strong>A:</strong> You can use the contact form on this page or email us at support@sociosith.com.</li>
-            <!-- Add more FAQ items here -->
-        </ul>
-    </div>
-</div>
-
 <script>
     // JavaScript to open and close the FAQ modal
     document.getElementById("faq-link").addEventListener("click", function(event) {
@@ -75,12 +69,6 @@
 
     document.querySelector(".close-button").addEventListener("click", function() {
         document.getElementById("faq-modal").style.display = "none";
-    });
-
-    window.addEventListener("click", function(event) {
-        if (event.target == document.getElementById("faq-modal")) {
-            document.getElementById("faq-modal").style.display = "none";
-        }
     });
 </script>
 {% endblock %}
