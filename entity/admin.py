@@ -26,6 +26,7 @@ if not firebase_admin._apps:
     print("admin initialised")
     cred = credentials.Certificate(firebase_credentials) 
     firebase_admin.initialize_app(cred, {'storageBucket': 'fyp-24-s4-26.firebasestorage.app' })
+    global bucket
     bucket = storage.bucket()
 
 db = firestore.client()

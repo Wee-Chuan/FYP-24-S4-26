@@ -302,7 +302,6 @@ def upload():
         os.remove(file_path)  # Clean up the temporary file
         return jsonify({"message": "File uploaded successfully", "url": file_url}), 200
     except Exception as e:
-        print("\n\n\n\n\\nERRORRRRRRRRR UPLOADINGGGGGGG\n\n\n\n\n\n")
         return jsonify({"message": f"Error uploading file: {str(e)}"}), 500
 
 # @influencer_boundary.route('/check_file', methods=['POST'])  # Use POST instead of GET to match JS request method
@@ -353,24 +352,25 @@ def get_conversations():
 
 @influencer_boundary.route('/check_file', methods=['POST'])
 def check_file():
-    print("newbiee")
+    
     data = request.get_json()
     file_path = data.get('file_path')
     
     if not file_path:
+        print("here")
         return jsonify({"exists": False, "message": "No file path provided"}), 400
-
+    
     # Extract username and filename (without extension) from the provided file path
     username, filename_with_extension = file_path.split('/', 1)  # Split only once to get the username and filename
     filename = filename_with_extension.split('.')[0]  # Get the filename without the extension
-
+    print("username:"+username)
     # Set the path prefix to search for all files under the username (excluding the filename)
     path_prefix = f"{username}/"  # This will match all files under 'username/'
 
     # List all files in Firebase Cloud Storage with the prefix
-    bucket = storage.bucket()  # Assuming you're using the default bucket
+    bucket = storage.bucket()
     blobs = bucket.list_blobs(prefix=path_prefix)
-
+    print(path_prefix)
     # Variables to store the latest blob and its timestamp
     latest_blob = None
     latest_time = None

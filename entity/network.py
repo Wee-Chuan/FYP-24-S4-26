@@ -115,7 +115,7 @@ def generate_word_clouds():
             print(f"No text available for {sentiment} sentiment. Generating 'NO WORDS' image.")
             
             # Generate "NO WORDS" image for empty sentiment
-            wordcloud = WordCloud(width=800, height=400, background_color="white").generate("NO WORDS")
+            wordcloud = WordCloud(width=800, height=400, background_color="white").generate("NIL")
             
             # Display the word cloud with "NO WORDS"
             plt.figure(figsize=(8, 4))

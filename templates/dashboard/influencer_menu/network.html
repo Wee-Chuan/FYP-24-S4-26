@@ -170,9 +170,10 @@ async function retrieveFile(filePath, staticPath) {
         { path: 'neutral_comments_table.html', id: 'neutralTable' },
         { path: 'negative_comments_table.html', id: 'negativeTable' }
     ];
-
+    const userData = {{ user | tojson }};
+    var username = userData['username'];
     const retrievalResults = await Promise.all(files.map(async (file) => {
-        const path = `{{user['username']}}/${file.path}`;  // Dynamically generate the path
+        const path = `${username}/${file.path}`;  // Dynamically generate the path
         console.log(path);  // Check the generated path
         const result = await checkFileExistence(path);
         console.log("here");

@@ -193,7 +193,7 @@ def create_conversation_tree(conversations_data, username):
                         net.add_node(
                             comment_id,
                             label=f"Comment {comment_id}",
-                            title=f"Community: {convo_id}<br>{comment['text']}",
+                            title=f"Community: {convo_id}\n{comment['text']}",
                             size=10,
                             color=conversation_colors[convo_id]
                         )
