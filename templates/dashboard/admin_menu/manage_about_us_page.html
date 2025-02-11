@@ -114,11 +114,9 @@
                     <label for="rating_filter">Filter by Rating:</label>
                     <select id="rating_filter" name="rating_filter" class="filter-dropdown" onchange="filterTestimonials()">
                         <option value="all" {% if rating_filter_value == 'all' %}selected{% endif %}>All Ratings</option>
-                        <option value="1" {% if rating_filter_value == '1' %}selected{% endif %}>1 Star</option>
-                        <option value="2" {% if rating_filter_value == '2' %}selected{% endif %}>2 Stars</option>
-                        <option value="3" {% if rating_filter_value == '3' %}selected{% endif %}>3 Stars</option>
-                        <option value="4" {% if rating_filter_value == '4' %}selected{% endif %}>4 Stars</option>
-                        <option value="5" {% if rating_filter_value == '5' %}selected{% endif %}>5 Stars</option>
+                        {% for i in range(1, 6) %}
+                        <option value="{{ i }}" {% if rating_filter_value == i|string %}selected{% endif %}>{{ i }} Star(s)</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <table class="table">
@@ -134,23 +132,21 @@
                     </thead>
                     <tbody>
                         {% for testimonial in testimonials %}
-                        {% if (filter_value == 'all' or (filter_value == 'selected' and testimonial.is_selected) 
+                        {% set is_testimonial_visible = (filter_value == 'all' or (filter_value == 'selected' and testimonial.is_selected) 
                             or (filter_value == 'non-selected' and not testimonial.is_selected)) 
                             and (rating_filter_value == 'all' or testimonial.rating == rating_filter_value) %}
-                        <tr>
+                        <tr {% if not is_testimonial_visible %}style="display: none;"{% endif %}>
                             <td>
-                                <!-- Checkbox for selecting a testimonial -->
                                 <input type="checkbox" 
-                                       name="testimonial_display_{{ testimonial.id }}" 
-                                       {% if testimonial.is_selected %}checked{% endif %}>
+                                    name="testimonial_display_{{ testimonial.id }}" 
+                                    value="on" {% if testimonial.is_selected %}checked{% endif %}>
                             </td>
                             <td>{{ testimonial.review }}</td>
-                            <td> {{ testimonial.rating }} </td>
-                            <td> {{ testimonial.category }} </td>
-                            <td> {{ testimonial.date.strftime('%y/%m/%d %H:%M:%S')  }} </td>
+                            <td>{{ testimonial.rating }}</td>
+                            <td>{{ testimonial.category }}</td>
+                            <td>{{ testimonial.date.strftime('%y/%m/%d %H:%M:%S') }}</td>
                             <td>{{ testimonial.username }}</td>
                         </tr>
-                        {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>
