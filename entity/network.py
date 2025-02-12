@@ -7,7 +7,9 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from scipy.special import softmax
 from entity.classes import Comment, User
 import entity.admin as st
-
+#----------------------------------------Gemini_API--------------------------------------#
+from entity.ai_summary import generate_structured_summary
+#----------------------------------------------------------------------------------------#
 # Global variables
 users = {}
 

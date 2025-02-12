@@ -7,6 +7,10 @@ from apify_client import ApifyClient
 import entity.admin as adm
 from firebase_admin import credentials, storage
 
+#---------------------------------Gemini API------------------------
+from boundary.influencer_ai_summary import process_ai_summary
+#--------------------------------------------------------------------
+
 # Custom modules
 import entity.network as nw
 import entity.createUsers as cu
