@@ -101,6 +101,13 @@
     margin-top: 5px;
 }
 
+.explanation {
+    color: #3e3838d7; /* Dark gray text for readability */
+    font-size: 1.1rem; /* Slightly larger text for emphasis */
+    line-height: 1.6; /* Good spacing for readability */
+    font-family: "Arial", sans-serif; /* Clean and professional font */
+}
+
 
 /* Feature Explanation Section */
 .feature-explanation {
