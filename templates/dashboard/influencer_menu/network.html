@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block title %}Network Visualization{% endblock %}
 
 {% block styles %}
@@ -10,7 +11,6 @@
             text-align: center;
             margin-top: 20px;
         }
-
         #loadingScreen img {
             width: 50px;
             height: 50px;
@@ -27,7 +27,7 @@
         /* Each item in the row will take up 48% of the space */
         .content-item {
             width: 50%;
-            border: 0px solid #ccc;
+            border: 0px;
         }
     
         /* Make sure the pie chart and word cloud images are responsive */
@@ -58,7 +58,7 @@
                 <button type="submit">Analyze</button>
             </form>
             
-            <div id = "analysisResults"></div>
+            <div id="analysisResults"></div>
             <!-- Loading screen (initially hidden) -->
             <div id="loadingScreen">
                 <p>Loading...</p>
@@ -100,145 +100,131 @@
             <iframe id="positiveTable" src="static/positive_comments_table.html" style="width:100%; height: 600px; border: 1px solid #ccc; display: none;"></iframe>
             <iframe id="neutralTable" src="static/neutral_comments_table.html" style="width:100%; height: 600px; border: 1px solid #ccc; display: none;"></iframe>
             <iframe id="negativeTable" src="static/negative_comments_table.html" style="width:100%; height: 600px; border: 1px solid #ccc; display: none;"></iframe>
+
+            <!-- =================== MODIFIED SECTION FOR AI SUMMARY =================== -->
+            <!-- This section has been added to display the overall AI summary generated from the API -->
+            <div id="aiSummary" style="margin-top: 30px; padding: 20px; border-top: 2px solid #ccc;">
+                <h3>Overall AI Summary</h3>
+                <!-- The variable 'ai_summary' should be passed from your Flask route -->
+                <p>{{ ai_summary }}</p>
+            </div>
+            <!-- ================= End of Modified Section =================== -->
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        // Check the file existence and retrieve them accordingly
-async function checkFileExistence(filePath) {
-    try {
-        // Send the POST request with the file path in the body
-        const response = await fetch('/check_file', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ file_path: filePath })  // Send the file path as JSON
-        });
-
-        const data = await response.json();  // Parse the JSON response
-
-        if (data.exists) {
-            // Prepare the static path by replacing the username with 'static/'
-            const staticPath = filePath.replace(/^.*?\//, 'static/');
-            // Trigger file retrieval
-            filePath = data.file_url;
-            console.log(filePath);
-            return await retrieveFile(filePath, staticPath);
-        } else {
-            console.log(data.message, filePath);  // Log the message if file doesn't exist
-            return false;
-        }
-    } catch (error) {
-        console.error('Error checking file:', error);
-        return false;
-    }
-}
-
-async function retrieveFile(filePath, staticPath) {
-    try {
-        // Send request to retrieve the file
-        const response = await fetch(`/retrieve?destination_blob_name=${encodeURIComponent(filePath)}&local_file_path=${encodeURIComponent(staticPath)}`, {
-            method: 'GET',
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            console.log(data.message);  // Success message
-            return true;
-        } else {
-            console.error(data.message);  // Error message
-            return false;
-        }
-    } catch (error) {
-        console.error('Error retrieving file:', error);
-        return false;
-    }
-}
-
-// Load data for multiple files and update UI
-(async function loadData() {
-    console.log("loading...");
-    const files = [
-        { path: 'sentiment_pie_chart.png', id: 'sentimentGraph' },
-        { path: 'wordcloud_positive.png', id: 'positiveWordCloud' },
-        { path: 'wordcloud_neutral.png', id: 'neutralWordCloud' },
-        { path: 'wordcloud_negative.png', id: 'negativeWordCloud' },
-        { path: 'positive_comments_table.html', id: 'positiveTable' },
-        { path: 'neutral_comments_table.html', id: 'neutralTable' },
-        { path: 'negative_comments_table.html', id: 'negativeTable' }
-    ];
-    const userData = {{ user | tojson }};
-    var username = userData['username'];
-    const retrievalResults = await Promise.all(files.map(async (file) => {
-        const path = `${username}/${file.path}`;  // Dynamically generate the path
-        console.log(path);  // Check the generated path
-        const result = await checkFileExistence(path);
-        console.log("here");
-        return { id: file.id, retrieved: result };
-    }));
-
-    console.log("here 2");
-    retrievalResults.forEach(file => {
-        console.log("here 3");
-        if (file.retrieved) {
-            const element = document.getElementById(file.id);
-            if (element) {
-                element.style.display = "block";
-                var src = element.src;
-                element.src = src.split('?')[0] + '?timestamp=' + new Date().getTime();  // Reload content
+        // JavaScript code for checking file existence, retrieving files, and handling form submission.
+        // (The code below remains unchanged.)
+        async function checkFileExistence(filePath) {
+            try {
+                const response = await fetch('/check_file', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ file_path: filePath })
+                });
+                const data = await response.json();
+                if (data.exists) {
+                    const staticPath = filePath.replace(/^.*?\//, 'static/');
+                    filePath = data.file_url;
+                    console.log(filePath);
+                    return await retrieveFile(filePath, staticPath);
+                } else {
+                    console.log(data.message, filePath);
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error checking file:', error);
+                return false;
             }
         }
-    });
-})();             
 
-function submitForm(event) {
-    event.preventDefault(); // Prevent the form from reloading the page
-
-    // Show loading
-    document.getElementById("loadingScreen").style.display = "block";
-    
-    // Create a FormData object and send a POST request to the backend
-    var formData = new FormData(document.getElementById("usernameForm"));
-    
-    fetch('/display_network', {
-        method: 'POST',  // Ensure method is POST
-        body: formData
-    })            
-    .then(response => response.json())
-    .then(data => {
-        // Dynamically update the page with the returned username
-        const username = data.username;
-        const analysisResultsDiv = document.getElementById("analysisResults");
-
-        // Display the relevant charts and tables
-        const elementsToDisplay = [
-            'sentimentGraph', 'positiveWordCloud', 'neutralWordCloud',
-            'negativeWordCloud', 'positiveTable', 'neutralTable', 'negativeTable'
-        ];
-
-        elementsToDisplay.forEach(id => {
-            const element = document.getElementById(id);
-            if (element) {
-                element.style.display = "block";
+        async function retrieveFile(filePath, staticPath) {
+            try {
+                const response = await fetch(`/retrieve?destination_blob_name=${encodeURIComponent(filePath)}&local_file_path=${encodeURIComponent(staticPath)}`, {
+                    method: 'GET',
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    console.log(data.message);
+                    return true;
+                } else {
+                    console.error(data.message);
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error retrieving file:', error);
+                return false;
             }
-        });
+        }
 
-        document.getElementById("loadingScreen").style.display = "none";
-        window.location.reload();
-    })
-    .catch(error => {
-        console.error("Error fetching data:", error);
-        document.getElementById("loadingScreen").style.display = "none";
-        
-        // Optionally show an error message to the user
-        const analysisResultsDiv = document.getElementById("analysisResults");
-        analysisResultsDiv.innerHTML = `<p style="color: red;">User does not exist or is a private account.</p>`;
-    });
-}
+        (async function loadData() {
+            console.log("loading...");
+            const files = [
+                { path: 'sentiment_pie_chart.png', id: 'sentimentGraph' },
+                { path: 'wordcloud_positive.png', id: 'positiveWordCloud' },
+                { path: 'wordcloud_neutral.png', id: 'neutralWordCloud' },
+                { path: 'wordcloud_negative.png', id: 'negativeWordCloud' },
+                { path: 'positive_comments_table.html', id: 'positiveTable' },
+                { path: 'neutral_comments_table.html', id: 'neutralTable' },
+                { path: 'negative_comments_table.html', id: 'negativeTable' }
+            ];
+            const userData = {{ user | tojson }};
+            var username = userData['username'];
+            const retrievalResults = await Promise.all(files.map(async (file) => {
+                const path = `${username}/${file.path}`;
+                console.log(path);
+                const result = await checkFileExistence(path);
+                console.log("here");
+                return { id: file.id, retrieved: result };
+            }));
+            console.log("here 2");
+            retrievalResults.forEach(file => {
+                console.log("here 3");
+                if (file.retrieved) {
+                    const element = document.getElementById(file.id);
+                    if (element) {
+                        element.style.display = "block";
+                        var src = element.src;
+                        element.src = src.split('?')[0] + '?timestamp=' + new Date().getTime();
+                    }
+                }
+            });
+        })();
 
-
-    </script>        
+        function submitForm(event) {
+            event.preventDefault();
+            document.getElementById("loadingScreen").style.display = "block";
+            var formData = new FormData(document.getElementById("usernameForm"));
+            fetch('/display_network', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const username = data.username;
+                const analysisResultsDiv = document.getElementById("analysisResults");
+                const elementsToDisplay = [
+                    'sentimentGraph', 'positiveWordCloud', 'neutralWordCloud',
+                    'negativeWordCloud', 'positiveTable', 'neutralTable', 'negativeTable'
+                ];
+                elementsToDisplay.forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.style.display = "block";
+                    }
+                });
+                document.getElementById("loadingScreen").style.display = "none";
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+                document.getElementById("loadingScreen").style.display = "none";
+                const analysisResultsDiv = document.getElementById("analysisResults");
+                analysisResultsDiv.innerHTML = `<p style="color: red;">User does not exist or is a private account.</p>`;
+            });
+        }
+    </script>
 {% endblock %}

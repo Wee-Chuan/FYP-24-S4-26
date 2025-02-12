@@ -7,9 +7,11 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from scipy.special import softmax
 from entity.classes import Comment, User
 import entity.admin as st
+
 #----------------------------------------Gemini_API--------------------------------------#
 from entity.ai_summary import generate_structured_summary
 #----------------------------------------------------------------------------------------#
+
 
 # Global variables
 users = {}
@@ -34,14 +36,16 @@ def get_sentiment(text):
 def preprocess_text(text):
     # Remove mentions (e.g., @username)
     text = re.sub(r'@[\w]+', '', text)
+    
     # Remove non-ASCII characters (emojis or special characters)
     text = re.sub(r'[^\x00-\x7F]+', '', text)
+    
     return text
 
 # Function to read data and initialize users
 def readDataAndInitialise(filename):
     users.clear()
-    global comments_list, comment_mapping  # comments_list is referenced later in generateGraphs
+    global comments_list, comment_mapping
 
     with open(filename, 'r') as file:
         reader = csv.DictReader(file)
@@ -62,7 +66,7 @@ def readDataAndInitialise(filename):
             timestamp = row["timestamp"]
 
             # Create Comment object
-            comment = Comment(text=text, likes=likes, replies=replies, timestamp=timestamp, username=username)
+            comment = Comment(text=text, likes=likes, replies=replies, timestamp = timestamp, username=username)
             sentiment = get_sentiment(text)  # Assign sentiment
             comment.sentiment = sentiment
 
@@ -84,7 +88,6 @@ def visualize_sentiment_pie_chart():
     values = list(sentiment_counts.values())
 
     # Create the pie chart using Matplotlib
-    import matplotlib.pyplot as plt
     fig, ax = plt.subplots()
     ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90, wedgeprops={'edgecolor': 'black'})
 
@@ -100,6 +103,9 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 
 # Function to generate a word cloud for each sentiment
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+
 def generate_word_clouds():
     sentiment_texts = {"Negative": "", "Neutral": "", "Positive": ""}
 
@@ -112,35 +118,43 @@ def generate_word_clouds():
     for sentiment, text in sentiment_texts.items():
         if not text.strip():  # Check if text is empty or whitespace
             print(f"No text available for {sentiment} sentiment. Generating 'NO WORDS' image.")
+            
             # Generate "NO WORDS" image for empty sentiment
             wordcloud = WordCloud(width=800, height=400, background_color="white").generate("NIL")
+            
             # Display the word cloud with "NO WORDS"
             plt.figure(figsize=(8, 4))
             plt.imshow(wordcloud, interpolation="bilinear")
             plt.axis("off")
             plt.title(f"Word Cloud for {sentiment} Sentiment - NO WORDS")
+            
             # Save the "NO WORDS" word cloud image
             wordcloud_file = f"data/wordcloud_{sentiment.lower()}.png"
             plt.savefig(wordcloud_file)
             plt.close()
+            
             print(f"Saved 'NO WORDS' image for {sentiment} sentiment at {wordcloud_file}")
             continue
 
         # Generate the word cloud for non-empty sentiment text
         wordcloud = WordCloud(width=800, height=400, background_color="white").generate(text)
+        
         # Display the word cloud
         plt.figure(figsize=(8, 4))
         plt.imshow(wordcloud, interpolation="bilinear")
         plt.axis("off")
         plt.title(f"Word Cloud for {sentiment} Sentiment")
+        
         # Save the word cloud as an image
         wordcloud_file = f"data/wordcloud_{sentiment.lower()}.png"
         plt.savefig(wordcloud_file)
         plt.close()
+
         print(f"Saved word cloud for {sentiment} sentiment at {wordcloud_file}")
 
 def generate_negative_comments_html():
     comments_per_page = 5
+
     # Extract negative comments from users
     negative_comments = []
     seen_comments = set()  # To track unique comments
@@ -149,7 +163,7 @@ def generate_negative_comments_html():
         for comment in user.comments:
             if comment.sentiment == "Negative" and comment.text not in seen_comments:
                 negative_comments.append({
-                    "text": comment.text.replace("\n", " ").replace('"', '\\"'),
+                    "text": comment.text.replace("\n", " ").replace('"', '\\"'),  # Clean newlines and escape quotes
                     "likes": comment.likes,
                     "timestamp": comment.timestamp,
                     "username": comment.username
@@ -210,19 +224,23 @@ def generate_negative_comments_html():
                     border-radius: 5px;
                 }}
             </style>
+
             <script>
                 const comments = {json.dumps(negative_comments)};
                 let currentPage = 1;
                 const commentsPerPage = 5;
+
                 function renderTable() {{
                     if (comments.length === 0) {{
                         document.getElementById('tableContainer').innerHTML = '<p id="noCommentsMessage">No negative comments available.</p>';
                         document.getElementById('paginationControls').style.display = 'none';
                         return;
                     }}
+
                     const start = (currentPage - 1) * commentsPerPage;
                     const end = Math.min(start + commentsPerPage, comments.length);
                     const paginatedComments = comments.slice(start, end);
+
                     let tableHtml = `
                         <table>
                             <thead>
@@ -235,6 +253,7 @@ def generate_negative_comments_html():
                             </thead>
                             <tbody>
                     `;
+
                     paginatedComments.forEach(comment => {{
                         tableHtml += `
                             <tr>
@@ -245,19 +264,24 @@ def generate_negative_comments_html():
                             </tr>
                         `;
                     }});
+
                     tableHtml += '</tbody></table>';
+
                     document.getElementById('tableContainer').innerHTML = tableHtml;
                     document.getElementById('prevButton').disabled = currentPage === 1;
                     document.getElementById('nextButton').disabled = end >= comments.length;
                 }}
+
                 function nextPage() {{
                     currentPage++;
                     renderTable();
                 }}
+
                 function previousPage() {{
                     currentPage--;
                     renderTable();
                 }}
+
                 window.onload = function () {{
                     renderTable();
                 }}
@@ -273,25 +297,32 @@ def generate_negative_comments_html():
         </body>
     </html>
     """
+
+    # Write the HTML content to a file
     with open("data/negative_comments_table.html", "w") as file:
         file.write(html_content)
+
     print("HTML file 'data/negative_comments_table.html' generated.")
 
 def generate_neutral_comments_html():
     comments_per_page = 5
+
     # Extract neutral comments from users
     neutral_comments = []
-    seen_comments = set()
+    seen_comments = set()  # To track unique comments
+
     for username, user in users.items():
         for comment in user.comments:
             if comment.sentiment == "Neutral" and comment.text not in seen_comments:
                 neutral_comments.append({
-                    "text": comment.text.replace("\n", " ").replace('"', '\\"'),
+                    "text": comment.text.replace("\n", " ").replace('"', '\\"'),  # Clean newlines and escape quotes
                     "likes": comment.likes,
                     "timestamp": comment.timestamp,
                     "username": comment.username
                 })
                 seen_comments.add(comment.text)
+
+    # HTML content structure
     html_content = f"""
     <html>
         <head>
@@ -317,20 +348,20 @@ def generate_neutral_comments_html():
                     max-width: 300px;
                 }}
                 th {{
-                    background-color: #808080;
+                    background-color: #808080; /* Neutral gray */
                     color: white;
                     text-transform: uppercase;
                     font-weight: bold;
                 }}
                 tr:nth-child(even) {{
-                    background-color: #f0f0f0;
+                    background-color: #f0f0f0; /* Light gray for even rows */
                 }}
                 tr:hover {{
-                    background-color: #e0e0e0;
+                    background-color: #e0e0e0; /* Slight hover effect */
                     cursor: pointer;
                 }}
                 td {{
-                    color: #333333;
+                    color: #333333; /* Dark gray for text */
                 }}
                 .pagination {{
                     margin-top: 10px;
@@ -347,26 +378,30 @@ def generate_neutral_comments_html():
                     transition: background-color 0.2s ease;
                 }}
                 .pagination button:hover {{
-                    background-color: #A9A9A9;
+                    background-color: #A9A9A9; /* Light grayish for hover */
                 }}
                 .pagination button:disabled {{
                     background-color: #cccccc;
                     cursor: not-allowed;
                 }}
             </style>
+
             <script>
                 let currentPage = 1;
-                const comments = {json.dumps(neutral_comments)};
+                const comments = {json.dumps(neutral_comments)};  // Properly embedded JSON
                 const commentsPerPage = 5;
+
                 function renderTable() {{
                     if (comments.length === 0) {{
                         document.getElementById('tableContainer').innerHTML = '<p id="noCommentsMessage">No neutral comments available.</p>';
                         document.getElementById('paginationControls').style.display = 'none';
                         return;
                     }}
+
                     const start = (currentPage - 1) * commentsPerPage;
-                    const end = Math.min(start + commentsPerPage, comments.length);
+                    const end = Math.min(start + commentsPerPage, comments.length); // Ensure 'end' does not go beyond array length
                     const paginatedComments = comments.slice(start, end);
+
                     let tableHtml = `
                         <table>
                             <thead>
@@ -379,6 +414,7 @@ def generate_neutral_comments_html():
                             </thead>
                             <tbody>
                     `;
+
                     paginatedComments.forEach(comment => {{
                         tableHtml += `
                             <tr>
@@ -389,19 +425,24 @@ def generate_neutral_comments_html():
                             </tr>
                         `;
                     }});
+
                     tableHtml += '</tbody></table>';
+
                     document.getElementById('tableContainer').innerHTML = tableHtml;
                     document.getElementById('prevButton').disabled = currentPage === 1;
                     document.getElementById('nextButton').disabled = end >= comments.length;
                 }}
+
                 function nextPage() {{
                     currentPage++;
                     renderTable();
                 }}
+
                 function previousPage() {{
                     currentPage--;
                     renderTable();
                 }}
+
                 window.onload = function () {{
                     renderTable();
                 }}
@@ -417,38 +458,45 @@ def generate_neutral_comments_html():
         </body>
     </html>
     """
+
+    # Write the HTML content to a file
     with open("data/neutral_comments_table.html", "w") as file:
         file.write(html_content)
+
     print("HTML file 'data/neutral_comments_table.html' generated.")
 
 def generate_positive_comments_html():
     comments_per_page = 5
+
     # Extract positive comments from users
     positive_comments = []
-    seen_comments = set()
+    seen_comments = set()  # To track unique comments
+
     for username, user in users.items():
         for comment in user.comments:
             if comment.sentiment == "Positive" and comment.text not in seen_comments:
                 positive_comments.append({
-                    "text": comment.text.replace("\n", " ").replace('"', '\\"'),
+                    "text": comment.text.replace("\n", " ").replace('"', '\\"'),  # Clean newlines and escape quotes
                     "likes": comment.likes,
                     "timestamp": comment.timestamp,
                     "username": comment.username
                 })
                 seen_comments.add(comment.text)
+
+    # HTML content structure with improved style
     html_content = f"""
     <html>
         <head>
             <style>
                 body {{
                     font-family: 'Arial', sans-serif;
-                    background-color: #e8f5e9;
+                    background-color: #e8f5e9;  /* Light green background */
                     margin: 2em;
                     color: #333;
                 }}
                 h1 {{
                     text-align: center;
-                    color: #388e3c;
+                    color: #388e3c; /* Green */
                     font-size: 2.5em;
                     margin-bottom: 20px;
                 }}
@@ -468,20 +516,20 @@ def generate_positive_comments_html():
                     word-wrap: break-word;
                 }}
                 th {{
-                    background-color: #81c784;
+                    background-color: #81c784;  /* Light green */
                     color: white;
                     font-weight: bold;
                     text-transform: uppercase;
                 }}
                 tr:nth-child(even) {{
-                    background-color: #f1f8e9;
+                    background-color: #f1f8e9;  /* Slightly lighter green */
                 }}
                 tr:hover {{
-                    background-color: #c8e6c9;
+                    background-color: #c8e6c9; /* Light hover effect */
                     cursor: pointer;
                 }}
                 td {{
-                    color: #388e3c;
+                    color: #388e3c;  /* Green text */
                 }}
                 .pagination {{
                     text-align: center;
@@ -499,7 +547,7 @@ def generate_positive_comments_html():
                     font-size: 1em;
                 }}
                 .pagination button:hover {{
-                    background-color: #66bb6a;
+                    background-color: #66bb6a;  /* Darker green for hover */
                 }}
                 .pagination button:disabled {{
                     background-color: #bdbdbd;
@@ -510,19 +558,23 @@ def generate_positive_comments_html():
                     transform: scale(0.98);
                 }}
             </style>
+
             <script>
                 let currentPage = 1;
-                const comments = {json.dumps(positive_comments)};
+                const comments = {json.dumps(positive_comments)};  // Properly embedded JSON
                 const commentsPerPage = 5;
+
                 function renderTable() {{
                     if (comments.length === 0) {{
                         document.getElementById('tableContainer').innerHTML = '<p id="noCommentsMessage">No positive comments available.</p>';
                         document.getElementById('paginationControls').style.display = 'none';
                         return;
                     }}
+
                     const start = (currentPage - 1) * commentsPerPage;
-                    const end = Math.min(start + commentsPerPage, comments.length);
+                    const end = Math.min(start + commentsPerPage, comments.length); // Ensure 'end' does not go beyond array length
                     const paginatedComments = comments.slice(start, end);
+
                     let tableHtml = `
                         <table>
                             <thead>
@@ -535,6 +587,7 @@ def generate_positive_comments_html():
                             </thead>
                             <tbody>
                     `;
+
                     paginatedComments.forEach(comment => {{
                         tableHtml += `
                             <tr>
@@ -545,19 +598,24 @@ def generate_positive_comments_html():
                             </tr>
                         `;
                     }});
+
                     tableHtml += '</tbody></table>';
+
                     document.getElementById('tableContainer').innerHTML = tableHtml;
                     document.getElementById('prevButton').disabled = currentPage === 1;
                     document.getElementById('nextButton').disabled = end >= comments.length;
                 }}
+
                 function nextPage() {{
                     currentPage++;
                     renderTable();
                 }}
+
                 function previousPage() {{
                     currentPage--;
                     renderTable();
                 }}
+
                 window.onload = function () {{
                     renderTable();
                 }}
@@ -573,8 +631,11 @@ def generate_positive_comments_html():
         </body>
     </html>
     """
+
+    # Write the HTML content to a file
     with open("data/positive_comments_table.html", "w") as file:
         file.write(html_content)
+
     print("HTML file 'data/positive_comments_table.html' generated.")
 
 
@@ -621,11 +682,9 @@ def generateGraphs(username):
         except Exception as e:
             print(f"Error uploading {remote_file}: {e}")
             
-    # MODIFIED: Define comments_list to prevent NameError (Added by us)
-    comments_list = []  # <-- Added this line to define comments_list
-    # End of modifications
-
-    print(comments_list)
+    print (comments_list)
     print("users is cleared")
     print(f"All files uploaded for user {username}.")
     print(users)
+
+    

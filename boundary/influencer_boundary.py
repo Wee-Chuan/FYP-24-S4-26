@@ -194,13 +194,20 @@ def post_analysis():
         'message': 'Post analysis completed.',
         'comment_tree_url': '/static/comment_tree.html'
     })
-
-@influencer_boundary.route('/network')  # when 'Network Visualization' is clicked in the sidebar from influencer's side
+#----------------------------------------------------------KEVIN-------------------------------------------------
+@influencer_boundary.route('/network')
 def network():
     account_type = session.get('account_type')
-    user_id = session.get('user_id') 
-    user = User.get_profile(user_id) 
-    return render_template('dashboard/influencer_menu/network.html', user_id=user_id, user=user)
+    user_id = session.get('user_id')
+    user = User.get_profile(user_id)
+    
+    # Generate the AI summary using your influencer_ai_summary module.
+    # This function reads the CSV, processes the comment data, generates insights, 
+    # and returns an overall summary.
+    ai_summary = process_ai_summary(user.username)
+    
+    # Pass the 'ai_summary' variable to the network.html template.
+    return render_template('dashboard/influencer_menu/network.html', user_id=user_id, user=user, ai_summary=ai_summary)
 
 #------------------------------------------------GEMINI_API -----------------------------------------------
 

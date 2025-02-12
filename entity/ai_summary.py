@@ -4,8 +4,13 @@ import requests
 import torch
 from collections import Counter
 from transformers import pipeline
+import logging
 
-# Initialize Hugging Face summarization pipeline (Facebook BART model)
+# Set up logging for debugging.
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Initialize the fallback summarization pipeline (Facebook BART model).
 device = "cuda" if torch.cuda.is_available() else "cpu"
 fallback_summarizer = pipeline(
     "summarization",
@@ -13,147 +18,215 @@ fallback_summarizer = pipeline(
     device=0 if torch.cuda.is_available() else -1
 )
 
-class AISummaryGenerator:
-    @staticmethod
-    def generate_ai_summary(text):
-        """
-        Generates a structured 5-10 sentence summary using Gemini API.
-        Falls back to Hugging Face summarization if Gemini API is unavailable.
-        """
-        try:
-            # Ensure text is within 1000 characters
-            prompt = " ".join(text.split())[:1000]
+# Constants for prompt construction.
+MAX_PROMPT_LENGTH = 1500  # Maximum number of characters to include in the prompt.
+DEFAULT_PROMPT_TEMPLATE = (
+    "Based on the following detailed data insights derived from your visualizations, "
+    "provide a comprehensive overall summary with key comparisons and actionable recommendations in fewer than 20 sentences: {}"
+)
 
-            # Check if Gemini API is available
-            gemini_api_url = os.getenv("GEMINI_API_URL")
-            gemini_api_key = os.getenv("GEMINI_API_KEY")
-
-            if gemini_api_url and gemini_api_key:
-                url = f"{gemini_api_url}?key={gemini_api_key}"
-                headers = {"Content-Type": "application/json"}
-                payload = {
-                    "contents": [
-                        {
-                            "parts": [
-                                {
-                                    "text": (
-                                        "Summarize the following social media insights in 5-10 sentences. Identify: "
-                                        "- Top active users, - Most engaged posts, "
-                                        "- Sentiment distribution (positive, neutral, negative), "
-                                        "- Key discussion trends, and - Recommendations for increasing engagement. "
-                                        f"{prompt}"
-                                    )
-                                }
-                            ]
-                        }
-                    ]
-                }
-                # Delay to reduce rate-limit issues
-                time.sleep(5)
-                response = requests.post(url, headers=headers, json=payload, timeout=30)
-
-                if response.status_code == 200:
-                    data = response.json()
-                    if "candidates" in data and data["candidates"]:
-                        candidate = data["candidates"][0]
-                        if "content" in candidate and "parts" in candidate["content"]:
-                            parts = candidate["content"]["parts"]
-                            if parts and isinstance(parts, list) and "text" in parts[0]:
-                                summary = parts[0]["text"]
-                            else:
-                                summary = "No summary available."
-                        else:
-                            summary = data.get("summary", "No summary available.")
-                    else:
-                        summary = data.get("summary", "No summary available.")
-                    used_method = "Gemini API"
-                elif response.status_code == 429:
-                    summary = "Rate limit exceeded. Try again later."
-                    used_method = "Gemini API Error"
-                else:
-                    summary = f"Error generating summary via Gemini API: {response.status_code}"
-                    used_method = "Gemini API Error"
-            else:
-                # Fall back to Hugging Face summarization
-                try:
-                    result = fallback_summarizer(prompt, max_length=250, min_length=50, do_sample=False)
-                    summary = result[0]["summary_text"]
-                    used_method = "Hugging Face Summarization"
-                except Exception as e:
-                    print(f"Hugging Face summarization error: {e}")
-                    summary = "Error using Hugging Face summarizer."
-                    used_method = "Hugging Face Error"
-
-            # Fallback if the summary is empty
-            if not summary.strip():
-                summary = "No AI summary available due to insufficient data."
-
-            return summary + f" (Summary generated using: {used_method})"
-        
-        except Exception as e:
-            print(f"Error generating AI summary: {e}")
-            return "⚠️ AI Summary not available."
-
-def generate_structured_summary(users):
+def build_recommendation(pos_pct, neg_pct, total_comments):
     """
-    Generates structured insights from the actual data loaded from commentData.csv,
-    and then uses the AI summarizer to produce a 5-10 sentence summary.
+    Dynamically creates a tailored recommendation based on the sentiment distribution and overall engagement.
     """
-    post_engagement = {}   # {post_url: {"likes": total_likes, "comments": [list of Comment objects]}}
+    if total_comments == 0:
+        return "Insufficient data to generate recommendations."
+    # If negative sentiment is comparatively high, advise to address negative feedback.
+    if neg_pct > pos_pct:
+        return (
+            "The data indicates a relatively high level of negative sentiment compared to positive feedback. "
+            "It is recommended to identify the causes of dissatisfaction, adjust content strategies, "
+            "and implement targeted improvements to address these concerns."
+        )
+    # Otherwise, suggest further optimizing the content strategy.
+    else:
+        return (
+            "While positive sentiment is strong, there is room for further improvement. "
+            "It is advised to refine your content strategy and experiment with innovative, personalized approaches "
+            "to boost overall engagement."
+        )
+
+def build_insights_prompt(users):
+    """
+    Aggregates detailed insights from the comment data and returns a structured text string.
+    The insights include:
+      - Total comment count,
+      - Top active users with comment counts,
+      - Most engaged posts with like counts,
+      - Comparative analysis between posts (e.g. how the top post compares to the average),
+      - Detailed sentiment distribution (raw counts and percentages),
+      - Key discussion trends (top comment texts, truncated if needed),
+      - And a tailored recommendation.
+    """
+    post_engagement = {}   # {post_url: {"likes": total_likes, "comments": [Comment objects]}}
     user_engagement = Counter()  # {username: total comments}
     sentiment_counts = Counter()  # {"Positive": X, "Negative": Y, "Neutral": Z}
 
-    # Process the actual user data
     for user in users.values():
         user_engagement[user.username] += len(user.comments)
         for comment in user.comments:
             sentiment_counts[comment.sentiment] += 1
-            post_url = getattr(comment, "postUrl", None)  # Assuming postUrl exists
+            post_url = getattr(comment, "postUrl", None)
             if post_url:
                 if post_url not in post_engagement:
                     post_engagement[post_url] = {"likes": 0, "comments": []}
                 post_engagement[post_url]["likes"] += comment.likes
                 post_engagement[post_url]["comments"].append(comment)
 
-    # Construct insights dynamically
-    summary_parts = []
+    total_comments = sum(sentiment_counts.values())
+    insights = []
 
-    # Top active users
-    top_users = [user for user, _ in user_engagement.most_common(3)]
-    if top_users:
-        summary_parts.append(f"Top Active Users: {', '.join(top_users)}.")
+    insights.append(f"Total comments in the dataset: {total_comments}.")
+
+    # Top active users.
+    if user_engagement:
+        top_users_data = user_engagement.most_common(3)
+        top_users_str = ", ".join([f"{user} ({count} comments)" for user, count in top_users_data])
+        insights.append("Top active users: " + top_users_str + ".")
     else:
-        summary_parts.append("No significant user activity detected.")
+        insights.append("No significant user activity detected.")
 
-    # Most engaged posts
-    top_posts = [post for post, data in sorted(post_engagement.items(), key=lambda x: x[1]['likes'], reverse=True)[:3]]
-    if top_posts:
-        summary_parts.append(f"Most Engaged Posts: {', '.join(top_posts)}.")
-    elif not post_engagement:
-        summary_parts.append("No posts had significant engagement.")
-
-    # Sentiment distribution
-    if any(sentiment_counts.values()):
-        sentiment_summary = f"Sentiment Analysis: {sentiment_counts['Positive']} Positive, {sentiment_counts['Neutral']} Neutral, {sentiment_counts['Negative']} Negative."
-        summary_parts.append(sentiment_summary)
+    # Most engaged posts.
+    if post_engagement:
+        top_posts_data = sorted(post_engagement.items(), key=lambda x: x[1]['likes'], reverse=True)[:3]
+        top_posts_str = ", ".join([f"{post} ({data['likes']} likes)" for post, data in top_posts_data])
+        insights.append("Most engaged posts: " + top_posts_str + ".")
     else:
-        summary_parts.append("No sentiment data available.")
+        insights.append("No posts had significant engagement.")
 
-    # Discussion trends based on comments (using the comment text)
-    # (Assumes Comment objects have a 'text' attribute; if 'likes' is available in the comment object, use that; otherwise, default to 0)
-    discussion_trends = sorted(
-        [comment.text for post, data in post_engagement.items() for comment in data["comments"]],
-        key=lambda x: getattr(x, 'likes', 0),
-        reverse=True
-    )[:3]
-    if discussion_trends:
-        summary_parts.append(f"Discussion Trends: {', '.join(discussion_trends)}.")
+    # Comparative analysis between posts.
+    if post_engagement and len(post_engagement) > 1:
+        all_likes = [data["likes"] for data in post_engagement.values()]
+        avg_likes = sum(all_likes) / len(all_likes)
+        max_likes = max(all_likes)
+        if avg_likes > 0:
+            diff_pct = round(((max_likes - avg_likes) / avg_likes) * 100, 1)
+        else:
+            diff_pct = 0
+        insights.append(f"Comparative analysis: The top post received {max_likes} likes, which is {diff_pct}% above the average of {round(avg_likes, 1)} likes.")
+    
+    # Sentiment distribution.
+    if total_comments > 0:
+        pos = sentiment_counts.get("Positive", 0)
+        neu = sentiment_counts.get("Neutral", 0)
+        neg = sentiment_counts.get("Negative", 0)
+        pos_pct = round((pos / total_comments) * 100, 1)
+        neu_pct = round((neu / total_comments) * 100, 1)
+        neg_pct = round((neg / total_comments) * 100, 1)
+        insights.append(
+            f"Sentiment analysis indicates {pos} positive ({pos_pct}%), {neu} neutral ({neu_pct}%), and {neg} negative ({neg_pct}%) comments."
+        )
     else:
-        summary_parts.append("No key discussion trends detected.")
+        insights.append("No sentiment data is available.")
 
-    structured_text = " ".join(summary_parts) if summary_parts else "No significant data available."
+    # Discussion trends: extract top 3 comment texts (truncated to 100 characters).
+    all_comments = [comment for post, data in post_engagement.items() for comment in data["comments"]]
+    if all_comments:
+        discussion_trends = sorted(
+            all_comments,
+            key=lambda x: getattr(x, 'likes', 0),
+            reverse=True
+        )[:3]
+        trends = "; ".join([ (c.text if len(c.text) <= 100 else c.text[:97] + "...") for c in discussion_trends ])
+        insights.append("Key discussion trends: " + trends + ".")
+    else:
+        insights.append("No key discussion trends identified.")
 
-    # Debug print to verify aggregated text
-    print("DEBUG: Aggregated structured text:", structured_text)
+    # Tailored recommendation based on sentiment percentages.
+    if total_comments > 0:
+        recommendation = build_recommendation(pos_pct, neg_pct, total_comments)
+        insights.append("Recommendations: " + recommendation)
+    else:
+        insights.append("No recommendations available due to insufficient data.")
 
-    return AISummaryGenerator.generate_ai_summary(structured_text)
+    structured_text = " ".join(insights)
+    return structured_text
+
+class AISummaryGenerator:
+    @staticmethod
+    def generate_ai_summary(text):
+        """
+        Generates a structured summary (fewer than 20 sentences) using the Gemini API.
+        Falls back to Hugging Face summarization if necessary.
+        """
+        try:
+            processed_text = " ".join(text.split())[:MAX_PROMPT_LENGTH]
+            prompt = DEFAULT_PROMPT_TEMPLATE.format(processed_text)
+
+            gemini_api_url = os.getenv("GEMINI_API_URL")
+            gemini_api_key = os.getenv("GEMINI_API_KEY")
+            summary = ""
+            used_method = ""
+
+            if gemini_api_url and gemini_api_key:
+                url = f"{gemini_api_url}?key={gemini_api_key}"
+                headers = {"Content-Type": "application/json"}
+                payload = {"contents": [{"parts": [{"text": prompt}]}]}
+                logger.info("Sending request to Gemini API with prompt: %s", prompt)
+                time.sleep(5)
+                try:
+                    response = requests.post(url, headers=headers, json=payload, timeout=30)
+                except requests.RequestException as e:
+                    logger.error("Request to Gemini API failed: %s", e)
+                    response = None
+
+                if response and response.status_code == 200:
+                    data = response.json()
+                    if "candidates" in data and data["candidates"]:
+                        candidate = data["candidates"][0]
+                        if "content" in candidate and "parts" in candidate["content"]:
+                            parts = candidate["content"]["parts"]
+                            if parts and isinstance(parts, list) and "text" in parts[0]:
+                                summary = parts[0]["text"].strip()
+                            else:
+                                summary = ""
+                        else:
+                            summary = data.get("summary", "").strip()
+                    used_method = "Gemini API"
+                elif response and response.status_code == 429:
+                    logger.warning("Gemini API rate limit exceeded.")
+                    summary = "Rate limit exceeded. Please try again later."
+                    used_method = "Gemini API Error"
+                else:
+                    logger.warning("Gemini API error: %s", response.status_code if response else "No response")
+                    try:
+                        result = fallback_summarizer(prompt, max_length=300, min_length=100, do_sample=False)
+                        summary = result[0]["summary_text"].strip()
+                        used_method = "Hugging Face Summarization"
+                    except Exception as e:
+                        logger.error("Hugging Face summarization error: %s", e)
+                        summary = "No AI summary available due to insufficient data."
+                        used_method = "Hugging Face Error"
+            else:
+                logger.info("Gemini API credentials not provided; using Hugging Face summarizer.")
+                try:
+                    result = fallback_summarizer(prompt, max_length=300, min_length=100, do_sample=False)
+                    summary = result[0]["summary_text"].strip()
+                    used_method = "Hugging Face Summarization"
+                except Exception as e:
+                    logger.error("Hugging Face summarization error: %s", e)
+                    summary = "No AI summary available due to insufficient data."
+                    used_method = "Hugging Face Error"
+
+            if not summary.strip():
+                summary = "No AI summary available due to insufficient data."
+
+            sentences = summary.split(". ")
+            if len(sentences) > 20:
+                summary = ". ".join(sentences[:20]) + "."
+            elif not summary.endswith("."):
+                summary += "."
+
+            return summary + f" (Summary generated using: {used_method})"
+        except Exception as e:
+            logger.error("Error generating AI summary: %s", e)
+            return "⚠️ AI Summary not available."
+
+def generate_structured_summary(users):
+    """
+    Aggregates detailed insights from the comment data (which powers network.html visualizations)
+    and returns a comprehensive, actionable AI summary in fewer than 20 sentences.
+    """
+    insights_text = build_insights_prompt(users)
+    logger.info("DEBUG: Aggregated structured text: %s", insights_text)
+    return AISummaryGenerator.generate_ai_summary(insights_text)
