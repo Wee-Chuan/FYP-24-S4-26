@@ -51,23 +51,19 @@
                     border-radius: 5px;
                 }
             </style>
-
             <script>
                 const comments = [{"text": "why is marzia's arm so long??\ud83d\ude2d\ud83d\ude2d", "likes": 37, "timestamp": "2024-11-01T15:19:04.000Z", "username": "touchyfeelymess"}, {"text": "Tears roll down my leg", "likes": 0, "timestamp": "2024-11-23T19:51:10.000Z", "username": "ouvaries"}, {"text": "wait pewds has a kid ?? what did i miss \ud83d\ude2d", "likes": 86, "timestamp": "2024-06-04T13:10:21.000Z", "username": "3starrsadie"}, {"text": "Bro ages backwards", "likes": 767, "timestamp": "2025-02-01T00:21:10.000Z", "username": "julius_alea_iacta_est"}, {"text": "Dogs cool , your a Turd", "likes": 0, "timestamp": "2025-01-24T05:23:41.000Z", "username": "trevorwoodrum"}, {"text": "Turd picture", "likes": 1, "timestamp": "2025-01-24T05:23:55.000Z", "username": "trevorwoodrum"}, {"text": "That's not a dabod, sir", "likes": 12, "timestamp": "2025-02-02T10:07:00.000Z", "username": "kaiflesh"}, {"text": "yikes!", "likes": 1, "timestamp": "2025-01-31T20:29:23.000Z", "username": "felipe.7zip"}];
                 let currentPage = 1;
                 const commentsPerPage = 5;
-
                 function renderTable() {
                     if (comments.length === 0) {
                         document.getElementById('tableContainer').innerHTML = '<p id="noCommentsMessage">No negative comments available.</p>';
                         document.getElementById('paginationControls').style.display = 'none';
                         return;
                     }
-
                     const start = (currentPage - 1) * commentsPerPage;
                     const end = Math.min(start + commentsPerPage, comments.length);
                     const paginatedComments = comments.slice(start, end);
-
                     let tableHtml = `
                         <table>
                             <thead>
@@ -80,7 +76,6 @@
                             </thead>
                             <tbody>
                     `;
-
                     paginatedComments.forEach(comment => {
                         tableHtml += `
                             <tr>
@@ -91,24 +86,19 @@
                             </tr>
                         `;
                     });
-
                     tableHtml += '</tbody></table>';
-
                     document.getElementById('tableContainer').innerHTML = tableHtml;
                     document.getElementById('prevButton').disabled = currentPage === 1;
                     document.getElementById('nextButton').disabled = end >= comments.length;
                 }
-
                 function nextPage() {
                     currentPage++;
                     renderTable();
                 }
-
                 function previousPage() {
                     currentPage--;
                     renderTable();
                 }
-
                 window.onload = function () {
                     renderTable();
                 }

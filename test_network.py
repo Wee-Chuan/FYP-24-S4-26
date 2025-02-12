@@ -1,81 +1,66 @@
-# test_network.py
-
 import os
-import pandas as pd
-import random
-from datetime import datetime, timedelta
-from entity.network import readDataAndInitialise, users
+from entity.network import readDataAndInitialise, users, generateGraphs
 from entity.ai_summary import generate_structured_summary
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend
 
-def generate_comment_data():
-    """
-    Generates a fresh `commentData.csv` with random usernames, comments, and engagements.
-    """
-    # Define sample usernames, comments, and posts
-    usernames = ["userA", "userB", "userC", "userD", "userE"]
-    sample_comments = [
-        "This is an amazing post! Love the visuals.",
-        "Not really my favorite content, could be better.",
-        "Absolutely fantastic work, keep it up!",
-        "Boring, expected more engagement.",
-        "This is great, very inspiring!",
-        "I don't agree with this at all.",
-        "Super informative and helpful.",
-        "Could have been more detailed.",
-        "Excellent post, very well explained.",
-        "Meh, nothing special about this."
-    ]
-    post_urls = [
-        "https://www.instagram.com/p/C4imhM1uwTP/",
-        "https://www.instagram.com/p/C3fghI8jyZT/",
-        "https://www.instagram.com/p/C2abcD1efGH/"
-    ]
+import builtins
 
-    # Generate random timestamps for the last 30 days
-    start_date = datetime.now() - timedelta(days=30)
-    timestamps = [(start_date + timedelta(days=random.randint(0, 30))).isoformat() for _ in range(20)]
+# Save the original open function
+original_open = builtins.open
 
-    # Create a dataset with random values
-    data = {
-        "id": [random.randint(10000000000000000, 99999999999999999) for _ in range(20)],
-        "likesCount": [random.randint(0, 100) for _ in range(20)],
-        "ownerUsername": [random.choice(usernames) for _ in range(20)],
-        "postUrl": [random.choice(post_urls) for _ in range(20)],
-        "repliesCount": [random.randint(0, 10) for _ in range(20)],
-        "text": [random.choice(sample_comments) for _ in range(20)],
-        "timestamp": timestamps
-    }
+def patched_open(filename, mode='r', *args, **kwargs):
+    # If the file is the CSV we use for testing and is being opened for reading,
+    # inject encoding="utf-8" and errors="ignore"
+    if filename.endswith("commentData.csv") and mode.startswith('r'):
+        kwargs.setdefault("encoding", "utf-8")
+        kwargs.setdefault("errors", "ignore")
+    return original_open(filename, mode, *args, **kwargs)
 
-    # Save CSV
-    df_simulated = pd.DataFrame(data)
-    os.makedirs("./data", exist_ok=True)
-    df_simulated.to_csv("./data/commentData.csv", index=False)
-
-    print(f"✅ New `commentData.csv` generated at: ./data/commentData.csv")
+# Patch the built-in open function
+builtins.open = patched_open
 
 def main():
-    # 🔄 Generate a new dataset before running the test
-    generate_comment_data()
-
-    # Path to the dynamically generated commentData.csv file
+    # Path to the actual comment data file.
     test_csv_path = "./data/commentData.csv"
+    summary_path = "./data/cached_ai_summary.txt"
+    username = "test_user"  # This would be provided by the user in production
 
-    # Verify if the CSV file now exists
+    # Check if the CSV file exists
     if not os.path.exists(test_csv_path):
-        print(f"❌ Error: The CSV file does not exist at {test_csv_path}")
+        print(f"❌ Error: The CSV file does not exist at {test_csv_path}.")
+        print("Please generate commentData.csv first (e.g., via your production process).")
         return
 
-    # ✅ Load data using `network.py`
+    # Initialize data from CSV
     print("🔄 Initializing data from CSV...")
     readDataAndInitialise(test_csv_path)
 
-    # ✅ Generate the AI summary with structured insights
-    print("🔄 Generating AI summary...")
-    structured_summary = generate_structured_summary(users)
+    # Process the data and generate visualizations
+    print("🔄 Running generateGraphs() to process comment data...")
+    generateGraphs(username)
 
-    # ✅ Print the structured AI summary (5-10 sentences)
-    print("\n📌 Structured AI Summary:")
-    print(structured_summary)
+    # Ensure valid user data exists
+    if not users:
+        print("❌ No user data found. AI summary will not be generated.")
+        return
+
+    # Use cached AI summary if it exists; otherwise, generate a new one.
+    if os.path.exists(summary_path):
+        print("\n📌 Using Cached AI Summary...")
+        with open(summary_path, "r") as file:
+            ai_summary = file.read()
+    else:
+        print("🔄 Generating AI summary...")
+        ai_summary = generate_structured_summary(users)
+        if ai_summary is None or not ai_summary.strip():
+            ai_summary = "No AI summary available due to insufficient data."
+        with open(summary_path, "w") as file:
+            file.write(ai_summary)
+
+    # Print the AI-generated summary (to be displayed on your website)
+    print("\n📌 AI-Generated Summary:")
+    print(ai_summary)
 
 if __name__ == "__main__":
     main()

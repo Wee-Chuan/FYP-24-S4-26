@@ -202,6 +202,8 @@ def network():
     user = User.get_profile(user_id) 
     return render_template('dashboard/influencer_menu/network.html', user_id=user_id, user=user)
 
+#------------------------------------------------GEMINI_API -----------------------------------------------
+
 @influencer_boundary.route('/display_network', methods=['POST'])
 def display_network():
     user_id = session.get('user_id') 
@@ -272,9 +274,13 @@ def display_network():
         # Generate graphs using the username from the user_id
         nw.generateGraphs(User.get_username_by_user_id(user_id))
 
-        # Return the username in a JSON response
+        # ✅ Generate AI Summary AFTER Processing Comments
+        ai_summary = process_ai_summary(username)
+
+        # ✅ Return AI Summary in API Response
         return jsonify({
             'username': username,
+            'ai_summary': ai_summary
         })
     
     except Exception as e:
@@ -285,6 +291,7 @@ def display_network():
             'error': 'Failed to retrieve comments or process data. Please try again later.'
         }), 500
 
+#----------------------------------------------------------------------------------------------
 @influencer_boundary.route('/display_sentiment_graph')
 def display_sentiment_graph():
     return render_template('dashboard/influencer_menu/sentimentgraph.html')
