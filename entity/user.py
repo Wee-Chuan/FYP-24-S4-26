@@ -1,42 +1,13 @@
 import os
-import sys
 import uuid
-import random
-import json
 import bcrypt
-from datetime import datetime, timedelta
-from collections import Counter
-
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-import mpld3
-import networkx as nx
-import pandas as pd
-import numpy as np
-
-from bertopic import BERTopic
-from wordcloud import WordCloud
-from faker import Faker
+from datetime import datetime
 from dotenv import load_dotenv
-from transformers import pipeline
-import torch
-
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.decomposition import NMF
-
-import nltk
-from nltk.sentiment import SentimentIntensityAnalyzer
-
-from firebase_admin import credentials, firestore, auth, storage
+from firebase_admin import credentials, firestore, storage
+import firebase_admin
 
 # Load environment variables
 load_dotenv()
-
-import firebase_admin
-from firebase_admin import credentials, firestore, auth
-import requests
 
 # Firebase Initialization
 if not firebase_admin._apps:
@@ -234,129 +205,4 @@ class User:
             return False
         return True
     
-    @staticmethod
-    def get_influencer_data():
-        """Retrieves influencer data from Firebase."""
-        influencer_data = []
-        try:
-            # Assuming degree_of_centrality is a collection in Firebase
-            influencers_ref = db.collection('degree_of_centrailty').stream()
 
-            # Loop through the collection to fetch the data
-            for influencer in influencers_ref:
-                data = influencer.to_dict()
-                influencer_info = {
-                    'username': data.get('username'),
-                    'follower_count': data.get('follower_count'),
-                    'following_count': data.get('following_count'),
-                    'uid': data.get('user_id')
-                }
-                influencer_data.append(influencer_info)
-
-            return influencer_data
-        except Exception as e:
-            print(f"Error retrieving influencer data: {e}")
-            return []
-
-    @staticmethod
-    def calculate_centrality():
-        """Calculates centrality for the influencers in the network."""
-        influencer_data = User.get_influencer_data()
-        
-        if not influencer_data:
-            print("No influencer data available.")
-            return None
-
-        # Create a directed graph (since followers follow influencers)
-        G = nx.DiGraph()
-
-        # Add nodes and edges based on the influencer data
-        for influencer in influencer_data:
-            username = influencer['username']
-            follower_count = influencer['follower_count']
-            following_count = influencer['following_count']
-            
-            # Add the influencer node (itself) with follower and following counts as attributes
-            G.add_node(username, follower_count=follower_count, following_count=following_count)
-            
-            # Assume each influencer follows others in the dataset (simplified relationship)
-            for other_influencer in influencer_data:
-                if other_influencer['username'] != username:
-                    G.add_edge(username, other_influencer['username'])  # Add directed edge from username to others
-
-        # Calculate centrality measures
-        centrality = {}
-        centrality['degree_centrality'] = nx.degree_centrality(G)  # Degree centrality
-        centrality['betweenness_centrality'] = nx.betweenness_centrality(G)  # Betweenness centrality
-        centrality['closeness_centrality'] = nx.closeness_centrality(G)  # Closeness centrality
-        centrality['eigenvector_centrality'] = nx.eigenvector_centrality(G)  # Eigenvector centrality
-        
-        return centrality
-    
-    
-    @staticmethod
-
-    def get_ranked_influencers():
-        """Fetches influencer data and ranks them based on centrality."""
-        influencers = User.get_influencer_data()
-        
-        if not influencers:
-            print("No influencer data to rank.")
-            return []
-
-        # Step 1: Calculate raw centrality score for each influencer
-        for influencer in influencers:
-            # Raw centrality score (un-normalized score)
-            influencer["unormalized_score"] = User.calculate_centrality_for_influencer(influencer)
-
-        # Step 2: Find the maximum raw centrality score
-        max_score = max(influencer["unormalized_score"] for influencer in influencers)
-
-        # Step 3: Normalize the scores (top influencer gets a score of 1)
-        for influencer in influencers:
-            if max_score != 0:  # Prevent division by zero if all scores are the same
-                influencer["centrality_score"] = round(influencer["unormalized_score"] / max_score, 3)
-            else:
-                influencer["centrality_score"] = 0  # If all scores are 0, set to 0
-
-        # Step 4: Sort influencers by normalized centrality score (descending order)
-        sorted_influencers = sorted(influencers, key=lambda x: x["centrality_score"], reverse=True)
-        
-        return sorted_influencers
-    
-    
-    @staticmethod
-    def calculate_centrality_for_influencer(influencer):
-        """Calculates a simplified centrality score for an individual influencer."""
-        # Simplified centrality based on follower and following counts
-        follower_count = influencer['follower_count']
-        following_count = influencer['following_count']
-        
-        # You can define a more sophisticated formula based on the specific centrality measure you want
-        centrality_score = follower_count - following_count  # Example formula
-        return centrality_score
-
-    @staticmethod
-    def compare_with_top_user(user_id):
-        """Compares the centrality of a user with the top influencer."""
-        ranked_influencers = User.get_ranked_influencers()
-
-        # Ensure there are influencers in the list
-        if not ranked_influencers:
-            print("No ranked influencers available.")
-            return None, None, None
-
-        # Get the top influencer (the one with the highest centrality score)
-        top_user = ranked_influencers[0]
-
-        # Find the influencer with the given user_id
-        user = next((u for u in ranked_influencers if u["username"] == user_id), None)
-
-        if user:
-            # Calculate the score difference between the top influencer and the user
-            score_diff = top_user["centrality_score"] - user["centrality_score"]
-            return top_user, user, score_diff
-        else:
-            print(f"User with ID {user_id} not found.")
-            return None, None, None
-    
