@@ -4,6 +4,7 @@ from entity.postclasses import Comment, User
 import networkx as nx
 from pyvis.network import Network
 import entity.admin as st
+import time
 
 def extract_parent_id_from_url(url):
     """Extract the parent ID from the URL."""
@@ -231,7 +232,8 @@ def create_conversation_tree(conversations_data, username):
         file.write(html_content)
 
     print(f"The comment tree has been saved to {output_path}")
-    st.upload_to_firebase(file_path = output_path, destination_blob_name = username+"/comment_tree.html")
+    timestamp = int(time.time() * 1000)  # Milliseconds for more precision
+    st.upload_to_firebase(file_path = output_path, destination_blob_name = f"{username}/comment_tree_{timestamp}.html")
 
 def create_top_users_table(conversations_file, output_html_file, username1):
     # Load the JSON data
@@ -366,7 +368,9 @@ def create_top_users_table(conversations_file, output_html_file, username1):
         file.write(html_content)
 
     print(f"Table saved to {output_html_file}")
-    st.upload_to_firebase(file_path = output_html_file, destination_blob_name = username1+"/top_users_table.html")
+    timestamp = int(time.time() * 1000)  # Milliseconds for more precision
+    print(f"{username1}/top_users_table_{timestamp}.html")
+    st.upload_to_firebase(file_path = output_html_file, destination_blob_name = f"{username1}/top_users_table_{timestamp}.html")
 
 def show_network(username):
     conversation_file = 'data/conversations.json'  # Input JSON file containing conversations data

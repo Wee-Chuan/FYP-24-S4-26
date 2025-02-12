@@ -296,18 +296,26 @@
     
     async function checkFileExistence(filePath) {
         try {
+            // Send the POST request with the file path in the body
             const response = await fetch('/check_file', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ file_path: filePath })
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ file_path: filePath })  // Send the file path as JSON
             });
     
-            const data = await response.json();
+            const data = await response.json();  // Parse the JSON response
+    
             if (data.exists) {
+                // Prepare the static path by replacing the username with 'static/'
                 const staticPath = filePath.replace(/^.*?\//, 'static/');
+                // Trigger file retrieval
+                filePath = data.file_url;
+                console.log("latest version" + filePath);
                 return await retrieveFile(filePath, staticPath);
             } else {
-                console.log(data.message, filePath);
+                console.log(data.message, filePath);  // Log the message if file doesn't exist
                 return false;
             }
         } catch (error) {
@@ -318,14 +326,18 @@
     
     async function retrieveFile(filePath, staticPath) {
         try {
-            const response = await fetch(`/retrieve?destination_blob_name=${encodeURIComponent(filePath)}&local_file_path=${encodeURIComponent(staticPath)}`);
+            // Send request to retrieve the file
+            const response = await fetch(`/retrieve?destination_blob_name=${encodeURIComponent(filePath)}&local_file_path=${encodeURIComponent(staticPath)}`, {
+                method: 'GET',
+            });
+    
             const data = await response.json();
     
             if (response.ok) {
-                console.log(data.message);
+                console.log(data.message);  // Success message
                 return true;
             } else {
-                console.error(data.message);
+                console.error(data.message);  // Error message
                 return false;
             }
         } catch (error) {
@@ -333,37 +345,42 @@
             return false;
         }
     }
-    
+    var have = true;
+    // Load data for multiple files and update UI
     (async function loadData() {
-        var have = false;
+        console.log("loading...");
         const files = [
             { path: 'comment_tree.html', id: 'hehe' },
-            { path: 'top_users_table.html', id: 'centralityGraph' }
+            { path: 'top_users_table.html', id: 'centralityGraph' },
         ];
-    
-        const retrievalResults = [];
-    
-        for (let file of files) {
-            const path = `{{user['username']}}/${file.path}`;
-            console.log(path);
+        const userData = {{ user | tojson }};
+        var username = userData['username'];
+        const retrievalResults = await Promise.all(files.map(async (file) => {
+            const path = `${username}/${file.path}`;  // Dynamically generate the path
+            console.log(path);  // Check the generated path
             const result = await checkFileExistence(path);
-            retrievalResults.push({ id: file.id, retrieved: result });
-        }
+            console.log("here");
+            return { id: file.id, retrieved: result };
+        }));
     
+        console.log("here 2");
         retrievalResults.forEach(file => {
+            console.log("here 3");
             if (file.retrieved) {
-                have = true;
                 const element = document.getElementById(file.id);
                 if (element) {
                     element.style.display = "block";
-                    element.src = element.src;
+                    var src = element.src;
+                    element.src = src.split('?')[0] + '?timestamp=' + new Date().getTime();  // Reload content
                 }
             }
+            else{ have = false;}
         });
-        if (have == true)
-            loadConversationTable();
-    
-    })();
+
+        if (have == true){
+                loadConversationTable();
+        }
+    })();  
         
 </script>
 {% endblock %}

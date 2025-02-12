@@ -132,7 +132,7 @@ def post_analysis():
         "directUrls": [post_url],
         "includeNestedComments": True,
         "isNewestComments": False,
-        "resultsLimit": 15
+        "resultsLimit": 30
     }
 
     # Run the Actor and wait for it to finish
@@ -218,7 +218,7 @@ def display_network():
         # Prepare the Actor input for the Instagram Post scraper using the username entered in the form
         run_input = {
             "username": [username],  # Dynamically pass the username from the form
-            "resultsLimit": 1,  # Get 1 post to fetch comments from
+            "resultsLimit": 10,  # Get 1 post to fetch comments from
         }
 
         # Run the Actor and wait for it to finish
@@ -340,7 +340,6 @@ from flask import jsonify
 @influencer_boundary.route('/data/conversations', methods=['GET'])
 def get_conversations():
     file_path = 'data/conversations.json'  # Define the file path
-
     try:
         with open(file_path, 'r') as file:
             data = json.load(file)

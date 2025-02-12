@@ -3,180 +3,345 @@
         "conversation_id": "conversation_1",
         "comments": [
             {
-                "text": "Team canelo button ➡️",
-                "likes": 10240,
-                "replies_count": 27,
+                "text": "Next fight:  Jake Paul Vs Morgan Freeman",
+                "likes": 29753,
+                "replies_count": 153,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18080638333612804",
+                "comment_id": "17861033040223921",
                 "parent_id": null,
-                "timestamp": "2025-02-08T02:31:31.000Z",
-                "username": "sagitario.tattoo"
+                "timestamp": "2024-11-16T22:31:53.000Z",
+                "username": "maytham_99"
             },
             {
-                "text": "@sagitario.tattoo nahh",
-                "likes": 15,
+                "text": "@maytham_99 😂😂",
+                "likes": 46,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18177244699314802",
-                "parent_id": "18080638333612804",
-                "timestamp": "2025-02-08T02:37:19.000Z",
-                "username": "pavrlisak"
+                "comment_id": "18062191840808706",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-16T22:34:46.000Z",
+                "username": "willfelicite"
             },
             {
-                "text": "@sagitario.tattoo ❤️❤️❤️",
+                "text": "@maytham_99 😂😂😂",
+                "likes": 19,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18038938406222558",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-16T22:35:02.000Z",
+                "username": "brenglynn44"
+            },
+            {
+                "text": "@maytham_99 YOU KNOW WHAAAAAT🤭🤭🤭🤣🤣🤣🤣🤣",
+                "likes": 28,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17958101996835530",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-16T22:38:45.000Z",
+                "username": "beetle_joose_"
+            },
+            {
+                "text": "@maytham_99 Next fight: Jake Paul VS Tutankamon",
+                "likes": 63,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18022921445301875",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-16T22:38:59.000Z",
+                "username": "yazzbcn"
+            },
+            {
+                "text": "@maytham_99 😂😂",
+                "likes": 5,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18001374944697544",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-16T22:50:09.000Z",
+                "username": "remzkunjr"
+            },
+            {
+                "text": "@maytham_99 😂😂😂😂😂",
+                "likes": 5,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17876216697197507",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-16T22:52:43.000Z",
+                "username": "jp.toriello"
+            },
+            {
+                "text": "@maytham_99 screaming 😂😂😂",
+                "likes": 6,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18048140587864222",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-16T22:58:29.000Z",
+                "username": "davey_earl"
+            },
+            {
+                "text": "@maytham_99 HAAHAHAHAHAHAHAH",
                 "likes": 1,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18085137922585726",
-                "parent_id": "18080638333612804",
-                "timestamp": "2025-02-08T02:38:47.000Z",
-                "username": "tkan_iz_dubai"
+                "comment_id": "17868177777246527",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-16T23:01:17.000Z",
+                "username": "kelsherrers"
             },
             {
-                "text": "@sagitario.tattoo chilote 🤡",
+                "text": "@maytham_99 I thought dadvid Attenborough had signed already",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17869058874240638",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-16T23:10:46.000Z",
+                "username": "joerb22"
+            },
+            {
+                "text": "@maytham_99 without a hand 😭",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18037723886216068",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-16T23:22:16.000Z",
+                "username": "abrahampineda_"
+            },
+            {
+                "text": "@maytham_99 😂😂",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18040041347513549",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-16T23:24:08.000Z",
+                "username": "black.spida34"
+            },
+            {
+                "text": "@maytham_99 😂😂😂😂😂",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17911392318032135",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-16T23:24:32.000Z",
+                "username": "carlosalbertocruz.bjj"
+            },
+            {
+                "text": "@maytham_99 😂👏🏻",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18058160842851644",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-16T23:26:16.000Z",
+                "username": "marktompkins82"
+            },
+            {
+                "text": "Jake Paul vs John wick 😂😂😂😂",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18057809776867046",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-16T23:27:37.000Z",
+                "username": "scooter_big"
+            },
+            {
+                "text": "@maytham_99 bro, reading this high. DIFFERENT! 😭🤣",
                 "likes": 2,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18086566069570252",
-                "parent_id": "18080638333612804",
-                "timestamp": "2025-02-08T02:57:09.000Z",
-                "username": "tino1126"
+                "comment_id": "18052323985788047",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-16T23:34:37.000Z",
+                "username": "yrnb.o.b"
             },
             {
-                "text": "@sagitario.tattoo no está vez, era de esperarse que Canelo huyera",
-                "likes": 6,
+                "text": "@maytham_99 😂😂😂😂😂😂😂",
+                "likes": 2,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18000944021744056",
-                "parent_id": "18080638333612804",
-                "timestamp": "2025-02-08T03:28:51.000Z",
-                "username": "charlibustamant"
+                "comment_id": "17874241095217512",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-16T23:51:23.000Z",
+                "username": "leo_nogs"
             },
             {
-                "text": "@sagitario.tattoo scared of Benavidez 🤣🤣",
-                "likes": 6,
+                "text": "@maytham_99 😂😂😂😂😂😂😂",
+                "likes": 1,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18045153677260566",
-                "parent_id": "18080638333612804",
-                "timestamp": "2025-02-08T03:32:23.000Z",
-                "username": "_gto_cris_"
+                "comment_id": "17917238964001096",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-16T23:57:13.000Z",
+                "username": "dan.p.officiel"
             },
             {
-                "text": "@pavrlisak yuh!",
-                "likes": 0,
+                "text": "@maytham_99 🤣fck that was hilarious",
+                "likes": 2,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18029236946556490",
-                "parent_id": "18080638333612804",
-                "timestamp": "2025-02-08T03:43:26.000Z",
-                "username": "sleepybear408"
+                "comment_id": "17884779417152286",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-16T23:57:26.000Z",
+                "username": "damons1984"
             },
             {
-                "text": "@sagitario.tattoo fu(k canelo and his fans",
-                "likes": 0,
+                "text": "@maytham_99 😂😂😂😂",
+                "likes": 1,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18031130504294963",
-                "parent_id": "18080638333612804",
-                "timestamp": "2025-02-08T03:52:18.000Z",
-                "username": "rolandocr753"
+                "comment_id": "17924562425882474",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-16T23:59:01.000Z",
+                "username": "1mahmoudfawzyy"
             },
             {
-                "text": "@sagitario.tattoo so why did he lost a fight",
-                "likes": 0,
+                "text": "@maytham_99 😂",
+                "likes": 1,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18076472161649225",
-                "parent_id": "18080638333612804",
-                "timestamp": "2025-02-08T04:07:58.000Z",
-                "username": "cascante_byron"
+                "comment_id": "18256684753258336",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-17T00:02:02.000Z",
+                "username": "xsono4"
             },
             {
-                "text": "@sagitario.tattoo nope",
-                "likes": 0,
+                "text": "@maytham_99 😭😂😂😂😂😂😂😂",
+                "likes": 1,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18160503523339647",
-                "parent_id": "18080638333612804",
-                "timestamp": "2025-02-08T04:51:15.000Z",
-                "username": "mm.oniique"
+                "comment_id": "17881731363171023",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-17T00:09:53.000Z",
+                "username": "rodol300"
             },
             {
-                "text": "@sagitario.tattoo team herpes mejor dicho 😂😂😂",
-                "likes": 0,
+                "text": "@maytham_99 I'm literally howling 🤣🤣",
+                "likes": 1,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18125520589411852",
-                "parent_id": "18080638333612804",
-                "timestamp": "2025-02-08T05:32:10.000Z",
-                "username": "rjcacho86"
+                "comment_id": "18068975623636317",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-17T00:17:54.000Z",
+                "username": "av_dowling"
             },
             {
-                "text": "@sagitario.tattoo never team Canelo",
-                "likes": 0,
+                "text": "@maytham_99 😂😂😂",
+                "likes": 2,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18164935888326776",
-                "parent_id": "18080638333612804",
-                "timestamp": "2025-02-08T07:23:40.000Z",
-                "username": "wilfre2"
+                "comment_id": "18012688247440543",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-17T00:19:30.000Z",
+                "username": "thebantuboy"
             },
             {
-                "text": "@sagitario.tattoo he’s fought nobody",
-                "likes": 0,
+                "text": "@maytham_99 @rohanmuk_",
+                "likes": 2,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17900096598035768",
-                "parent_id": "18080638333612804",
-                "timestamp": "2025-02-08T08:30:35.000Z",
-                "username": "ceasarr1"
+                "comment_id": "18047914630849962",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-17T00:29:29.000Z",
+                "username": "sriramt16"
             },
             {
-                "text": "@ceasarr1 u a casual boxing fan 😂floyd, bivol, kolavev , charlo, sounders,cotto, ggg r nobodys huh",
-                "likes": 0,
+                "text": "@maytham_99 nope paul vs Biden",
+                "likes": 3,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17960115902856185",
-                "parent_id": "18080638333612804",
-                "timestamp": "2025-02-08T15:34:59.000Z",
-                "username": "samir.ortizz"
+                "comment_id": "17912547528019930",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-17T01:02:25.000Z",
+                "username": "drew_buckheit"
             },
             {
-                "text": "@sagitario.tattoo nah man he’s a 🤡 🔥🇲🇽",
-                "likes": 0,
+                "text": "@maytham_99 ahahahhahaahha",
+                "likes": 1,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18030363872547360",
-                "parent_id": "18080638333612804",
-                "timestamp": "2025-02-08T16:37:38.000Z",
-                "username": "indaretrogames"
+                "comment_id": "18013350569647733",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-17T01:08:30.000Z",
+                "username": "jos_x8"
             },
             {
-                "text": "@sagitario.tattoo all time",
-                "likes": 0,
+                "text": "@davey_earl bro why is your teeth so white",
+                "likes": 2,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18019609514463354",
-                "parent_id": "18080638333612804",
-                "timestamp": "2025-02-08T19:42:04.000Z",
-                "username": "care_lessangel"
+                "comment_id": "18048227987073958",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-17T01:14:54.000Z",
+                "username": "lt.ghost8"
+            },
+            {
+                "text": "@maytham_99 Jake Paul vs Clint Eastwood",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17866979697250045",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-17T01:20:24.000Z",
+                "username": "vatantromain"
+            },
+            {
+                "text": "@maytham_99 Morgan Freeman only had one hand",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18001250036514127",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-17T01:21:33.000Z",
+                "username": "djgregorythomas"
+            },
+            {
+                "text": "@maytham_99 @kvdr.gl jjjjgkhgkj",
+                "likes": 2,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17962692140704004",
+                "parent_id": "17861033040223921",
+                "timestamp": "2024-11-17T01:29:46.000Z",
+                "username": "muhammed.synd"
             }
         ]
     },
@@ -184,180 +349,92 @@
         "conversation_id": "conversation_2",
         "comments": [
             {
-                "text": "Couldn’t beat tommy but will beat Canelo 🥴😂",
-                "likes": 5546,
-                "replies_count": 88,
+                "text": "Next fight Jake Paul vs. 100 year old ex-President Jimmy Carter",
+                "likes": 8055,
+                "replies_count": 20,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18041882258098409",
+                "comment_id": "18054591232745189",
                 "parent_id": null,
-                "timestamp": "2025-02-08T02:30:37.000Z",
-                "username": "mmcg1992"
+                "timestamp": "2024-11-16T22:28:50.000Z",
+                "username": "swearjar"
             },
             {
-                "text": "@mmcg1992 😂😂 I know",
-                "likes": 24,
+                "text": "@swearjar original",
+                "likes": 18,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17959602941891115",
-                "parent_id": "18041882258098409",
-                "timestamp": "2025-02-08T03:03:19.000Z",
-                "username": "thepurpletree_"
+                "comment_id": "18377232934129699",
+                "parent_id": "18054591232745189",
+                "timestamp": "2024-11-16T22:34:40.000Z",
+                "username": "lslcjparker"
             },
             {
-                "text": "@mmcg1992 Canelo couldn't beat Bivol at 175, but deluded people believe he can do something to Jake, who weighs over 200 pounds 😂😂",
-                "likes": 20,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18012691829694038",
-                "parent_id": "18041882258098409",
-                "timestamp": "2025-02-08T03:13:53.000Z",
-                "username": "el_kbron_wagner"
-            },
-            {
-                "text": "@el_kbron_wagner hol on.. u genuinely think jake can beat canelo? 🤣🤣",
-                "likes": 142,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18024250289366668",
-                "parent_id": "18041882258098409",
-                "timestamp": "2025-02-08T03:19:17.000Z",
-                "username": "htx.guero03"
-            },
-            {
-                "text": "@mmcg1992 he even knocked down Tommy but counted as a slip okay 🤣🤣🤣",
-                "likes": 3,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18042013547093362",
-                "parent_id": "18041882258098409",
-                "timestamp": "2025-02-08T03:33:37.000Z",
-                "username": "_gto_cris_"
-            },
-            {
-                "text": "@mmcg1992 still would have paid a couple hundred to see that fight @canelo  @jakepaul",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18081868300609222",
-                "parent_id": "18041882258098409",
-                "timestamp": "2025-02-08T03:36:06.000Z",
-                "username": "redbeard_redbeard_1"
-            },
-            {
-                "text": "@mmcg1992 EXACTLY!! 🎯",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18119534872386644",
-                "parent_id": "18041882258098409",
-                "timestamp": "2025-02-08T03:37:14.000Z",
-                "username": "mr_q_nyc"
-            },
-            {
-                "text": "@mmcg1992 he's literally doing what he's claiming Canelo to do.. Trying to get his biggest pay day 😂 we all knew hed get wrecked anyways",
-                "likes": 6,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18482160205000359",
-                "parent_id": "18041882258098409",
-                "timestamp": "2025-02-08T03:39:19.000Z",
-                "username": "dee.jay_77"
-            },
-            {
-                "text": "@mmcg1992 fact he couldn’t beat Tommy fury @jakepaul",
-                "likes": 4,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18118966312425713",
-                "parent_id": "18041882258098409",
-                "timestamp": "2025-02-08T03:42:28.000Z",
-                "username": "ayecristianfilm49"
-            },
-            {
-                "text": "@el_kbron_wagner shut up go cry to your mummy",
+                "text": "@swearjar yup",
                 "likes": 2,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18066512698700187",
-                "parent_id": "18041882258098409",
-                "timestamp": "2025-02-08T04:05:02.000Z",
-                "username": "001_jcm"
+                "comment_id": "18016147760372478",
+                "parent_id": "18054591232745189",
+                "timestamp": "2024-11-16T22:38:59.000Z",
+                "username": "yaya_dezzii"
             },
             {
-                "text": "@mmcg1992 no cap😂",
+                "text": "@swearjar naw batman",
+                "likes": 3,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18036459446517173",
+                "parent_id": "18054591232745189",
+                "timestamp": "2024-11-16T22:52:50.000Z",
+                "username": "littlebigkicker"
+            },
+            {
+                "text": "@swearjar biden?",
+                "likes": 3,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17863785441200680",
+                "parent_id": "18054591232745189",
+                "timestamp": "2024-11-17T00:23:01.000Z",
+                "username": "yahomyrlarue"
+            },
+            {
+                "text": "@swearjar 😂😂😂🥊🥊😂😂",
+                "likes": 4,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17861013453221123",
+                "parent_id": "18054591232745189",
+                "timestamp": "2024-11-17T01:46:19.000Z",
+                "username": "fini7sher"
+            },
+            {
+                "text": "@swearjar 😂😂😂",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18155791933342201",
-                "parent_id": "18041882258098409",
-                "timestamp": "2025-02-08T04:29:05.000Z",
-                "username": "ballmajormusic"
+                "comment_id": "17881964244171384",
+                "parent_id": "18054591232745189",
+                "timestamp": "2024-11-18T03:03:04.000Z",
+                "username": "khaazramaaranu"
             },
             {
-                "text": "@el_kbron_wagner sabes cuánto pesaba berlanga y Munguía el día del combate ? 😂 son mejores boxeadores que Paul y los hizo ver como novatos 196 libras pesaba berlanga y callo en la lona como basura",
-                "likes": 0,
+                "text": "@swearjar this did not age well",
+                "likes": 7,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17972769944819888",
-                "parent_id": "18041882258098409",
-                "timestamp": "2025-02-08T05:00:33.000Z",
-                "username": "saul_gb28"
-            },
-            {
-                "text": "@el_kbron_wagner pobre wey de verdad crees aue jake paul tiene nivel para hacerle algo a canelo😂😂😂😂😂😂😂😂😂😂😂😂😂🤣🤣🤣🤣🤣🤣🤣",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18041909432364317",
-                "parent_id": "18041882258098409",
-                "timestamp": "2025-02-08T05:02:43.000Z",
-                "username": "crisser12"
-            },
-            {
-                "text": "Sabes quién era la fuente que hizo viral esa falsa rehidratación? 🤣🤣🤣 Canelo pesaba 183 libras y Berlanga pasaba 185 libras la noche del combate. Tal vez deberías verificar mejor tus \"fuentes\" 👁",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18081879724613792",
-                "parent_id": "18041882258098409",
-                "timestamp": "2025-02-08T05:03:46.000Z",
-                "username": "el_kbron_wagner"
-            },
-            {
-                "text": "@el_kbron_wagner avg disney kid",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18320533093167263",
-                "parent_id": "18041882258098409",
-                "timestamp": "2025-02-08T05:36:28.000Z",
-                "username": "_aman_205"
-            },
-            {
-                "text": "@mmcg1992 💯💯🤣🤣🤣🤣",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18059911966785678",
-                "parent_id": "18041882258098409",
-                "timestamp": "2025-02-08T05:51:09.000Z",
-                "username": "kylestewartmg69"
+                "comment_id": "18002680541710566",
+                "parent_id": "18054591232745189",
+                "timestamp": "2025-01-15T13:13:32.000Z",
+                "username": "that_hockey_kid1"
             }
         ]
     },
@@ -365,180 +442,345 @@
         "conversation_id": "conversation_3",
         "comments": [
             {
-                "text": "Jake would get smoked button ———>",
-                "likes": 9963,
-                "replies_count": 50,
+                "text": "Who's next? Biden?",
+                "likes": 6164,
+                "replies_count": 96,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17971095215703770",
+                "comment_id": "18026054879447462",
                 "parent_id": null,
-                "timestamp": "2025-02-08T02:32:20.000Z",
-                "username": "jack_grossman04"
+                "timestamp": "2024-11-16T22:27:45.000Z",
+                "username": "sanja.peulic"
             },
             {
-                "text": "@jack_grossman04 jake would blitz canelo",
-                "likes": 31,
+                "text": "@sanja.peulic 😂😂",
+                "likes": 12,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18056993596971440",
-                "parent_id": "17971095215703770",
-                "timestamp": "2025-02-08T02:45:56.000Z",
-                "username": "snoops101pl"
+                "comment_id": "18098714821461944",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:28:51.000Z",
+                "username": "moeluce"
             },
             {
-                "text": "@snoops101pl 🤡",
-                "likes": 42,
+                "text": "@sanja.peulic 😂😂😂",
+                "likes": 3,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17950754996919762",
-                "parent_id": "17971095215703770",
-                "timestamp": "2025-02-08T02:48:01.000Z",
-                "username": "114_d4niel_m4rtin3z_285"
+                "comment_id": "17931561050950560",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:29:21.000Z",
+                "username": "3e.m7"
             },
             {
-                "text": "@snoops101pl get off his dic homie 😂",
-                "likes": 7,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "17887066416195233",
-                "parent_id": "17971095215703770",
-                "timestamp": "2025-02-08T02:58:16.000Z",
-                "username": "daboi_jt"
-            },
-            {
-                "text": "@snoops101pl I would do it if Canelo was 65 years old hahaha",
+                "text": "@sanja.peulic jokes thats jokes lmao 👏😂",
                 "likes": 4,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17890988298175974",
-                "parent_id": "17971095215703770",
-                "timestamp": "2025-02-08T03:02:56.000Z",
-                "username": "amygsettnom"
+                "comment_id": "18081455287492069",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:29:44.000Z",
+                "username": "abohalima0308"
             },
             {
-                "text": "@jack_grossman04 he lit though",
-                "likes": 0,
+                "text": "@sanja.peulic The Pope",
+                "likes": 9,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18058257662482063",
-                "parent_id": "17971095215703770",
-                "timestamp": "2025-02-08T03:04:34.000Z",
-                "username": "rodrigojmg"
+                "comment_id": "18020786027622983",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:33:35.000Z",
+                "username": "skyridge_x"
             },
             {
-                "text": "@daboi_jt get off mine 😂",
+                "text": "@sanja.peulic that would be fun to watch 😂",
+                "likes": 9,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18059743033877253",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:34:31.000Z",
+                "username": "sirfabielalmonte"
+            },
+            {
+                "text": "@sanja.peulic @mchamham @ernesto_vil 😂",
                 "likes": 2,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18050691572132636",
-                "parent_id": "17971095215703770",
-                "timestamp": "2025-02-08T03:07:23.000Z",
-                "username": "snoops101pl"
+                "comment_id": "18094142434491049",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:35:34.000Z",
+                "username": "rayray0281"
             },
             {
-                "text": "@2x14omri ong jakey goin ko him",
+                "text": "@sanja.peulic too much of a challenge",
                 "likes": 1,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18338797603157626",
-                "parent_id": "17971095215703770",
-                "timestamp": "2025-02-08T03:11:18.000Z",
-                "username": "2x14omri"
+                "comment_id": "17935563425945387",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:35:38.000Z",
+                "username": "ikingpete"
             },
             {
-                "text": "@jack_grossman04 hell no",
+                "text": "@sanja.peulic hahaha",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17889759429187098",
-                "parent_id": "17971095215703770",
-                "timestamp": "2025-02-08T03:18:19.000Z",
-                "username": "e_b_24__"
+                "comment_id": "17872456239218861",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:36:37.000Z",
+                "username": "justhill84"
             },
             {
-                "text": "@snoops101pl Even ur mother don’t believe that",
+                "text": "@sanja.peulic 😂😂😂",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18442982635073117",
-                "parent_id": "17971095215703770",
-                "timestamp": "2025-02-08T16:39:39.000Z",
-                "username": "zgetmoneyy"
+                "comment_id": "17928843560966499",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:37:02.000Z",
+                "username": "n.a.te_12"
             },
             {
-                "text": "@jack_grossman04 Jake would pay Canelo to take a dive just like he did Tyson button —->",
+                "text": "@sanja.peulic he is abit to young",
+                "likes": 2,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18264983923266892",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:37:40.000Z",
+                "username": "_kavinesh.krishna_"
+            },
+            {
+                "text": "@sanja.peulic 😂",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17967604064680870",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:39:45.000Z",
+                "username": "valdo_21_zoe"
+            },
+            {
+                "text": "@sanja.peulic great comment",
+                "likes": 2,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18058599316868906",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:40:01.000Z",
+                "username": "joeyboyterroni"
+            },
+            {
+                "text": "@sanja.peulic 😂😂😂😂😂😂😂",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18155443084333627",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:40:20.000Z",
+                "username": "ix.xxviii.16xo"
+            },
+            {
+                "text": "@sanja.peulic 😂😂😂😂😂",
                 "likes": 1,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17932436453882706",
-                "parent_id": "17971095215703770",
-                "timestamp": "2025-02-08T16:41:05.000Z",
-                "username": "100percentpureadrenaline"
+                "comment_id": "18366132064113578",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:40:23.000Z",
+                "username": "_mason_newman_"
             },
             {
-                "text": "@2x14omri big facts",
+                "text": "@sanja.peulic Bruce lee",
+                "likes": 2,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17881288938175403",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:43:25.000Z",
+                "username": "danpurdiesmith"
+            },
+            {
+                "text": "@sanja.peulic hahahahaahahahahahahahahahahahahahaha",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18069218887636054",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:43:57.000Z",
+                "username": "alfonsoporrasn"
+            },
+            {
+                "text": "@sanja.peulic na probably king tut",
+                "likes": 2,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18281876734246817",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:44:37.000Z",
+                "username": "twon_da_kidd"
+            },
+            {
+                "text": "@sanja.peulic 😂😂😂😂😂😂😂😂",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18028754333322473",
-                "parent_id": "17971095215703770",
-                "timestamp": "2025-02-08T18:34:32.000Z",
-                "username": "snoops101pl"
+                "comment_id": "17872147503144476",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:44:40.000Z",
+                "username": "rodgepolar"
             },
             {
-                "text": "@jack_grossman04 within seconds",
+                "text": "@sanja.peulic leave him alone",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17975889563680926",
-                "parent_id": "17971095215703770",
-                "timestamp": "2025-02-08T18:51:49.000Z",
-                "username": "pafc_rob"
+                "comment_id": "17842978233362407",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:47:20.000Z",
+                "username": "casca_4596"
             },
             {
-                "text": "@snoops101pl lmfao 🤣 😂 💀",
+                "text": "@sanja.peulic @lova_lorti 😂",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18063304363906210",
-                "parent_id": "17971095215703770",
-                "timestamp": "2025-02-08T19:18:59.000Z",
-                "username": "marcusmac313"
+                "comment_id": "18076828744575402",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:48:12.000Z",
+                "username": "mikaelamae"
             },
             {
-                "text": "@jack_grossman04 then why doesn’t he fight him ?",
+                "text": "@sanja.peulic 😂😂😂😂",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17861637039344895",
-                "parent_id": "17971095215703770",
-                "timestamp": "2025-02-08T22:10:34.000Z",
-                "username": "theapexpeter"
+                "comment_id": "18026525744216225",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:51:04.000Z",
+                "username": "higgins_c"
             },
             {
-                "text": "@jack_grossman04 yes",
+                "text": "@sanja.peulic 😂😂😂😂",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18053205590109701",
-                "parent_id": "17971095215703770",
-                "timestamp": "2025-02-09T00:01:32.000Z",
-                "username": "man0tas95155"
+                "comment_id": "18045710462028096",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T22:59:35.000Z",
+                "username": "v_painting_services"
+            },
+            {
+                "text": "@sanja.peulic Obama 🙌",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18035898020059835",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T23:03:24.000Z",
+                "username": "enzo_spinoglio"
+            },
+            {
+                "text": "@sanja.peulic 😂😂😂😂😂",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18084027415551741",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T23:04:14.000Z",
+                "username": "rdzlucio"
+            },
+            {
+                "text": "@sanja.peulic 😅🤣",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17885215863071758",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T23:04:40.000Z",
+                "username": "lexebullfrenchies"
+            },
+            {
+                "text": "@sanja.peulic 😂😂",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18050258290968316",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T23:12:40.000Z",
+                "username": "aqsuited"
+            },
+            {
+                "text": "@sanja.peulic hahahahahahahaha",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18111106588427337",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T23:18:41.000Z",
+                "username": "kapitalofficial"
+            },
+            {
+                "text": "@sanja.peulic 🤣🤣🤣🤣",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18038157701338020",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T23:20:22.000Z",
+                "username": "wave0139"
+            },
+            {
+                "text": "@sanja.peulic 😂😂😂😂😂😂",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18258322666265279",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-16T23:44:57.000Z",
+                "username": "taralli_senza_stilo"
+            },
+            {
+                "text": "@sanja.peulic 😂😂",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18047634218011388",
+                "parent_id": "18026054879447462",
+                "timestamp": "2024-11-17T00:19:52.000Z",
+                "username": "mattdallasmusic"
             }
         ]
     },
@@ -546,180 +788,81 @@
         "conversation_id": "conversation_4",
         "comments": [
             {
-                "text": "all your fights are fixed mate, relax urself",
-                "likes": 6831,
-                "replies_count": 71,
+                "text": "your brother beat a guy 3 decades out of his prime, congrats",
+                "likes": 10591,
+                "replies_count": 27,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17948399111924425",
+                "comment_id": "18049206962067053",
                 "parent_id": null,
-                "timestamp": "2025-02-08T02:30:01.000Z",
-                "username": "_szymon04"
+                "timestamp": "2024-11-16T22:44:21.000Z",
+                "username": "_jjpeck2"
             },
             {
-                "text": "@_szymon04 u sound mad a YouTuber actually winnin",
-                "likes": 59,
+                "text": "@_jjpeck2 literally the age gap between them is bigger than the number of years jake lived",
+                "likes": 452,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18035971460599350",
-                "parent_id": "17948399111924425",
-                "timestamp": "2025-02-08T02:48:08.000Z",
-                "username": "727.king.em"
+                "comment_id": "17989052453727582",
+                "parent_id": "18049206962067053",
+                "timestamp": "2024-11-16T22:53:17.000Z",
+                "username": "mohdghm247"
             },
             {
-                "text": "@727.king.em against senior citizens",
-                "likes": 111,
+                "text": "@_jjpeck2 true",
+                "likes": 19,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18063038902910411",
-                "parent_id": "17948399111924425",
-                "timestamp": "2025-02-08T02:49:18.000Z",
-                "username": "eric.huggins"
+                "comment_id": "18301762459204608",
+                "parent_id": "18049206962067053",
+                "timestamp": "2024-11-16T23:41:25.000Z",
+                "username": "jorgensenelias"
             },
             {
-                "text": "@eric.huggins he literally only taught 1 person who’s considered a senior citizen n that wa smoke tyson all his other fight aren’t like that u frl jus yappin",
-                "likes": 8,
+                "text": "@mohdghm247 literally lmao",
+                "likes": 27,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18057158255050379",
-                "parent_id": "17948399111924425",
-                "timestamp": "2025-02-08T02:50:46.000Z",
-                "username": "727.king.em"
+                "comment_id": "18070572481626954",
+                "parent_id": "18049206962067053",
+                "timestamp": "2024-11-17T00:17:01.000Z",
+                "username": "priceyyy33"
             },
             {
-                "text": "@727.king.em because they used to always get beat up in school 😂😂😂",
-                "likes": 5,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "17995892390757071",
-                "parent_id": "17948399111924425",
-                "timestamp": "2025-02-08T03:10:07.000Z",
-                "username": "pokefitz"
-            },
-            {
-                "text": "@727.king.em Get off your knees 😂",
-                "likes": 12,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "17928189515905904",
-                "parent_id": "17948399111924425",
-                "timestamp": "2025-02-08T03:16:52.000Z",
-                "username": "enitify"
-            },
-            {
-                "text": "@727.king.em name 1 fighter he beat at his age",
-                "likes": 5,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18480789637018978",
-                "parent_id": "17948399111924425",
-                "timestamp": "2025-02-08T03:19:29.000Z",
-                "username": "savageshiloh22"
-            },
-            {
-                "text": "@727.king.em tell that to Tommy Fury 🤡",
-                "likes": 2,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18488271424012239",
-                "parent_id": "17948399111924425",
-                "timestamp": "2025-02-08T03:52:44.000Z",
-                "username": "mr_q_nyc"
-            },
-            {
-                "text": "@mr_q_nyc lmao name 1 person Jake lost to beside Tommy fury 😂 oh that’s right u can’t u jus yappin jit go yap somewhere else",
+                "text": "@_jjpeck2 a win is a win",
                 "likes": 1,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17880034338144656",
-                "parent_id": "17948399111924425",
-                "timestamp": "2025-02-08T03:53:27.000Z",
-                "username": "727.king.em"
+                "comment_id": "17863732248267296",
+                "parent_id": "18049206962067053",
+                "timestamp": "2024-11-17T02:30:26.000Z",
+                "username": "whodeyvic53"
             },
             {
-                "text": "@727.king.em name 1 boxer who he fought and won besides mike tyson",
-                "likes": 5,
+                "text": "@_jjpeck2 36 actually lol. Tyson was in his prime in 1988!",
+                "likes": 3,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18091029715532249",
-                "parent_id": "17948399111924425",
-                "timestamp": "2025-02-08T04:08:24.000Z",
-                "username": "abinashchetia_"
+                "comment_id": "17878660311237806",
+                "parent_id": "18049206962067053",
+                "timestamp": "2024-11-17T04:08:46.000Z",
+                "username": "eggi_th12"
             },
             {
-                "text": "@727.king.em 59 year old he fight",
-                "likes": 2,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18090831952484398",
-                "parent_id": "17948399111924425",
-                "timestamp": "2025-02-08T04:40:49.000Z",
-                "username": "3045cristiano"
-            },
-            {
-                "text": "@727.king.em wtf he winnin lol",
+                "text": "I still have yet to find one good comment Jake. Your stuck going down hill buddy I will fight you when your 80smth years old and in the retirement home.",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18080379379554207",
-                "parent_id": "17948399111924425",
-                "timestamp": "2025-02-08T05:42:25.000Z",
-                "username": "mikesetfree"
-            },
-            {
-                "text": "@savageshiloh22 Deji and Gib both by stoppage.",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "17950705826923225",
-                "parent_id": "17948399111924425",
-                "timestamp": "2025-02-08T05:56:01.000Z",
-                "username": "itsruvimm"
-            },
-            {
-                "text": "@itsruvimm he said ‘fighters’",
-                "likes": 1,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "17946945350796404",
-                "parent_id": "17948399111924425",
-                "timestamp": "2025-02-08T05:58:57.000Z",
-                "username": "_szymon04"
-            },
-            {
-                "text": "@_szymon04 less talking, more proving. No need to stall now 😂",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18316256011161151",
-                "parent_id": "17948399111924425",
-                "timestamp": "2025-02-08T06:06:59.000Z",
-                "username": "getfukt420.1"
-            },
-            {
-                "text": "@getfukt420.1 what..?",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18060997687756744",
-                "parent_id": "17948399111924425",
-                "timestamp": "2025-02-08T06:07:48.000Z",
-                "username": "_szymon04"
+                "comment_id": "18076008187587898",
+                "parent_id": "18049206962067053",
+                "timestamp": "2024-11-17T09:47:21.000Z",
+                "username": "jackhudson2092_yt"
             }
         ]
     },
@@ -727,180 +870,158 @@
         "conversation_id": "conversation_5",
         "comments": [
             {
-                "text": "Jake we know your fights are rigged",
-                "likes": 5122,
-                "replies_count": 39,
+                "text": "the tag 😂😂",
+                "likes": 1466,
+                "replies_count": 25,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17849834802398163",
+                "comment_id": "17873977170212443",
                 "parent_id": null,
-                "timestamp": "2025-02-08T02:33:17.000Z",
-                "username": "amithouston"
+                "timestamp": "2024-11-16T22:34:45.000Z",
+                "username": "samgolbach"
             },
             {
-                "text": "@amithouston Any proof?",
-                "likes": 37,
+                "text": "@samgolbach what u doing here Sam 😂",
+                "likes": 78,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17916979716058146",
-                "parent_id": "17849834802398163",
-                "timestamp": "2025-02-08T03:10:53.000Z",
-                "username": "thatdillonguy"
+                "comment_id": "18474897058006993",
+                "parent_id": "17873977170212443",
+                "timestamp": "2024-11-16T22:36:56.000Z",
+                "username": "badkidmalikb"
             },
             {
-                "text": "@thatdillonguy he payed Mike Tyson 10 million 😭🙏",
-                "likes": 40,
+                "text": "@samgolbach 😂",
+                "likes": 4,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17888218662194794",
-                "parent_id": "17849834802398163",
-                "timestamp": "2025-02-08T03:18:59.000Z",
-                "username": "lilmonkeycrazy"
+                "comment_id": "18158495446325176",
+                "parent_id": "17873977170212443",
+                "timestamp": "2024-11-16T22:37:07.000Z",
+                "username": "bdgnphotography"
             },
             {
-                "text": "wrong..mike tyson ACCEPTED 10 million to fight 💀",
-                "likes": 25,
+                "text": "@samgolbach w Sam",
+                "likes": 3,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18113857756452515",
-                "parent_id": "17849834802398163",
-                "timestamp": "2025-02-08T03:35:37.000Z",
-                "username": "kyle_m49"
+                "comment_id": "18006372782673856",
+                "parent_id": "17873977170212443",
+                "timestamp": "2024-11-16T22:43:04.000Z",
+                "username": "emmit_skj"
             },
             {
-                "text": "@kyle_m49 10 million and  he has to lose 🤣",
-                "likes": 10,
+                "text": "@samgolbach sup sam!",
+                "likes": 2,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17866134120315902",
-                "parent_id": "17849834802398163",
-                "timestamp": "2025-02-08T04:43:09.000Z",
-                "username": "hane_5.0"
+                "comment_id": "18086928415513680",
+                "parent_id": "17873977170212443",
+                "timestamp": "2024-11-16T22:45:27.000Z",
+                "username": "lyndon1240"
             },
             {
-                "text": "@amithouston and still your here",
+                "text": "@samgolbach wsg sam",
+                "likes": 2,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17956670720837427",
+                "parent_id": "17873977170212443",
+                "timestamp": "2024-11-16T23:05:44.000Z",
+                "username": "darth_vader668"
+            },
+            {
+                "text": "@samgolbach hi Sam",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18154501459347623",
-                "parent_id": "17849834802398163",
-                "timestamp": "2025-02-08T04:50:20.000Z",
-                "username": "mm.oniique"
+                "comment_id": "18081823369555949",
+                "parent_id": "17873977170212443",
+                "timestamp": "2024-11-16T23:10:19.000Z",
+                "username": "rayy_dizzle"
             },
             {
-                "text": "@kyle_m49 agree",
+                "text": "@samgolbach ilyyy 😭",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17898330810133646",
-                "parent_id": "17849834802398163",
-                "timestamp": "2025-02-08T04:50:34.000Z",
-                "username": "mm.oniique"
+                "comment_id": "18042530417274753",
+                "parent_id": "17873977170212443",
+                "timestamp": "2024-11-17T00:15:41.000Z",
+                "username": "briannaxhz"
             },
             {
-                "text": "@amithouston 🤡",
-                "likes": 1,
+                "text": "@samgolbach he beat up a retired sweet old man, nothing to brag about",
+                "likes": 6,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17892887286173432",
-                "parent_id": "17849834802398163",
-                "timestamp": "2025-02-08T08:44:31.000Z",
-                "username": "just__juss__"
+                "comment_id": "17946923522873319",
+                "parent_id": "17873977170212443",
+                "timestamp": "2024-11-17T00:30:49.000Z",
+                "username": "lill_hunnyy"
             },
             {
-                "text": "@amithouston No we dont",
+                "text": "@samgolbach Sam",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18056794880045000",
-                "parent_id": "17849834802398163",
-                "timestamp": "2025-02-08T11:01:32.000Z",
-                "username": "samuel.rintala"
+                "comment_id": "17857891788246227",
+                "parent_id": "17873977170212443",
+                "timestamp": "2024-11-17T00:38:53.000Z",
+                "username": "tbhhayley"
             },
             {
-                "text": "@amithouston So explain how he lost to fury. Lol.",
-                "likes": 1,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "17867139936315307",
-                "parent_id": "17849834802398163",
-                "timestamp": "2025-02-08T12:34:26.000Z",
-                "username": "jzkddkdidi"
-            },
-            {
-                "text": "@amithouston Like do people forget he literally lost to a smaller name boxer.... with a smaller net worth... in Tommy Fury... a guy with no legacy of his own... if anyone should have rigged a fight, it wouldve been him. Turns out, Jake lost a SD.... so hows it all rigged?",
+                "text": "@samgolbach hii sam",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18128710537402933",
-                "parent_id": "17849834802398163",
-                "timestamp": "2025-02-08T12:35:27.000Z",
-                "username": "jzkddkdidi"
+                "comment_id": "18053045842941102",
+                "parent_id": "17873977170212443",
+                "timestamp": "2024-11-17T00:44:18.000Z",
+                "username": "sarahelisabeth3"
             },
             {
-                "text": "@amithouston hater 😂",
+                "text": "@samgolbach LY",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18058720975971149",
-                "parent_id": "17849834802398163",
-                "timestamp": "2025-02-08T13:29:05.000Z",
-                "username": "viperenation"
+                "comment_id": "18065737417705156",
+                "parent_id": "17873977170212443",
+                "timestamp": "2024-11-17T00:51:03.000Z",
+                "username": "stvrniolotr"
             },
             {
-                "text": "@amithouston bet on them then",
-                "likes": 1,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18062744542907265",
-                "parent_id": "17849834802398163",
-                "timestamp": "2025-02-08T15:13:13.000Z",
-                "username": "seifsoudy"
-            },
-            {
-                "text": "@amithouston that’s illegal",
+                "text": "@samgolbach REAL. 😂",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18050279420134589",
-                "parent_id": "17849834802398163",
-                "timestamp": "2025-02-08T16:49:14.000Z",
-                "username": "quail.638722"
+                "comment_id": "17915842743009908",
+                "parent_id": "17873977170212443",
+                "timestamp": "2024-11-21T09:48:49.000Z",
+                "username": "ashton.morley.7"
             },
             {
-                "text": "@amithouston he do fake people need to dtop supporting his fske fights",
+                "text": "@samgolbach where Colby lol 😂",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17893045746071919",
-                "parent_id": "17849834802398163",
-                "timestamp": "2025-02-08T19:36:08.000Z",
-                "username": "monstamind101"
-            },
-            {
-                "text": "@amithouston that part!!!!",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "17923906952915921",
-                "parent_id": "17849834802398163",
-                "timestamp": "2025-02-09T00:34:01.000Z",
-                "username": "nessa_rez"
+                "comment_id": "17945945957870227",
+                "parent_id": "17873977170212443",
+                "timestamp": "2024-11-23T17:43:13.000Z",
+                "username": "420_pot_memes"
             }
         ]
     },
@@ -908,180 +1029,345 @@
         "conversation_id": "conversation_6",
         "comments": [
             {
-                "text": "Team Canelo ~~~~~~~~~~~~~~~~~~~~~>🇲🇽",
-                "likes": 4005,
-                "replies_count": 27,
+                "text": "Fight real boxers in their prime",
+                "likes": 13114,
+                "replies_count": 305,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17923705514915385",
+                "comment_id": "18019816520632359",
                 "parent_id": null,
-                "timestamp": "2025-02-08T02:36:15.000Z",
-                "username": "fit11_eg"
+                "timestamp": "2024-11-16T22:25:42.000Z",
+                "username": "peterrvaldezz"
             },
             {
-                "text": "@fit11_eg nope",
-                "likes": 5,
+                "text": "@peterrvaldezz Logan did and got whooped",
+                "likes": 281,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18070996027748278",
-                "parent_id": "17923705514915385",
-                "timestamp": "2025-02-08T04:50:05.000Z",
-                "username": "mm.oniique"
+                "comment_id": "17880949815175730",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-16T22:29:53.000Z",
+                "username": "nik.nik.__"
             },
             {
-                "text": "@fit11_eg team Benavidez —>",
-                "likes": 8,
+                "text": "@peterrvaldezz I agree",
+                "likes": 42,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18486751711033366",
-                "parent_id": "17923705514915385",
-                "timestamp": "2025-02-08T05:05:28.000Z",
-                "username": "shotswjay"
+                "comment_id": "18051487267810634",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-16T22:30:40.000Z",
+                "username": "itsdjxplicit"
             },
             {
-                "text": "@fit11_eg Jake would knock canelo out bub 😂 there’s a reason he’s ducking he scared",
+                "text": "@nik.nik.__ exactly",
+                "likes": 23,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18091050427499190",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-16T22:30:42.000Z",
+                "username": "peterrvaldezz"
+            },
+            {
+                "text": "@nik.nik.__ And Jake",
+                "likes": 24,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18075875995581060",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-16T22:52:33.000Z",
+                "username": "barber0505"
+            },
+            {
+                "text": "@peterrvaldezz exactly! Like to see him try Ryan Rozicki.. his teeth would be on the mat .",
+                "likes": 36,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18058207072852818",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T00:50:42.000Z",
+                "username": "caper09"
+            },
+            {
+                "text": "@nik.nik.__ that’s why he switched to WWE lmao boxing wasn’t for him",
+                "likes": 36,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18320529286087689",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T01:34:56.000Z",
+                "username": "angelos.hyseni"
+            },
+            {
+                "text": "@peterrvaldezz drink prime",
+                "likes": 3977,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17925515747978630",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T02:36:16.000Z",
+                "username": "loganpaul"
+            },
+            {
+                "text": "@loganpaul 😂",
+                "likes": 55,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18038922128218770",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T02:36:36.000Z",
+                "username": "runitup_qui"
+            },
+            {
+                "text": "@loganpaul  seriously bruh in India it's rare to get",
+                "likes": 27,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18048230321021320",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T02:37:03.000Z",
+                "username": "the_luffy_708"
+            },
+            {
+                "text": "@the_luffy_708 launch it in india too bro",
+                "likes": 16,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17924640716881672",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T02:37:17.000Z",
+                "username": "the_luffy_708"
+            },
+            {
+                "text": "@the_luffy_708 where were you sigma male when they recently came and launched in India 😂😂",
+                "likes": 16,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18044466944491546",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T02:38:29.000Z",
+                "username": "rak_5102"
+            },
+            {
+                "text": "@the_luffy_708 they did already bro 😂",
+                "likes": 12,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17897973993027862",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T02:38:39.000Z",
+                "username": "alexanderwcobb"
+            },
+            {
+                "text": "@loganpaul noob",
+                "likes": 4,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18044474443912991",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T02:40:57.000Z",
+                "username": "dyldeyvelldron"
+            },
+            {
+                "text": "@loganpaul 😂",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18042150943950675",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T02:41:34.000Z",
+                "username": "s_t_e_v_i_n_151"
+            },
+            {
+                "text": "@peterrvaldezz see that’s the difference Floyd was still good at. Boxing compared to Mike",
+                "likes": 2,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18046821113488733",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T02:43:10.000Z",
+                "username": "da_realjay19"
+            },
+            {
+                "text": "@loganpaul goof",
+                "likes": 2,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18041554367512559",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T02:43:20.000Z",
+                "username": "_keizyyy_"
+            },
+            {
+                "text": "@da_realjay19 yeah i definitely give Logan more props than Jake but Flyod was way out of his prime as well for that fight",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18250571674282552",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T02:46:59.000Z",
+                "username": "peterrvaldezz"
+            },
+            {
+                "text": "@loganpaul he still didn’t pay up yet🤦🏾‍♂️",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18091309282503451",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T02:47:05.000Z",
+                "username": "hs.bullies_inc"
+            },
+            {
+                "text": "@loganpaul ada goomala 😂",
                 "likes": 1,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17939589743971953",
-                "parent_id": "17923705514915385",
-                "timestamp": "2025-02-08T06:00:10.000Z",
-                "username": "aidanc122"
+                "comment_id": "17920371929899161",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T02:54:40.000Z",
+                "username": "pk_creation2408"
             },
             {
-                "text": "@aidanc122 he ducked bc Jake isn’t worth his time💀🤣🤣 Jake isn’t knocking out canelo buddy get out of here",
-                "likes": 3,
+                "text": "@peterrvaldezz he ain’t even beat Floyd",
+                "likes": 4,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18050192315130695",
-                "parent_id": "17923705514915385",
-                "timestamp": "2025-02-08T06:39:13.000Z",
-                "username": "eliezerjr_321"
+                "comment_id": "17924456333882901",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T02:56:57.000Z",
+                "username": "ray_haz30"
             },
             {
-                "text": "Yeah Igh bub Jake would’ve got him more money then any of those fights. And Ong Jake would win, we got that Ohio blood bro u can’t relate lol",
+                "text": "@loganpaul send it to me 🥲",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18038135141524093",
-                "parent_id": "17923705514915385",
-                "timestamp": "2025-02-08T06:40:17.000Z",
-                "username": "aidanc122"
+                "comment_id": "18130884235344246",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T03:00:10.000Z",
+                "username": "azimrabys"
             },
             {
-                "text": "^",
+                "text": "@loganpaul 🤣🤣🤣",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17896165818148605",
-                "parent_id": "17923705514915385",
-                "timestamp": "2025-02-08T06:40:52.000Z",
-                "username": "aidanc122"
+                "comment_id": "17901884040074278",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T03:20:12.000Z",
+                "username": "stonner_yinks"
             },
             {
-                "text": "@aidanc122 😂😂 no sabes nada de box 🤣🌶️🌶️",
+                "text": "@peterrvaldezz he didn’t really claim he’s a boxer tho so 🤷‍♀️",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17883800430124660",
-                "parent_id": "17923705514915385",
-                "timestamp": "2025-02-08T06:42:47.000Z",
-                "username": "brian23lv"
+                "comment_id": "18031702205371005",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T03:21:18.000Z",
+                "username": "xs71mx"
             },
             {
-                "text": "@fit11_eg Jake would dog walk u bro 😂 all that muscle for what. Stick to wrestling brotha",
+                "text": "@loganpaul 🤣",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18054085604286146",
-                "parent_id": "17923705514915385",
-                "timestamp": "2025-02-08T06:42:56.000Z",
-                "username": "aidanc122"
+                "comment_id": "17949501032887452",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T03:21:50.000Z",
+                "username": "mcgocklinn"
             },
             {
-                "text": "@fit11_eg and u do testosterone bro ur nun special I know ppl who do it lol",
+                "text": "@loganpaul u drink it",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18083258965599336",
-                "parent_id": "17923705514915385",
-                "timestamp": "2025-02-08T06:43:39.000Z",
-                "username": "aidanc122"
+                "comment_id": "18055008121746135",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T03:22:49.000Z",
+                "username": "therealkareemhere"
             },
             {
-                "text": "@brian23lv me no speak Spanish punta",
+                "text": "@loganpaul 😂",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17861123376344566",
-                "parent_id": "17923705514915385",
-                "timestamp": "2025-02-08T06:44:17.000Z",
-                "username": "aidanc122"
+                "comment_id": "17972865896657929",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T03:23:42.000Z",
+                "username": "evoxkp"
             },
             {
-                "text": "@aidanc122  jajaja  I speak English but I don't waste my time with ignorant people blood dumb 💀🇲🇽",
+                "text": "@loganpaul 😂😂",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18240413743303300",
-                "parent_id": "17923705514915385",
-                "timestamp": "2025-02-08T06:46:47.000Z",
-                "username": "brian23lv"
+                "comment_id": "18021366278547391",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T03:30:13.000Z",
+                "username": "o.mar.r"
             },
             {
-                "text": "@brian23lv I fw Mexicans but canelo ducking bub",
+                "text": "@loganpaul 😭🤣",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18059704354940096",
-                "parent_id": "17923705514915385",
-                "timestamp": "2025-02-08T06:48:27.000Z",
-                "username": "aidanc122"
+                "comment_id": "17999163353527913",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T03:42:30.000Z",
+                "username": "sa_realtor.scott"
             },
             {
-                "text": "@fit11_eg 👎🏽",
+                "text": "@loganpaul hahahaha goddamn it Logan",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17910885761979554",
-                "parent_id": "17923705514915385",
-                "timestamp": "2025-02-08T07:00:51.000Z",
-                "username": "marcos_wpty507"
+                "comment_id": "17955722708839276",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T03:45:28.000Z",
+                "username": "eldanmakabre"
             },
             {
-                "text": "@aidanc122 didn't jake lose to an actual boxer and after that he went to fighting retirement MMA/UFC fighter",
-                "likes": 1,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18077734198568903",
-                "parent_id": "17923705514915385",
-                "timestamp": "2025-02-08T08:17:32.000Z",
-                "username": "ishmalien"
-            },
-            {
-                "text": "@ishmalien it was in between but yes 😂 washed, boxer and back to washed",
+                "text": "@loganpaul 🤣",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18056436161020629",
-                "parent_id": "17923705514915385",
-                "timestamp": "2025-02-08T09:11:45.000Z",
-                "username": "lift_heavy831"
+                "comment_id": "17843011656361860",
+                "parent_id": "18019816520632359",
+                "timestamp": "2024-11-17T03:46:09.000Z",
+                "username": "biaklawma_hc"
             }
         ]
     },
@@ -1089,59 +1375,345 @@
         "conversation_id": "conversation_7",
         "comments": [
             {
-                "text": "Inga tu madre button ~~~~~>",
-                "likes": 1207,
-                "replies_count": 4,
+                "text": "WHEN THE PAULS GET OLD I WANT TO SEE YOUNG PEOPLE FIGHT THE OLD PAULS.",
+                "likes": 24568,
+                "replies_count": 74,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17843969868419250",
+                "comment_id": "18072625204553483",
                 "parent_id": null,
-                "timestamp": "2025-02-08T04:26:31.000Z",
-                "username": "cbluhmo"
+                "timestamp": "2024-11-16T22:25:56.000Z",
+                "username": "bushgreen260"
             },
             {
-                "text": "@cbluhmo 😂😂😂😂",
+                "text": "@bushgreen260 ‼️‼️‼️‼️",
+                "likes": 123,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17852748306329918",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-16T22:39:09.000Z",
+                "username": "yaya_dezzii"
+            },
+            {
+                "text": "@bushgreen260 facts lol",
+                "likes": 117,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18081050008494601",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-16T22:51:21.000Z",
+                "username": "jen_92_jen"
+            },
+            {
+                "text": "@bushgreen260 exactly",
+                "likes": 42,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17869407030165102",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-16T22:57:04.000Z",
+                "username": "m_sarmad11"
+            },
+            {
+                "text": "@bushgreen260 didn't even think about that. They better not back down 😂",
+                "likes": 154,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17886267021148658",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-16T23:21:53.000Z",
+                "username": "itsyou.moses"
+            },
+            {
+                "text": "@bushgreen260 I’m game too lbs",
+                "likes": 8,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18085475413523762",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-16T23:31:16.000Z",
+                "username": "joshhill_25"
+            },
+            {
+                "text": "@bushgreen260 I want to fight them now",
                 "likes": 2,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18089994691489726",
-                "parent_id": "17843969868419250",
-                "timestamp": "2025-02-08T21:15:39.000Z",
-                "username": "carlesdumont"
+                "comment_id": "17968697426805412",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-16T23:33:26.000Z",
+                "username": "pedritohdavids"
             },
             {
-                "text": "@s.r.t2000__ 🤣",
+                "text": "@bushgreen260 hahah I was thinking the same 🥊",
+                "likes": 2,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17995606136552230",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-16T23:35:39.000Z",
+                "username": "mcknight_jr5"
+            },
+            {
+                "text": "@bushgreen260 @momostates",
+                "likes": 2,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18051923875794634",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-16T23:37:06.000Z",
+                "username": "matthew.piccolo"
+            },
+            {
+                "text": "@bushgreen260 fax",
                 "likes": 1,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18011924375693960",
-                "parent_id": "17843969868419250",
-                "timestamp": "2025-02-08T22:20:43.000Z",
-                "username": "bryan_pedraza208"
+                "comment_id": "17855764653314111",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T00:02:08.000Z",
+                "username": "elias_04_sandberg"
             },
             {
-                "text": "@carlesdumont pos si , a oídos tercos palabras necias 🇲🇽",
-                "likes": 2,
+                "text": "@bushgreen260 hahahahahah",
+                "likes": 1,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18080253658553334",
-                "parent_id": "17843969868419250",
-                "timestamp": "2025-02-09T08:38:51.000Z",
-                "username": "cbluhmo"
+                "comment_id": "17966097131815498",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T00:03:53.000Z",
+                "username": "juliocm._"
             },
             {
-                "text": "@cbluhmo let’s include put0",
+                "text": "@bushgreen260 me too",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18038513996016488",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T00:05:35.000Z",
+                "username": "iam.kidking"
+            },
+            {
+                "text": "@bushgreen260 that part",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18067719529656740",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T00:07:17.000Z",
+                "username": "artxbautista"
+            },
+            {
+                "text": "@bushgreen260 I was just thinking that",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17961457916821581",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T00:13:43.000Z",
+                "username": "javisszn"
+            },
+            {
+                "text": "@bushgreen260 Well, if the bag is huge I am sure they will be up to it",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17933799869834857",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T00:19:21.000Z",
+                "username": "el.m.latino"
+            },
+            {
+                "text": "@bushgreen260 😂😂😂",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18077499793632002",
-                "parent_id": "17843969868419250",
-                "timestamp": "2025-02-10T20:43:19.000Z",
-                "username": "amie_txp"
+                "comment_id": "18000683135699998",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T00:19:36.000Z",
+                "username": "mattdallasmusic"
+            },
+            {
+                "text": "@bushgreen260 if they get old *wink*",
+                "likes": 3,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18087189778517351",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T00:20:31.000Z",
+                "username": "homer679_"
+            },
+            {
+                "text": "@bushgreen260 😂😭",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18013867022409473",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T00:20:57.000Z",
+                "username": "its_lindabby"
+            },
+            {
+                "text": "@bushgreen260 true👌🏻",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18026993030580759",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T00:21:34.000Z",
+                "username": "segoviia_99"
+            },
+            {
+                "text": "@bushgreen260 letsgooooo 🤣 so im happy",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18026695151198746",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T00:23:48.000Z",
+                "username": "mr.r3zza"
+            },
+            {
+                "text": "@bushgreen260 for $20 mil I think they will happily take the fight",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18469678486045843",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T00:35:29.000Z",
+                "username": "jasons_lacki"
+            },
+            {
+                "text": "@bushgreen260 sign me up",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18044360198119618",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T00:48:59.000Z",
+                "username": "burnz.101"
+            },
+            {
+                "text": "@bushgreen260 they will deny",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17859362229283900",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T01:16:50.000Z",
+                "username": "justinn.v3"
+            },
+            {
+                "text": "@bushgreen260 this right here",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17998017887530416",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T01:20:49.000Z",
+                "username": "erictlove"
+            },
+            {
+                "text": "@bushgreen260 facts",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18023946338281897",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T02:01:04.000Z",
+                "username": "theoneandonlyj5"
+            },
+            {
+                "text": "so you wanna see 60 yr old jake paul pay to win a fight against a young fighter in his prime? 🤣🤣",
+                "likes": 3,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18068652343654887",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T02:36:56.000Z",
+                "username": "matt.grandi"
+            },
+            {
+                "text": "@bushgreen260 Me to brother",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18069557917564844",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T05:36:08.000Z",
+                "username": "marcii_c7"
+            },
+            {
+                "text": "@bushgreen260  I agree",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18041458448322929",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T08:39:40.000Z",
+                "username": "bilalzaher19"
+            },
+            {
+                "text": "@bushgreen260 F** ill do it ill make it so they regret doing it",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18067373545728532",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T09:44:07.000Z",
+                "username": "jackhudson2092_yt"
+            },
+            {
+                "text": "@bushgreen260 🤣👏🥊",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18322448884082343",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T10:27:45.000Z",
+                "username": "cokieznkream"
+            },
+            {
+                "text": "@bushgreen260 👏👏👏",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18005938253671333",
+                "parent_id": "18072625204553483",
+                "timestamp": "2024-11-17T11:13:46.000Z",
+                "username": "ali_a_ziabakhsh"
             }
         ]
     },
@@ -1149,180 +1721,15 @@
         "conversation_id": "conversation_8",
         "comments": [
             {
-                "text": "Crawford vs Canelo will be bigger than your fight with Tyson",
-                "likes": 2882,
-                "replies_count": 56,
+                "text": "👏",
+                "likes": 1,
+                "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18086536372514947",
+                "comment_id": "18071182285694062",
                 "parent_id": null,
-                "timestamp": "2025-02-08T02:31:28.000Z",
-                "username": "luciano_hernandez123"
-            },
-            {
-                "text": "LOL",
-                "likes": 47,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "17865203262323664",
-                "parent_id": "18086536372514947",
-                "timestamp": "2025-02-08T02:36:45.000Z",
-                "username": "jthompson7171"
-            },
-            {
-                "text": "😂😂😂 never in a million years",
-                "likes": 72,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18051318514933797",
-                "parent_id": "18086536372514947",
-                "timestamp": "2025-02-08T02:40:27.000Z",
-                "username": "dannyphantom.32"
-            },
-            {
-                "text": "It’s on PPV. They’ll have to sell 60 million PPVs😂60 million people watched Jake fight. Canelo will never top that😂",
-                "likes": 46,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18065315212853557",
-                "parent_id": "18086536372514947",
-                "timestamp": "2025-02-08T02:56:42.000Z",
-                "username": "theprosportsanalyst"
-            },
-            {
-                "text": "Idk about that Crawford doesn’t sell if anything it would be Canelo people wanna see if he losing it",
-                "likes": 1,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18036670349611027",
-                "parent_id": "18086536372514947",
-                "timestamp": "2025-02-08T03:04:51.000Z",
-                "username": "richgodace"
-            },
-            {
-                "text": "@theprosportsanalyst comparing live viewers to PPV numbers 😂 Jake did 60k against Mike Perry",
-                "likes": 33,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18081662683549475",
-                "parent_id": "18086536372514947",
-                "timestamp": "2025-02-08T03:08:36.000Z",
-                "username": "futureofcombat"
-            },
-            {
-                "text": "It'll be a big fight, no doubt. But it won't top Paul and Tyson. It's unrealistic. Jake smart for partnering with Netflix.",
-                "likes": 14,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "17856094305369101",
-                "parent_id": "18086536372514947",
-                "timestamp": "2025-02-08T03:10:26.000Z",
-                "username": "thatdillonguy"
-            },
-            {
-                "text": "@theprosportsanalyst they watched it because it was given away for free 😂😂",
-                "likes": 11,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18116293573434242",
-                "parent_id": "18086536372514947",
-                "timestamp": "2025-02-08T03:12:34.000Z",
-                "username": "realbrendonreed"
-            },
-            {
-                "text": "Negative",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "17954387624779803",
-                "parent_id": "18086536372514947",
-                "timestamp": "2025-02-08T03:41:38.000Z",
-                "username": "giovanniq001"
-            },
-            {
-                "text": "By Far! 🎯",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "17985674489794893",
-                "parent_id": "18086536372514947",
-                "timestamp": "2025-02-08T03:57:41.000Z",
-                "username": "mr_q_nyc"
-            },
-            {
-                "text": "@thatdillonguy a free fight will always top a PAID fight. Guess why. 🤦🏽‍♂️",
-                "likes": 2,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18489264619014873",
-                "parent_id": "18086536372514947",
-                "timestamp": "2025-02-08T04:01:56.000Z",
-                "username": "mr_q_nyc"
-            },
-            {
-                "text": "Nah ya on crack",
-                "likes": 1,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18081036163554925",
-                "parent_id": "18086536372514947",
-                "timestamp": "2025-02-08T04:50:33.000Z",
-                "username": "iamsunshine1994"
-            },
-            {
-                "text": "no",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18125479945416791",
-                "parent_id": "18086536372514947",
-                "timestamp": "2025-02-08T04:52:26.000Z",
-                "username": "joshgrobler_"
-            },
-            {
-                "text": "And a actual fight 😭",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "17965276622843747",
-                "parent_id": "18086536372514947",
-                "timestamp": "2025-02-08T05:21:42.000Z",
-                "username": "ishme_cdot"
-            },
-            {
-                "text": "Unfortunately it won't. Jake vs tyson literally broke everyone's internet lmao",
-                "likes": 3,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18329210029089505",
-                "parent_id": "18086536372514947",
-                "timestamp": "2025-02-08T06:25:48.000Z",
-                "username": "marcellarivieree"
-            },
-            {
-                "text": "Zero chance",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18330722713082413",
-                "parent_id": "18086536372514947",
-                "timestamp": "2025-02-08T06:26:25.000Z",
-                "username": "beamenace"
+                "timestamp": "2025-02-02T14:57:52.000Z",
+                "username": "sabatinop24"
             }
         ]
     },
@@ -1330,37 +1737,125 @@
         "conversation_id": "conversation_9",
         "comments": [
             {
-                "text": "",
-                "likes": 1394,
-                "replies_count": 4,
+                "text": "why have i seen logan vs jake yet?",
+                "likes": 1285,
+                "replies_count": 19,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18051436544172821",
+                "comment_id": "18044204012169216",
                 "parent_id": null,
-                "timestamp": "2025-02-08T02:30:05.000Z",
-                "username": "anthonysmoke99"
+                "timestamp": "2024-11-16T22:37:52.000Z",
+                "username": "ayo_._saturn"
             },
             {
-                "text": "@anthonysmoke99 😂😂😂😂",
-                "likes": 3,
+                "text": "@ayo_._saturn havent** myb",
+                "likes": 51,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18039361511126902",
-                "parent_id": "18051436544172821",
-                "timestamp": "2025-02-08T03:33:00.000Z",
-                "username": "_gto_cris_"
+                "comment_id": "18077602156604055",
+                "parent_id": "18044204012169216",
+                "timestamp": "2024-11-16T22:38:03.000Z",
+                "username": "ayo_._saturn"
             },
             {
-                "text": "@anthonysmoke99 🇲🇽🇲🇽🇲🇽🇲🇽🇲🇽🇲🇽🇲🇽🇲🇽🇲🇽🇲🇽🇲🇽🇲🇽👏",
+                "text": "@ayo_._saturn oh I don’t know, maybe because there brothers 😯",
+                "likes": 62,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18042864647158710",
+                "parent_id": "18044204012169216",
+                "timestamp": "2024-11-16T22:41:07.000Z",
+                "username": "angelthepeanut"
+            },
+            {
+                "text": "@angelthepeanut itd still be entertaining to see…?",
+                "likes": 23,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18041651770976817",
+                "parent_id": "18044204012169216",
+                "timestamp": "2024-11-16T22:42:11.000Z",
+                "username": "ayo_._saturn"
+            },
+            {
+                "text": "@ayo_._saturn are you slow ?",
+                "likes": 16,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17851874694286573",
+                "parent_id": "18044204012169216",
+                "timestamp": "2024-11-16T22:52:04.000Z",
+                "username": "youngflare1017"
+            },
+            {
+                "text": "@ayo_._saturn we have, but in disstracks",
+                "likes": 20,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18044397311328197",
+                "parent_id": "18044204012169216",
+                "timestamp": "2024-11-16T23:57:41.000Z",
+                "username": "matt.grandi"
+            },
+            {
+                "text": "@ayo_._saturn hasn’t happened",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18024094076274325",
+                "parent_id": "18044204012169216",
+                "timestamp": "2024-11-17T00:10:14.000Z",
+                "username": "aus_the_giant"
+            },
+            {
+                "text": "@ayo_._saturn have you seen Nick Diaz vs Nate Diaz? Or any other fighting brothers??",
                 "likes": 2,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18049870034332573",
-                "parent_id": "18051436544172821",
-                "timestamp": "2025-02-09T19:02:41.000Z",
-                "username": "hr__hernandez"
+                "comment_id": "17938857386941415",
+                "parent_id": "18044204012169216",
+                "timestamp": "2024-11-17T00:13:31.000Z",
+                "username": "alex_vincent23"
+            },
+            {
+                "text": "@ayo_._saturn I think @loganpaul knows he would get destroyed",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18046375682093438",
+                "parent_id": "18044204012169216",
+                "timestamp": "2024-11-17T01:19:48.000Z",
+                "username": "bradenpracht"
+            },
+            {
+                "text": "@ayo_._saturn because it would be the most rigged fight in history",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18038227568220974",
+                "parent_id": "18044204012169216",
+                "timestamp": "2024-11-17T02:40:50.000Z",
+                "username": "fowleowen"
+            },
+            {
+                "text": "@bradenpracht i wanna see it",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18043953877923701",
+                "parent_id": "18044204012169216",
+                "timestamp": "2024-11-17T21:02:51.000Z",
+                "username": "ayo_._saturn"
             }
         ]
     },
@@ -1368,37 +1863,15 @@
         "conversation_id": "conversation_10",
         "comments": [
             {
-                "text": "Stick to your YouTube fighters and leave real boxer alone 🤡",
-                "likes": 485,
-                "replies_count": 2,
+                "text": "Jake Paul vs Logan Paul next",
+                "likes": 57,
+                "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18054720557036888",
+                "comment_id": "18013624439638812",
                 "parent_id": null,
-                "timestamp": "2025-02-08T05:25:53.000Z",
-                "username": "juanelo_ss"
-            },
-            {
-                "text": "",
-                "likes": 5,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18178978777313774",
-                "parent_id": "18054720557036888",
-                "timestamp": "2025-02-08T23:20:40.000Z",
-                "username": "louielouortiz"
-            },
-            {
-                "text": "@juanelo_ss he pays real fighters more and takes a pay cut on his promotions soon 💀💀😭😭",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "17884155096216287",
-                "parent_id": "18054720557036888",
-                "timestamp": "2025-02-09T22:15:57.000Z",
-                "username": "cecileen_davis"
+                "timestamp": "2024-11-19T13:41:10.000Z",
+                "username": "turnublackish"
             }
         ]
     },
@@ -1406,114 +1879,15 @@
         "conversation_id": "conversation_11",
         "comments": [
             {
-                "text": "Salty he messed u abt 😭",
-                "likes": 717,
-                "replies_count": 16,
+                "text": "Next with Joe Biden !!!!",
+                "likes": 27,
+                "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17918089773052562",
+                "comment_id": "18468403216002900",
                 "parent_id": null,
-                "timestamp": "2025-02-08T04:40:57.000Z",
-                "username": "zmrealest"
-            },
-            {
-                "text": "@zmrealest what",
-                "likes": 7,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18050086838327580",
-                "parent_id": "17918089773052562",
-                "timestamp": "2025-02-08T07:04:35.000Z",
-                "username": "anthony.delisa"
-            },
-            {
-                "text": "salty ur a nobody",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18076860238653430",
-                "parent_id": "17918089773052562",
-                "timestamp": "2025-02-08T08:45:56.000Z",
-                "username": "just__juss__"
-            },
-            {
-                "text": "@just__juss__ k😂",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18056566865077842",
-                "parent_id": "17918089773052562",
-                "timestamp": "2025-02-08T09:31:45.000Z",
-                "username": "zmrealest"
-            },
-            {
-                "text": "@zmrealest that’s just bad business but ok brother",
-                "likes": 2,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18016850720487185",
-                "parent_id": "17918089773052562",
-                "timestamp": "2025-02-08T10:37:54.000Z",
-                "username": "jetskiid23"
-            },
-            {
-                "text": "@zmrealest that was Jake's lottery ticket🤣🤣",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18148307449362056",
-                "parent_id": "17918089773052562",
-                "timestamp": "2025-02-08T11:33:31.000Z",
-                "username": "seyi_ldnn"
-            },
-            {
-                "text": "@seyi_ldnn fr😂",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "17885315322210255",
-                "parent_id": "17918089773052562",
-                "timestamp": "2025-02-08T14:24:40.000Z",
-                "username": "zmrealest"
-            },
-            {
-                "text": "@anthony.delisa Anthony Canelo was negotiation with that middle eastern boxing promoter to fight Crawford and Canelo started negotiating with Jake to get a bigger deal with those promoters",
-                "likes": 1,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "17886498687197287",
-                "parent_id": "17918089773052562",
-                "timestamp": "2025-02-09T00:39:34.000Z",
-                "username": "mycraftsmanrealty"
-            },
-            {
-                "text": "@just__juss__ no bs if he a nobody u are too?",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18068722513667891",
-                "parent_id": "17918089773052562",
-                "timestamp": "2025-02-09T00:49:24.000Z",
-                "username": "anthony.delisa"
-            },
-            {
-                "text": "@anthony.delisa u as well. it’s a circle",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "17955168131873903",
-                "parent_id": "17918089773052562",
-                "timestamp": "2025-02-09T01:11:58.000Z",
-                "username": "just__juss__"
+                "timestamp": "2024-11-17T23:16:45.000Z",
+                "username": "marcomorgantini"
             }
         ]
     },
@@ -1521,37 +1895,48 @@
         "conversation_id": "conversation_12",
         "comments": [
             {
-                "text": "bro just fought a 58 year old 😭😭",
-                "likes": 531,
-                "replies_count": 3,
+                "text": "Izazovi Bajdena sledecu 👏",
+                "likes": 69,
+                "replies_count": 4,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17933898395989887",
+                "comment_id": "18465412897052040",
                 "parent_id": null,
-                "timestamp": "2025-02-08T02:33:24.000Z",
-                "username": "alfonso.young"
+                "timestamp": "2024-11-16T23:06:11.000Z",
+                "username": "serbiangamesbl_yt"
             },
             {
-                "text": "@alfonso.young !!!!!!!",
-                "likes": 1,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "17883228876125672",
-                "parent_id": "17933898395989887",
-                "timestamp": "2025-02-08T22:34:05.000Z",
-                "username": "jackie_gto"
-            },
-            {
-                "text": "@alfonso.young No respect",
+                "text": "@serbiangamesbl_yt too serbo",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18050041571324154",
-                "parent_id": "17933898395989887",
-                "timestamp": "2025-02-11T02:19:05.000Z",
-                "username": "libro.del.cartel"
+                "comment_id": "18113159212424500",
+                "parent_id": "18465412897052040",
+                "timestamp": "2024-11-16T23:26:21.000Z",
+                "username": "petr.ovich034"
+            },
+            {
+                "text": "@serbiangamesbl_yt serbian sigma games bl",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18047157356079644",
+                "parent_id": "18465412897052040",
+                "timestamp": "2024-11-16T23:26:47.000Z",
+                "username": "zivicbrate"
+            },
+            {
+                "text": "@serbiangamesbl_yt serbo najaci",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18011983931454527",
+                "parent_id": "18465412897052040",
+                "timestamp": "2024-11-17T12:49:43.000Z",
+                "username": "cimpraaaaa"
             }
         ]
     },
@@ -1559,70 +1944,103 @@
         "conversation_id": "conversation_13",
         "comments": [
             {
-                "text": "Jake talking down on ppl when his fight between Mike Tyson was all scripted 😂",
-                "likes": 1227,
-                "replies_count": 8,
+                "text": "You really proud of this bullshit? Whats next? You vs the corpse of Muhammed Ali?",
+                "likes": 3004,
+                "replies_count": 17,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18461636218071069",
+                "comment_id": "17900805849084038",
                 "parent_id": null,
-                "timestamp": "2025-02-08T02:57:35.000Z",
-                "username": "screenslaviervillainous"
+                "timestamp": "2024-11-16T22:43:34.000Z",
+                "username": "cebi"
             },
             {
-                "text": "And Mike was there also so ?",
+                "text": "@cebi crazy how you mad but looked under his post lollllll",
+                "likes": 9,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17913020790019421",
+                "parent_id": "17900805849084038",
+                "timestamp": "2024-11-16T22:53:12.000Z",
+                "username": "jamoney_c"
+            },
+            {
+                "text": "@cebi that’s a good one actually",
+                "likes": 27,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17991581873726839",
+                "parent_id": "17900805849084038",
+                "timestamp": "2024-11-16T23:08:49.000Z",
+                "username": "emmaterryx"
+            },
+            {
+                "text": "@cebi me n my guys was just sayin that",
+                "likes": 6,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17846551023332646",
+                "parent_id": "17900805849084038",
+                "timestamp": "2024-11-16T23:12:08.000Z",
+                "username": "iamjaketrent"
+            },
+            {
+                "text": "@cebi what have you done in your life worth mentioning 😂",
+                "likes": 4,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18036568946203039",
+                "parent_id": "17900805849084038",
+                "timestamp": "2024-11-16T23:19:57.000Z",
+                "username": "keeble_yannick"
+            },
+            {
+                "text": "@cebi @johnmichaeldasilva you called it",
                 "likes": 3,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17986921550739350",
-                "parent_id": "18461636218071069",
-                "timestamp": "2025-02-08T04:52:21.000Z",
-                "username": "mm.oniique"
+                "comment_id": "18033589397360401",
+                "parent_id": "17900805849084038",
+                "timestamp": "2024-11-17T04:24:03.000Z",
+                "username": "grant671"
             },
             {
-                "text": "Pelea con puro abuelo quien no",
-                "likes": 2,
+                "text": "@cebi @mcoronaz 😭😭😭😭",
+                "likes": 1,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18052475681326632",
-                "parent_id": "18461636218071069",
-                "timestamp": "2025-02-08T05:03:33.000Z",
-                "username": "cristiansauri"
+                "comment_id": "17911616496021588",
+                "parent_id": "17900805849084038",
+                "timestamp": "2024-11-17T05:48:08.000Z",
+                "username": "minnyyy888"
             },
             {
-                "text": "And make him sign a no agression clause, idk who was in that ring that night, but it wasn't Mike fr",
-                "likes": 8,
+                "text": "@emmaterryx 🤣🤣",
+                "likes": 1,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17939650715958359",
-                "parent_id": "18461636218071069",
-                "timestamp": "2025-02-08T08:06:04.000Z",
-                "username": "duzgouveia"
+                "comment_id": "18026896697526696",
+                "parent_id": "17900805849084038",
+                "timestamp": "2024-11-17T16:28:38.000Z",
+                "username": "mintyrigden"
             },
             {
-                "text": "He makes money 💰",
+                "text": "@cebi His answer would be drink prime 🤣",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18005519174707038",
-                "parent_id": "18461636218071069",
-                "timestamp": "2025-02-08T12:25:44.000Z",
-                "username": "jakes.strauss"
-            },
-            {
-                "text": "🤣🤣🤣",
-                "likes": 0,
-                "replies_count": 0,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18039412850596029",
-                "parent_id": "18461636218071069",
-                "timestamp": "2025-02-08T13:02:08.000Z",
-                "username": "1wave_djs"
+                "comment_id": "18068601250641653",
+                "parent_id": "17900805849084038",
+                "timestamp": "2024-11-17T18:01:52.000Z",
+                "username": "latomika_00"
             }
         ]
     },
@@ -1630,15 +2048,15 @@
         "conversation_id": "conversation_14",
         "comments": [
             {
-                "text": "That ain’t a real signature 😂nice try diddy",
-                "likes": 1006,
-                "replies_count": 4,
+                "text": "You next Logan 😂😂",
+                "likes": 4,
+                "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "17943537977824812",
+                "comment_id": "18117444508407245",
                 "parent_id": null,
-                "timestamp": "2025-02-08T02:43:43.000Z",
-                "username": "honda_ek9felix"
+                "timestamp": "2024-11-17T03:02:09.000Z",
+                "username": "drezd_boi"
             }
         ]
     },
@@ -1646,26 +2064,15 @@
         "conversation_id": "conversation_15",
         "comments": [
             {
-                "text": "",
-                "likes": 31,
-                "replies_count": 1,
-                "sentiment": null,
-                "topic": null,
-                "comment_id": "18108409438422342",
-                "parent_id": null,
-                "timestamp": "2025-02-10T11:44:34.000Z",
-                "username": "anat_dayan_"
-            },
-            {
-                "text": "@anat_dayan_ 🇵🇸🇵🇸🇵🇸🇵🇸🇵🇸🇵🇸",
-                "likes": 1,
+                "text": "This is not a picture to be proud of.. 👎🏼",
+                "likes": 49,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "18038002130148182",
-                "parent_id": "18108409438422342",
-                "timestamp": "2025-02-11T01:39:34.000Z",
-                "username": "miss_dee2023"
+                "comment_id": "18270096448247669",
+                "parent_id": null,
+                "timestamp": "2024-11-21T15:25:44.000Z",
+                "username": "supneo_"
             }
         ]
     },
@@ -1673,15 +2080,459 @@
         "conversation_id": "conversation_16",
         "comments": [
             {
-                "text": "",
+                "text": "Jake fighting Muhammad Ali next?",
+                "likes": 17,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18051612226993009",
+                "parent_id": null,
+                "timestamp": "2024-11-19T00:18:02.000Z",
+                "username": "ethan.bluemer.14"
+            }
+        ]
+    },
+    "conversation_17": {
+        "conversation_id": "conversation_17",
+        "comments": [
+            {
+                "text": "“Hm, how to make my brothers event about me…”",
+                "likes": 33,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17933197106959014",
+                "parent_id": null,
+                "timestamp": "2024-11-16T23:23:26.000Z",
+                "username": "lx_koch"
+            }
+        ]
+    },
+    "conversation_18": {
+        "conversation_id": "conversation_18",
+        "comments": [
+            {
+                "text": "Love from India 🥊",
+                "likes": 7,
+                "replies_count": 4,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18259176202269895",
+                "parent_id": null,
+                "timestamp": "2024-11-17T03:04:54.000Z",
+                "username": "ig_mr.tomboy"
+            },
+            {
+                "text": "@ig_mr.tomboy for winning against 60 year old grandpa 😭😭?",
+                "likes": 10,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17876862210194441",
+                "parent_id": "18259176202269895",
+                "timestamp": "2024-11-17T03:28:22.000Z",
+                "username": "_fadh__y"
+            },
+            {
+                "text": "@ig_mr.tomboy 0% boxing knowledge,better playing pes",
+                "likes": 3,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17851043391338474",
+                "parent_id": "18259176202269895",
+                "timestamp": "2024-11-17T04:17:53.000Z",
+                "username": "sarang__ks"
+            }
+        ]
+    },
+    "conversation_19": {
+        "conversation_id": "conversation_19",
+        "comments": [
+            {
+                "text": "Y’all should fight each other",
+                "likes": 10,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18026112671236632",
+                "parent_id": null,
+                "timestamp": "2024-11-17T21:44:47.000Z",
+                "username": "donignaciom"
+            }
+        ]
+    },
+    "conversation_20": {
+        "conversation_id": "conversation_20",
+        "comments": [
+            {
+                "text": "🤣😂",
+                "likes": 8,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18051348991944488",
+                "parent_id": null,
+                "timestamp": "2024-11-19T21:05:26.000Z",
+                "username": "aljosa_cerovina_king__"
+            }
+        ]
+    },
+    "conversation_21": {
+        "conversation_id": "conversation_21",
+        "comments": [
+            {
+                "text": "Mike tyson was in his prime and champ 9 years before jake paul was born. Impressive 🙄",
+                "likes": 24,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18036288281205429",
+                "parent_id": null,
+                "timestamp": "2024-11-17T18:54:39.000Z",
+                "username": "ezios_15"
+            }
+        ]
+    },
+    "conversation_22": {
+        "conversation_id": "conversation_22",
+        "comments": [
+            {
+                "text": "Next fight: jake paul VS Joe Biden😂",
+                "likes": 14,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18060893935837459",
+                "parent_id": null,
+                "timestamp": "2024-11-17T13:53:30.000Z",
+                "username": "feliix.ar"
+            }
+        ]
+    },
+    "conversation_23": {
+        "conversation_id": "conversation_23",
+        "comments": [
+            {
+                "text": "Didn't peep, both of you guys had the same font on your shorts",
+                "likes": 6,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18141632392360038",
+                "parent_id": null,
+                "timestamp": "2024-11-16T22:25:06.000Z",
+                "username": "marcflamez"
+            }
+        ]
+    },
+    "conversation_24": {
+        "conversation_id": "conversation_24",
+        "comments": [
+            {
+                "text": "Atleast jake beat his old man 🤣",
+                "likes": 16,
+                "replies_count": 1,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17982474284765024",
+                "parent_id": null,
+                "timestamp": "2024-11-16T22:25:52.000Z",
+                "username": "shawn_meb_2760"
+            },
+            {
+                "text": "@shawn_meb_2760 elder",
+                "likes": 2,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18047203463023049",
+                "parent_id": "17982474284765024",
+                "timestamp": "2024-11-16T22:30:42.000Z",
+                "username": "madibogo8"
+            }
+        ]
+    },
+    "conversation_25": {
+        "conversation_id": "conversation_25",
+        "comments": [
+            {
+                "text": "“ the fixed brothers “",
+                "likes": 12,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18054069913757989",
+                "parent_id": null,
+                "timestamp": "2024-11-18T13:47:16.000Z",
+                "username": "jarrah.kleinig"
+            }
+        ]
+    },
+    "conversation_26": {
+        "conversation_id": "conversation_26",
+        "comments": [
+            {
+                "text": "Insane",
+                "likes": 43,
+                "replies_count": 5,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17999046014701826",
+                "parent_id": null,
+                "timestamp": "2024-11-16T22:37:31.000Z",
+                "username": "drewgulak"
+            },
+            {
+                "text": "@drewgulak i think you should have a match with logan in wwe for the United states champion Dream match there",
+                "likes": 2,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18030038546161383",
+                "parent_id": "17999046014701826",
+                "timestamp": "2024-11-17T03:09:51.000Z",
+                "username": "brad_dutton130"
+            },
+            {
+                "text": "@brad_dutton130 LOLLLLLLL",
+                "likes": 7,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17922894062995704",
+                "parent_id": "17999046014701826",
+                "timestamp": "2024-11-17T03:22:42.000Z",
+                "username": "drewgulak"
+            },
+            {
+                "text": "Right so logan isn't the champ any more 😂",
                 "likes": 0,
                 "replies_count": 0,
                 "sentiment": null,
                 "topic": null,
-                "comment_id": "",
+                "comment_id": "17902758573077523",
+                "parent_id": "17999046014701826",
+                "timestamp": "2024-11-17T04:47:05.000Z",
+                "username": "michaelreadddd"
+            },
+            {
+                "text": "I know i said \"dream match\" la knight is us champ but in future should be logan 2x champ vs drew gulak then drew shocks the world and wins 😎",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17846560176329159",
+                "parent_id": "17999046014701826",
+                "timestamp": "2024-11-17T07:09:56.000Z",
+                "username": "brad_dutton130"
+            },
+            {
+                "text": "Ah fair enough then",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17855262915261799",
+                "parent_id": "17999046014701826",
+                "timestamp": "2024-11-17T07:10:36.000Z",
+                "username": "michaelreadddd"
+            }
+        ]
+    },
+    "conversation_27": {
+        "conversation_id": "conversation_27",
+        "comments": [
+            {
+                "text": "Pretty impressive TBH, know how to manifest 💰🏆",
+                "likes": 173,
+                "replies_count": 24,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18058962046854207",
                 "parent_id": null,
-                "timestamp": "",
-                "username": ""
+                "timestamp": "2024-11-16T23:46:21.000Z",
+                "username": "urijahfaber"
+            },
+            {
+                "text": "@urijahfaber survived a man pushing 60…..real impressive",
+                "likes": 42,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18031807187119135",
+                "parent_id": "18058962046854207",
+                "timestamp": "2024-11-16T23:53:05.000Z",
+                "username": "jm_arnold"
+            },
+            {
+                "text": "@jm_arnold \nMike would stop you in 2 rounds 🤣",
+                "likes": 2,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17931860000952723",
+                "parent_id": "18058962046854207",
+                "timestamp": "2024-11-16T23:55:32.000Z",
+                "username": "gatti.21"
+            },
+            {
+                "text": "@gatti.21 pick up on the obvious sarcasm here genius",
+                "likes": 11,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18030800243148100",
+                "parent_id": "18058962046854207",
+                "timestamp": "2024-11-16T23:58:59.000Z",
+                "username": "jm_arnold"
+            },
+            {
+                "text": "@urijahfaber sounding goofy bro",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18048351881050222",
+                "parent_id": "18058962046854207",
+                "timestamp": "2024-11-17T00:15:45.000Z",
+                "username": "march209_stock"
+            },
+            {
+                "text": "@jm_arnold \nPut down the Big Ego here Genius.\nWhat does sarcasm have to do with Jake being a better fighter than you?🤣🤦🏻‍♂️",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17882275323172113",
+                "parent_id": "18058962046854207",
+                "timestamp": "2024-11-17T00:16:06.000Z",
+                "username": "gatti.21"
+            },
+            {
+                "text": "@march209_stock please explain how professor?",
+                "likes": 2,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18466700434030419",
+                "parent_id": "18058962046854207",
+                "timestamp": "2024-11-17T00:24:18.000Z",
+                "username": "jm_arnold"
+            },
+            {
+                "text": "@urijahfaber Lmao keep quiet next time",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17910848316036590",
+                "parent_id": "18058962046854207",
+                "timestamp": "2024-11-17T01:25:28.000Z",
+                "username": "sruest94"
+            },
+            {
+                "text": "@urijahfaber Urijah come on man",
+                "likes": 1,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17903065266082103",
+                "parent_id": "18058962046854207",
+                "timestamp": "2024-11-17T01:30:48.000Z",
+                "username": "mitchtomsmith"
+            },
+            {
+                "text": "@urijahfaber the marketing was genius. 👏🏻👏🏻",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18076912939586596",
+                "parent_id": "18058962046854207",
+                "timestamp": "2024-11-17T02:06:00.000Z",
+                "username": "lisa.garza"
+            },
+            {
+                "text": "@urijahfaber does it taste good in your mouth ? Meat rider",
+                "likes": 3,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18043760600123769",
+                "parent_id": "18058962046854207",
+                "timestamp": "2024-11-17T02:26:27.000Z",
+                "username": "jmxss44"
+            },
+            {
+                "text": "@urijahfaber all thanks to @joeweller",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18080991382497012",
+                "parent_id": "18058962046854207",
+                "timestamp": "2024-11-17T03:30:30.000Z",
+                "username": "brandonw2882"
+            },
+            {
+                "text": "@urijahfaber he’s not gunna kiss you mate",
+                "likes": 0,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18093966919493624",
+                "parent_id": "18058962046854207",
+                "timestamp": "2024-11-17T13:43:40.000Z",
+                "username": "jaxkwills"
+            }
+        ]
+    },
+    "conversation_28": {
+        "conversation_id": "conversation_28",
+        "comments": [
+            {
+                "text": "Just because you paid for fights.....",
+                "likes": 35,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17885995131138761",
+                "parent_id": null,
+                "timestamp": "2024-11-20T03:29:33.000Z",
+                "username": "ogbluewidow2"
+            }
+        ]
+    },
+    "conversation_29": {
+        "conversation_id": "conversation_29",
+        "comments": [
+            {
+                "text": "Only if they were to let the hands go a bit more especially Logan . Don’t clinch and hug fight more .",
+                "likes": 6,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "18053822819497291",
+                "parent_id": null,
+                "timestamp": "2024-12-29T21:09:46.000Z",
+                "username": "iamksb"
+            }
+        ]
+    },
+    "conversation_30": {
+        "conversation_id": "conversation_30",
+        "comments": [
+            {
+                "text": "Paul vs Paul is what we need to see.",
+                "likes": 3,
+                "replies_count": 0,
+                "sentiment": null,
+                "topic": null,
+                "comment_id": "17875868124196370",
+                "parent_id": null,
+                "timestamp": "2024-11-17T13:30:28.000Z",
+                "username": "trav_elbourne"
             }
         ]
     }
