@@ -121,7 +121,7 @@ def generate_word_clouds():
             plt.figure(figsize=(8, 4))
             plt.imshow(wordcloud, interpolation="bilinear")
             plt.axis("off")
-            plt.title(f"Word Cloud for {sentiment} Sentiment - NO WORDS")
+            plt.title(f"Word Cloud for {sentiment} Sentiment - NIL")
             
             # Save the "NO WORDS" word cloud image
             wordcloud_file = f"data/wordcloud_{sentiment.lower()}.png"
