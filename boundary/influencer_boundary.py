@@ -132,7 +132,7 @@ def post_analysis():
         "directUrls": [post_url],
         "includeNestedComments": True,
         "isNewestComments": False,
-        "resultsLimit": 30
+        "resultsLimit": 50
     }
 
     # Run the Actor and wait for it to finish
