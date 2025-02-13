@@ -9,6 +9,8 @@ from firebase_admin import credentials, storage
 
 #---------------------------------Gemini API------------------------
 from boundary.influencer_ai_summary import process_ai_summary
+from boundary.influencer_ai_summary import GeminiAPI
+
 #--------------------------------------------------------------------
 
 # Custom modules
@@ -204,7 +206,10 @@ def network():
     # Generate the AI summary using your influencer_ai_summary module.
     # This function reads the CSV, processes the comment data, generates insights, 
     # and returns an overall summary.
-    ai_summary = process_ai_summary(user.username)
+    #ai_summary = process_ai_summary(user.username)
+    username = user.get("username")
+    ai_summary = process_ai_summary(username)
+
     
     # Pass the 'ai_summary' variable to the network.html template.
     return render_template('dashboard/influencer_menu/network.html', user_id=user_id, user=user, ai_summary=ai_summary)

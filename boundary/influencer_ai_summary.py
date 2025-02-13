@@ -6,6 +6,10 @@ from collections import Counter
 from transformers import pipeline
 import logging
 
+# boundary/influencer_ai_summary.py
+from gemini_api import GeminiAPI
+
+
 # Set up logging for debugging.
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -213,3 +217,11 @@ def generate_structured_summary(users):
     insights_text = build_insights_prompt(users)
     logger.info("DEBUG: Aggregated structured text: %s", insights_text)
     return AISummaryGenerator.generate_ai_summary(insights_text)
+
+def process_ai_summary(text: str) -> str:
+    """
+    Generate and return an AI summary for the provided text using the Gemini API.
+    """
+    # Customize the prompt as needed. Here we're simply passing the text.
+    return GeminiAPI.summarize_text(text)
+

@@ -638,8 +638,8 @@ def generate_positive_comments_html():
 
     print("HTML file 'data/positive_comments_table.html' generated.")
 
-
 import time
+from gemini_api import GeminiAPI  
 
 def generateGraphs(username):
     global users
@@ -648,17 +648,16 @@ def generateGraphs(username):
 
     readDataAndInitialise(filename)  # Process the raw data
 
-    # Generate the pie chart
-    visualize_sentiment_pie_chart()  # Visualize sentiment distribution in pie chart
+    print("Generating visualizations...")
+
+    visualize_sentiment_pie_chart()  
     generate_word_clouds()
     generate_negative_comments_html()
     generate_neutral_comments_html()
     generate_positive_comments_html()
 
-    # Get the current timestamp for unique file names (in milliseconds)
-    timestamp = int(time.time() * 1000)  # Milliseconds for more precision
-
-    # List of files to be uploaded with timestamps added to the filenames
+    # Generate timestamped filenames for Firebase upload
+    timestamp = int(time.time() * 1000)
     files_to_upload = [
         ("data/negative_comments_table.html", f"{username}/negative_comments_table_{timestamp}.html"),
         ("data/neutral_comments_table.html", f"{username}/neutral_comments_table_{timestamp}.html"),
@@ -668,23 +667,58 @@ def generateGraphs(username):
         ("data/wordcloud_positive.png", f"{username}/wordcloud_positive_{timestamp}.png"),
         ("data/wordcloud_neutral.png", f"{username}/wordcloud_neutral_{timestamp}.png")
     ]
-    
-    # Upload the new files without deletion
+
+    # Upload files (but delay AI Summary until upload completes)
     for local_file, remote_file in files_to_upload:
         try:
-            # Upload the new file with a unique timestamped name
             success = st.upload_to_firebase(file_path=local_file, destination_blob_name=remote_file)
-            
             if success:
-                print(f"Successfully uploaded {remote_file}")
+                print(f"Uploaded: {remote_file}")
             else:
                 print(f"Failed to upload {remote_file}")
         except Exception as e:
             print(f"Error uploading {remote_file}: {e}")
-            
-    print (comments_list)
-    print("users is cleared")
-    print(f"All files uploaded for user {username}.")
-    print(users)
 
-    
+    # ✅ Generate AI Summary based on real data AFTER all uploads finish
+    try:
+        print("Generating AI Summary...")
+
+        # Collect text data from all comments
+        sentiment_texts = {"Negative": "", "Neutral": "", "Positive": ""}
+        sentiment_counts = {"Negative": 0, "Neutral": 0, "Positive": 0}
+
+        for user in users.values():
+            for comment in user.comments:
+                sentiment_counts[comment.sentiment] += 1
+                sentiment_texts[comment.sentiment] += comment.text + " "
+
+        # Build a structured prompt using real visualization data
+        prompt = (
+            f"Sentiment Breakdown:\n"
+            f"- Negative: {sentiment_counts['Negative']} comments\n"
+            f"- Neutral: {sentiment_counts['Neutral']} comments\n"
+            f"- Positive: {sentiment_counts['Positive']} comments\n\n"
+            f"Top Words from Negative Comments:\n{sentiment_texts['Negative']}\n\n"
+            f"Top Words from Neutral Comments:\n{sentiment_texts['Neutral']}\n\n"
+            f"Top Words from Positive Comments:\n{sentiment_texts['Positive']}\n\n"
+            "Provide a concise summary highlighting key insights."
+        )
+
+        ai_summary = GeminiAPI.summarize_text(prompt)
+
+        # Save AI Summary to a file
+        summary_file = f"data/overall_ai_summary_{timestamp}.txt"
+        with open(summary_file, "w") as f:
+            f.write(ai_summary)
+
+        # Upload AI Summary to Firebase
+        success = st.upload_to_firebase(file_path=summary_file, destination_blob_name=f"{username}/overall_ai_summary_{timestamp}.txt")
+        if success:
+            print(f"AI Summary uploaded successfully: {summary_file}")
+        else:
+            print("Failed to upload AI Summary.")
+
+    except Exception as e:
+        print(f"Error generating AI Summary: {e}")
+
+    print("Graph generation complete for user:", username)
