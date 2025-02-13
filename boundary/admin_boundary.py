@@ -101,12 +101,8 @@ def suspend_user(user_id):
     
     # Call the suspend_user method from the Admin class
     result = Admin.suspend_user(user_id)
-    # success, message = Admin.suspend_user(user_id)
-
-    # flash(message, "success" if success else "danger")
+    
     return jsonify(result)
-    # # Redirect back to the 'approve_accounts' page
-    # return redirect(url_for('admin_boundary.manage_accounts'))
 
 @admin_boundary.route('/admin/manage-landing-page', methods=['GET', 'POST', 'PUT'])
 def manage_landing_page():

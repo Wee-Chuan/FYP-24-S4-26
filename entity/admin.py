@@ -220,26 +220,16 @@ class Admin:
             if user_doc.exists:
                 user_data = user_doc.to_dict()
                 if user_data['is_suspended'] == True:
-                    # message = f"User already suspended"
-                    # return False, message
                     return {'success': False, 'message': 'User already suspended'}
                 else:
                     # Suspend the user
                     user_ref.update({'is_suspended': True})
-                    # message = f"User {user_data['username']} has been suspended successfully."
-                    # return True, message
                     return {'success': True, 'message': f"User {user_data['username']} has been suspended successfully."}
                     
-                
             else:
-                # message = f"User {user_data['username']} does not exist."
-                # return False, message
                 return {'success': False, 'message': f"User {user_data['username']} does not exist."}
 
         except Exception as e:
-            # message = f"Error suspending user: {e}"
-            # return False, message
-        
             return {'success': False, 'message': f"Error suspending user: {e}"}
     
     # ============================== Manage landing page ==================================#
