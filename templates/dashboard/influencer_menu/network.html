@@ -62,6 +62,7 @@
             </form>
             
             <div id = "analysisResults"></div>
+                <p id = "instaUser"></p>
             <!-- Loading screen (initially hidden) -->
             <div id="loadingScreen">
                 <p>Loading...</p>
@@ -241,6 +242,27 @@ function submitForm(event) {
         analysisResultsDiv.innerHTML = `<p style="color: red;">User does not exist or is a private account.</p>`;
     });
 }
+async function fetchInstaUsername() {
+    try {
+        let response = await fetch('/insta_username');
+        let data = await response.json();
+
+        // Get the paragraph element
+        let instaUserParagraph = document.getElementById('instaUser');
+
+        if (instaUserParagraph) {
+            // Update the content with the fetched username
+            instaUserParagraph.textContent = `Network analysis for: ${data.insta_username}`;
+        } else {
+            console.error("Paragraph with ID 'instauser' not found.");
+        }
+    } catch (error) {
+        console.error("Error fetching Instagram username:", error);
+    }
+}
+
+// Call the function to update the paragraph
+fetchInstaUsername();
 
 
     </script>        

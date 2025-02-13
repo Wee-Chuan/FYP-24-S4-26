@@ -16,14 +16,24 @@ from entity.followers_hist_entity import FollowerHist
 # Define Flask Blueprint
 influencer_boundary = Blueprint('influencer_boundary', __name__)
 
-###################################################################################################################
+post_url = ""
+insta_user = ""
 
+###################################################################################################################
 @influencer_boundary.after_request
 def add_no_cache_headers(response):
     response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "0"
     return response
+
+@influencer_boundary.route('/get_post_url', methods=['GET'])
+def get_post_url():
+    return jsonify({"post_url": post_url})
+
+@influencer_boundary.route('/insta_username', methods=['GET'])
+def insta_username():
+    return jsonify({"insta_username": insta_user})
 
 @influencer_boundary.route('/followers', methods=['GET', 'POST'])
 def followers():
@@ -204,7 +214,7 @@ def display_network():
     
     # Get the username from the POST request
     username = request.form.get('username')
-
+    insta_username = username
     if not username:
         return jsonify({'error': 'Username is required'}), 400
 
