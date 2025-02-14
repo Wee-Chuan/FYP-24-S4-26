@@ -377,7 +377,7 @@
                     element.src = src.split('?')[0] + '?timestamp=' + new Date().getTime();  // Reload content
                 }
             }
-            else{ have = false;}
+            else{have = false;}
         });
 
         if (have == true){
@@ -385,32 +385,7 @@
         }
     })();  
 
-    async function fetchPostUrl() {
-        try {
-            let response = await fetch('/get_post_url');
-            let data = await response.json();
-            
-            // Get the div element
-            let postUrlDiv = document.getElementById('posturl');
     
-            if (postUrlDiv) {
-                // Create an anchor tag
-                let anchor = document.createElement('a');
-                anchor.href = data.post_url;
-                anchor.textContent = "View Post";
-                anchor.target = "_blank"; // Open in new tab
-    
-                // Clear previous content and append the new anchor tag
-                postUrlDiv.innerHTML = "";
-                postUrlDiv.appendChild(anchor);
-            } else {
-                console.error("Div with ID 'posturl' not found.");
-            }
-        } catch (error) {
-            console.error("Error fetching post URL:", error);
-        }
-    }
-    fetchPostUrl();
         
 </script>
 {% endblock %}

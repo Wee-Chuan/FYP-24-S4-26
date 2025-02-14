@@ -154,7 +154,7 @@ def generate_random_color():
 def generate_random_color():
     return f"#{random.randint(0, 0xFFFFFF):06x}"
 
-def create_conversation_tree(conversations_data, username):
+def create_conversation_tree(conversations_data, username, post_url):
     # Create a PyVis network
     net = Network(notebook=True)
 
@@ -178,7 +178,7 @@ def create_conversation_tree(conversations_data, username):
                     net.add_node(
                         comment_id,
                         label=f"Comment {comment_id}",
-                        title=f"Community: {convo_id} \nComment: {comment['text']}",
+                        title=f"Community: {convo_id} \nComment: {comment['text']}\nPost URL: {post_url}",
                         size=10,
                         color=conversation_colors[convo_id]
                     )
@@ -372,8 +372,8 @@ def create_top_users_table(conversations_file, output_html_file, username1):
     print(f"{username1}/top_users_table_{timestamp}.html")
     st.upload_to_firebase(file_path = output_html_file, destination_blob_name = f"{username1}/top_users_table_{timestamp}.html")
 
-def show_network(username):
+def show_network(username, post_url):
     conversation_file = 'data/conversations.json'  # Input JSON file containing conversations data
     conversations_data = load_conversations(conversation_file)
-    create_conversation_tree(conversations_data, username)
+    create_conversation_tree(conversations_data, username, post_url)
     create_top_users_table('data/conversations.json', 'static/top_users_table.html', username) 

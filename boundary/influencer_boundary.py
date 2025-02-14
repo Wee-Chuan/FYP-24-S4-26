@@ -1,11 +1,11 @@
 import os
 import csv
-import pandas as pd
-from flask import Blueprint, render_template, redirect, url_for, session, flash, request, jsonify, current_app
-from werkzeug.utils import secure_filename
+from flask import Blueprint, render_template, redirect, url_for, session, flash, request, jsonify
 from apify_client import ApifyClient
 import entity.admin as adm
-from firebase_admin import credentials, storage
+from firebase_admin import storage
+import matplotlib
+matplotlib.use('Agg') 
 
 # Custom modules
 import entity.network as nw
@@ -16,9 +16,6 @@ from entity.followers_hist_entity import FollowerHist
 # Define Flask Blueprint
 influencer_boundary = Blueprint('influencer_boundary', __name__)
 
-post_url = ""
-insta_user = ""
-
 ###################################################################################################################
 @influencer_boundary.after_request
 def add_no_cache_headers(response):
@@ -26,14 +23,6 @@ def add_no_cache_headers(response):
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "0"
     return response
-
-@influencer_boundary.route('/get_post_url', methods=['GET'])
-def get_post_url():
-    return jsonify({"post_url": post_url})
-
-@influencer_boundary.route('/insta_username', methods=['GET'])
-def insta_username():
-    return jsonify({"insta_username": insta_user})
 
 @influencer_boundary.route('/followers', methods=['GET', 'POST'])
 def followers():
@@ -193,7 +182,7 @@ def post_analysis():
     user_id = session.get('user_id')
     cu.create_user_json()
     cu.make_convo_file()
-    cu.show_network(User.get_username_by_user_id(user_id))
+    cu.show_network(username = User.get_username_by_user_id(user_id), post_url=post_url)
 
     # Return success in JSON response
     return jsonify({
@@ -243,7 +232,7 @@ def display_network():
         # Prepare the Actor input for the Instagram Comments scraper
         run_input = {
             "directUrls": postURLs,
-            "resultsLimit": 10,  # Modify this number as needed to capture more comments
+            "resultsLimit": 5,  # Modify this number as needed to capture more comments
             "includeReplies": False,
         }
 
@@ -276,7 +265,7 @@ def display_network():
         print("All comments saved to data/commentData.csv")
 
         # Generate graphs using the username from the user_id
-        nw.generateGraphs(User.get_username_by_user_id(user_id))
+        nw.generateGraphs(username=User.get_username_by_user_id(user_id), insta_username=insta_username)
 
         # Return the username in a JSON response
         return jsonify({
@@ -361,7 +350,6 @@ def get_conversations():
 
 @influencer_boundary.route('/check_file', methods=['POST'])
 def check_file():
-    
     data = request.get_json()
     file_path = data.get('file_path')
     

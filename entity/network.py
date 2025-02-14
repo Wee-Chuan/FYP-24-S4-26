@@ -1,12 +1,12 @@
 import csv
 import re
 import json
-import plotly.graph_objects as go
-import plotly.io as pio
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from scipy.special import softmax
 from entity.classes import Comment, User
 import entity.admin as st
+import plotly.graph_objects as go
+import plotly.io as pio
 
 # Global variables
 users = {}
@@ -71,7 +71,7 @@ def readDataAndInitialise(filename):
             users[username].comments.append(comment)
 
 # Function to generate the pie chart as an image
-def visualize_sentiment_pie_chart():
+def visualize_sentiment_pie_chart(instagram_username):
     # Count the number of sentiments
     sentiment_counts = {"Negative": 0, "Neutral": 0, "Positive": 0}
     for username, user in users.items():
@@ -90,7 +90,7 @@ def visualize_sentiment_pie_chart():
     ax.axis('equal')
 
     # Save the figure as an image
-    plt.title("Sentiment Distribution")
+    plt.title(f"Sentiment Distribution: {instagram_username}")
     plt.savefig('data/sentiment_pie_chart.png')  # Save as PNG image
     plt.close()
 
@@ -636,7 +636,7 @@ def generate_positive_comments_html():
 
 import time
 
-def generateGraphs(username):
+def generateGraphs(username, insta_username):
     global users
     users.clear()
     filename = "data/commentData.csv"
@@ -644,7 +644,7 @@ def generateGraphs(username):
     readDataAndInitialise(filename)  # Process the raw data
 
     # Generate the pie chart
-    visualize_sentiment_pie_chart()  # Visualize sentiment distribution in pie chart
+    visualize_sentiment_pie_chart(instagram_username=insta_username)  # Visualize sentiment distribution in pie chart
     generate_word_clouds()
     generate_negative_comments_html()
     generate_neutral_comments_html()
