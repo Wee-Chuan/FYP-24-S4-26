@@ -127,20 +127,26 @@ def create_conversations(users_data):
 
     return conversations
 
-def make_convo_file():
-    # Load the users data (assuming the 'users.json' file is structured as shown)
+def make_convo_file(username):
+    # Load the users data
     with open('data/users.json', 'r', encoding='utf-8') as file:
         users_data = json.load(file)
 
     # Create conversations from the user data
     conversations = create_conversations(users_data)
 
-    # Save the conversations to a JSON file
-    with open('data/conversations.json', 'w', encoding='utf-8') as file:
+    # Define file paths
+    local_file_path = "data/conversations.json"
+    output_file = f"{username}/conversations"
+
+    # Save conversations to JSON
+    with open(local_file_path, 'w', encoding='utf-8') as file:
         json.dump(conversations, file, ensure_ascii=False, indent=4)
 
-    print("Conversations have been saved to conversations.json.")
-
+    timestamp = int(time.time() * 1000)  # Milliseconds for more precision
+    # Upload the file to Firebase
+    st.upload_to_firebase(file_path=local_file_path, destination_blob_name=f"{output_file}_{timestamp}.json")
+    
 # Load the conversations.json data
 def load_conversations(convo_file):
     with open(convo_file, 'r', encoding='utf-8') as file:
@@ -166,7 +172,7 @@ def create_conversation_tree(conversations_data, username, post_url):
         comments = convo_data["comments"]
 
         # Only process conversations with 3 or more comments
-        if len(comments) >= 3:
+        if len(comments) >= 1:
             # Assign a unique color for each conversation
             if convo_id not in conversation_colors:
                 conversation_colors[convo_id] = generate_random_color()

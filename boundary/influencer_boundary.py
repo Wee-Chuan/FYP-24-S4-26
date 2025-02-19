@@ -131,7 +131,7 @@ def post_analysis():
         "directUrls": [post_url],
         "includeNestedComments": True,
         "isNewestComments": False,
-        "resultsLimit": 50
+        "resultsLimit": 75
     }
 
     # Run the Actor and wait for it to finish
@@ -181,7 +181,7 @@ def post_analysis():
     # Generate the network graph
     user_id = session.get('user_id')
     cu.create_user_json()
-    cu.make_convo_file()
+    cu.make_convo_file(username = User.get_username_by_user_id(user_id))
     cu.show_network(username = User.get_username_by_user_id(user_id), post_url=post_url)
 
     # Return success in JSON response
@@ -375,7 +375,7 @@ def check_file():
     # Iterate over the blobs and find the latest file based on the timestamp
     for blob in blobs:
         # Check if the current blob's name contains the requested filename without extension
-        if filename in blob.name and blob.name.endswith(('png', 'html')):  # Check if it has the correct extension
+        if filename in blob.name and blob.name.endswith(('png', 'html', 'json')):  # Check if it has the correct extension
             if not latest_time or blob.updated > latest_time:
                 latest_blob = blob
                 latest_time = blob.updated

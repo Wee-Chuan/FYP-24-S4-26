@@ -311,11 +311,15 @@
             const data = await response.json();  // Parse the JSON response
     
             if (data.exists) {
-                // Prepare the static path by replacing the username with 'static/'
-                const staticPath = filePath.replace(/^.*?\//, 'static/');
+
+                if (filePath.endsWith("conversations.json")) {
+                    staticPath = filePath.replace(/^.*?\//, 'data/');
+                } else {
+                    staticPath = filePath.replace(/^.*?\//, 'static/');
+                }
                 // Trigger file retrieval
                 filePath = data.file_url;
-                console.log("latest version" + filePath);
+                console.log("latest version: " + filePath);
                 return await retrieveFile(filePath, staticPath);
             } else {
                 console.log(data.message, filePath);  // Log the message if file doesn't exist
@@ -355,6 +359,7 @@
         const files = [
             { path: 'comment_tree.html', id: 'hehe' },
             { path: 'top_users_table.html', id: 'centralityGraph' },
+            { path: 'conversations.json', id: 'conversationDetails' },
         ];
         const userData = {{ user | tojson }};
         var username = userData['username'];
@@ -370,6 +375,7 @@
         retrievalResults.forEach(file => {
             console.log("here 3");
             if (file.retrieved) {
+                if (file.id == "conversationDetails"){return;}
                 const element = document.getElementById(file.id);
                 if (element) {
                     element.style.display = "block";
