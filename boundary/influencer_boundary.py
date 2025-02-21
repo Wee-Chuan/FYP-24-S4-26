@@ -232,7 +232,7 @@ def display_network():
         # Prepare the Actor input for the Instagram Comments scraper
         run_input = {
             "directUrls": postURLs,
-            "resultsLimit": 5,  # Modify this number as needed to capture more comments
+            "resultsLimit": 10,  # Modify this number as needed to capture more comments
             "includeReplies": False,
         }
 
